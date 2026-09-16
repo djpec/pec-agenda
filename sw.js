@@ -1,5 +1,5 @@
-const CACHE='pec-agenda-v3';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg'];
+const CACHE='pec-agenda-v4';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
@@ -11,19 +11,32 @@ self.addEventListener('activate',event=>{
   self.clients.claim();
 });
 
+async function injectMobileFix(response){
+  const html=await response.text();
+  const tag='<link rel="stylesheet" href="./mobile-fix.css?v=4">';
+  const patched=html.includes('mobile-fix.css')?html:html.replace('</head>',`${tag}</head>`);
+  return new Response(patched,{
+    status:response.status,
+    statusText:response.statusText,
+    headers:{'Content-Type':'text/html; charset=utf-8'}
+  });
+}
+
 self.addEventListener('fetch',event=>{
   if(event.request.method!=='GET')return;
 
   if(event.request.mode==='navigate'){
-    event.respondWith(
-      fetch(event.request)
-        .then(response=>{
-          const copy=response.clone();
-          caches.open(CACHE).then(cache=>cache.put('./index.html',copy));
-          return response;
-        })
-        .catch(()=>caches.match('./index.html'))
-    );
+    event.respondWith((async()=>{
+      try{
+        const response=await fetch(event.request,{cache:'no-store'});
+        const copy=response.clone();
+        caches.open(CACHE).then(cache=>cache.put('./index.html',copy));
+        return injectMobileFix(response);
+      }catch{
+        const cached=await caches.match('./index.html');
+        return cached?injectMobileFix(cached):Response.error();
+      }
+    })());
     return;
   }
 

@@ -1,0 +1,158 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
+  <meta name="theme-color" content="#0d0e10" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="pec Agenda" />
+  <title>pec Agenda</title>
+  <link rel="manifest" href="./manifest.webmanifest" />
+  <link rel="icon" href="./icon.svg" type="image/svg+xml" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <style>
+    :root{--bg:#0d0e10;--card:#15171a;--card2:#1b1e22;--line:#282c31;--text:#f6f7f8;--muted:#9299a3;--accent:#f2c94c;--danger:#ff6868;--safe:#6bd49b;--r:22px}
+    *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+    html,body{margin:0;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif;min-height:100%}
+    body{padding:env(safe-area-inset-top) 0 calc(92px + env(safe-area-inset-bottom))}
+    button,input,select,textarea{font:inherit}
+    button{cursor:pointer}
+    .app{width:min(760px,100%);margin:0 auto;padding:18px 16px 28px}
+    header{display:flex;align-items:center;justify-content:space-between;padding:4px 2px 20px}
+    .brand{display:flex;align-items:center;gap:11px}.mark{width:42px;height:42px;border-radius:14px;background:var(--accent);color:#111;display:grid;place-items:center;font-weight:950;letter-spacing:-2px;font-size:19px}.brand b{font-size:20px;letter-spacing:-.4px}.brand small{display:block;color:var(--muted);font-size:12px;margin-top:1px}
+    .status{font-size:11px;font-weight:800;letter-spacing:.08em;padding:7px 9px;border-radius:999px;background:#18231d;color:var(--safe)}.status.off{background:#281b1b;color:#ff8b8b}
+    .hero{background:linear-gradient(145deg,#1c1f23,#121416);border:1px solid var(--line);border-radius:28px;padding:22px;position:relative;overflow:hidden;box-shadow:0 14px 40px #0005}.hero:after{content:"";position:absolute;width:180px;height:180px;border-radius:50%;background:var(--accent);filter:blur(80px);opacity:.09;right:-60px;top:-80px}.eyebrow{color:var(--accent);font-size:12px;font-weight:850;letter-spacing:.12em;text-transform:uppercase}.hero h1{font-size:30px;line-height:1.05;margin:12px 0 8px;letter-spacing:-1px}.hero .meta{color:var(--muted);font-size:14px;line-height:1.45}.countdown{margin-top:18px;display:inline-flex;gap:7px;align-items:center;background:#0c0d0f;border:1px solid var(--line);border-radius:999px;padding:9px 12px;font-size:12px;font-weight:750}.dot{width:7px;height:7px;background:var(--accent);border-radius:50%}
+    .toolbar{display:flex;align-items:center;justify-content:space-between;margin:26px 2px 12px}.toolbar h2{font-size:20px;margin:0;letter-spacing:-.5px}.ghost{border:1px solid var(--line);background:var(--card);color:var(--text);border-radius:12px;padding:9px 11px;font-size:12px;font-weight:750}
+    .months{display:flex;gap:8px;overflow:auto;padding:2px 1px 12px;scrollbar-width:none}.months::-webkit-scrollbar{display:none}.chip{white-space:nowrap;border:1px solid var(--line);background:var(--card);color:var(--muted);border-radius:999px;padding:9px 13px;font-size:12px;font-weight:800}.chip.active{background:var(--accent);border-color:var(--accent);color:#111}
+    .day{margin-top:14px}.day-head{display:flex;align-items:baseline;gap:9px;padding:0 4px 9px}.day-head strong{font-size:16px}.day-head span{color:var(--muted);font-size:12px;text-transform:uppercase;font-weight:750;letter-spacing:.06em}
+    .event{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:15px;display:grid;grid-template-columns:64px 1fr auto;gap:13px;align-items:center;margin-bottom:9px;transition:.15s transform,.15s border-color}.event:active{transform:scale(.992);border-color:#3a4047}.time{height:54px;border-radius:15px;background:var(--card2);display:grid;place-items:center;color:var(--accent);font-size:15px;font-weight:900;text-align:center;padding:3px}.time.special{font-size:10px;line-height:1.05}.info h3{font-size:15px;margin:0 0 4px;letter-spacing:-.2px}.info p{font-size:12px;color:var(--muted);margin:0;line-height:1.35}.edit{border:0;background:transparent;color:#707782;font-size:20px;padding:10px 4px}
+    .empty{border:1px dashed #343940;border-radius:20px;padding:28px 18px;text-align:center;color:var(--muted);margin-top:14px}.empty b{color:var(--text);display:block;margin-bottom:5px}
+    .fab{position:fixed;right:max(18px,calc((100vw - 760px)/2 + 18px));bottom:calc(20px + env(safe-area-inset-bottom));z-index:20;border:0;background:var(--accent);color:#111;border-radius:18px;height:58px;padding:0 18px;font-weight:900;font-size:14px;box-shadow:0 10px 28px #0008;display:flex;align-items:center;gap:8px}.fab i{font-style:normal;font-size:22px}
+    .backdrop{position:fixed;inset:0;background:#000a;z-index:40;display:none;align-items:flex-end;justify-content:center}.backdrop.open{display:flex}.sheet{width:min(760px,100%);max-height:92vh;overflow:auto;background:#121417;border:1px solid var(--line);border-bottom:0;border-radius:28px 28px 0 0;padding:12px 18px calc(22px + env(safe-area-inset-bottom));box-shadow:0 -20px 70px #0008}.grab{width:44px;height:5px;background:#3a3e44;border-radius:99px;margin:2px auto 18px}.sheet-head{display:flex;justify-content:space-between;align-items:center}.sheet h2{font-size:22px;margin:0}.close{border:0;background:#23262b;color:var(--text);width:36px;height:36px;border-radius:50%;font-size:20px}.grid{display:grid;grid-template-columns:1fr 1fr;gap:11px;margin-top:18px}.field{display:flex;flex-direction:column;gap:7px}.field.full{grid-column:1/-1}.field label{font-size:11px;color:var(--muted);font-weight:800;text-transform:uppercase;letter-spacing:.06em}.field input,.field select,.field textarea{width:100%;border:1px solid var(--line);background:#0d0f11;color:var(--text);border-radius:14px;padding:13px;outline:none}.field textarea{min-height:76px;resize:vertical}.hint{grid-column:1/-1;font-size:11px;color:var(--muted);line-height:1.4;background:#191c20;border-radius:12px;padding:10px 12px}.actions{display:flex;gap:9px;margin-top:18px}.primary,.danger{border:0;border-radius:15px;padding:14px 16px;font-weight:900}.primary{background:var(--accent);color:#111;flex:1}.danger{background:#2b1718;color:#ff8b8b;display:none}
+    .settings{margin-top:24px;border-top:1px solid var(--line);padding-top:18px}.settings h3{font-size:13px;margin:0 0 10px;color:var(--muted)}.settings-row{display:flex;gap:8px;flex-wrap:wrap}.mini{border:1px solid var(--line);background:#191c20;color:var(--text);border-radius:12px;padding:10px 12px;font-size:12px;font-weight:750}
+    #importFile{display:none}
+    @media(max-width:480px){.hero h1{font-size:27px}.event{grid-template-columns:58px 1fr auto;gap:10px}.time{height:50px}.grid{grid-template-columns:1fr}.field.full,.hint{grid-column:auto}.fab span{display:none}.fab{width:58px;padding:0;justify-content:center;border-radius:50%}}
+  </style>
+</head>
+<body>
+<div class="app">
+  <header>
+    <div class="brand"><div class="mark">pec</div><div><b>pec Agenda</b><small>shows & eventos</small></div></div>
+    <div id="status" class="status">ONLINE</div>
+  </header>
+
+  <section class="hero">
+    <div class="eyebrow">Próximo show</div>
+    <h1 id="nextTitle">Nenhum show cadastrado</h1>
+    <div id="nextMeta" class="meta">Adicione sua primeira data para começar.</div>
+    <div class="countdown"><span class="dot"></span><span id="countdown">Agenda local e offline</span></div>
+  </section>
+
+  <div class="toolbar"><h2>Minha agenda</h2><button id="todayBtn" class="ghost">Hoje</button></div>
+  <div id="months" class="months"></div>
+  <main id="agenda"></main>
+
+  <section class="settings">
+    <h3>Backup da agenda</h3>
+    <div class="settings-row">
+      <button id="exportBtn" class="mini">Exportar backup</button>
+      <button id="importBtn" class="mini">Importar backup</button>
+      <input id="importFile" type="file" accept="application/json,.json" />
+    </div>
+  </section>
+</div>
+
+<button id="addBtn" class="fab"><i>+</i><span>Novo show</span></button>
+
+<div id="modal" class="backdrop" aria-hidden="true">
+  <section class="sheet">
+    <div class="grab"></div>
+    <div class="sheet-head"><h2 id="formTitle">Novo show</h2><button id="closeBtn" class="close">×</button></div>
+    <form id="eventForm">
+      <input type="hidden" id="eventId" />
+      <div class="grid">
+        <div class="field full"><label>Evento / Local</label><input id="title" required placeholder="Ex.: Las Vegas Lounge" /></div>
+        <div class="field"><label>Data da noite</label><input id="date" type="date" required /></div>
+        <div class="field"><label>Tipo de horário</label><select id="timeType"><option value="time">Horário</option><option value="tbd">A confirmar</option><option value="allnight">Noite toda</option></select></div>
+        <div id="timeField" class="field"><label>Horário</label><input id="time" type="time" value="23:00" /></div>
+        <div class="field"><label>Local / detalhe</label><input id="place" placeholder="Ex.: Authentic Bar" /></div>
+        <div class="field full"><label>Observações</label><textarea id="notes" placeholder="Cliente, endereço, montagem, contato..."></textarea></div>
+        <div class="hint">Na tua regra, horários de madrugada pertencem à noite escolhida. Ex.: <b>03/10 às 03:00</b> aparece depois das 23h do dia 03/10, mesmo acontecendo civilmente na madrugada de 04/10.</div>
+      </div>
+      <div class="actions"><button type="button" id="deleteBtn" class="danger">Excluir</button><button class="primary">Salvar show</button></div>
+    </form>
+  </section>
+</div>
+
+<script>
+const KEY='pec-agenda-v1';
+let events=load();
+let selectedMonth=null;
+
+function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
+function save(){localStorage.setItem(KEY,JSON.stringify(events))}
+function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
+function monthKey(date){return date.slice(0,7)}
+function monthLabel(key){const [y,m]=key.split('-').map(Number);return new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(y,m-1,1)).replace(/^./,x=>x.toUpperCase())}
+function dayLabel(date){const [y,m,d]=date.split('-').map(Number);return new Intl.DateTimeFormat('pt-BR',{weekday:'long'}).format(new Date(y,m-1,d)).replace(/^./,x=>x.toUpperCase())}
+function displayDate(date){const [y,m,d]=date.split('-');return `${d}/${m}`}
+function sortTime(e){if(e.timeType==='allnight')return 20*60;if(e.timeType==='tbd')return 21*60;if(!e.time)return 21*60;let [h,m]=e.time.split(':').map(Number);if(h<12)h+=24;return h*60+m}
+function actualDate(e){if(e.timeType!=='time'||!e.time)return null;const [y,m,d]=e.date.split('-').map(Number);const [h,min]=e.time.split(':').map(Number);const dt=new Date(y,m-1,d,h,min,0);if(h<12)dt.setDate(dt.getDate()+1);return dt}
+function sorted(list){return [...list].sort((a,b)=>a.date.localeCompare(b.date)||sortTime(a)-sortTime(b))}
+function timeText(e){if(e.timeType==='tbd')return 'A confirmar';if(e.timeType==='allnight')return 'Noite toda';return e.time||'--:--'}
+
+function renderMonths(){
+  const keys=[...new Set(events.map(e=>monthKey(e.date)))].sort();
+  if(!keys.length){document.querySelector('#months').innerHTML='';selectedMonth=null;return}
+  if(!selectedMonth||!keys.includes(selectedMonth)){
+    const now=new Date();const k=`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}`;
+    selectedMonth=keys.find(x=>x>=k)||keys[0];
+  }
+  document.querySelector('#months').innerHTML=keys.map(k=>`<button class="chip ${k===selectedMonth?'active':''}" data-month="${k}">${monthLabel(k)}</button>`).join('');
+  document.querySelectorAll('[data-month]').forEach(b=>b.onclick=()=>{selectedMonth=b.dataset.month;render()});
+}
+function renderAgenda(){
+  const root=document.querySelector('#agenda');
+  const list=selectedMonth?sorted(events.filter(e=>monthKey(e.date)===selectedMonth)):[];
+  if(!list.length){root.innerHTML='<div class="empty"><b>Nenhuma data neste mês</b>Toque em “+” para adicionar um show.</div>';return}
+  const groups={};list.forEach(e=>(groups[e.date]??=[]).push(e));
+  root.innerHTML=Object.entries(groups).map(([date,items])=>`<section class="day"><div class="day-head"><strong>${displayDate(date)}</strong><span>${dayLabel(date)}</span></div>${items.map(e=>`<article class="event" data-edit="${esc(e.id)}"><div class="time ${e.timeType!=='time'?'special':''}">${esc(timeText(e))}</div><div class="info"><h3>${esc(e.title)}</h3><p>${esc([e.place,e.notes].filter(Boolean).join(' • '))}</p></div><button class="edit" aria-label="Editar">›</button></article>`).join('')}</section>`).join('');
+  document.querySelectorAll('[data-edit]').forEach(el=>el.onclick=()=>openForm(events.find(e=>e.id===el.dataset.edit)));
+}
+function renderNext(){
+  const now=new Date();
+  const future=events.map(e=>({e,dt:actualDate(e)})).filter(x=>x.dt&&x.dt>=now).sort((a,b)=>a.dt-b.dt);
+  const x=future[0];
+  if(!x){document.querySelector('#nextTitle').textContent=events.length?'Sem próximo horário definido':'Nenhum show cadastrado';document.querySelector('#nextMeta').textContent=events.length?'Existem datas sem horário confirmado.':'Adicione sua primeira data para começar.';document.querySelector('#countdown').textContent='Agenda local e offline';return}
+  document.querySelector('#nextTitle').textContent=x.e.title;
+  document.querySelector('#nextMeta').textContent=`${displayDate(x.e.date)} • ${x.e.time}${x.e.place?' • '+x.e.place:''}`;
+  const ms=x.dt-now;const days=Math.floor(ms/86400000);const hours=Math.floor((ms%86400000)/3600000);
+  document.querySelector('#countdown').textContent=days>0?`Faltam ${days}d ${hours}h`:`Faltam ${Math.max(0,hours)}h`;
+}
+function render(){renderMonths();renderAgenda();renderNext()}
+
+function openForm(e=null){
+  document.querySelector('#formTitle').textContent=e?'Editar show':'Novo show';
+  document.querySelector('#eventId').value=e?.id||'';document.querySelector('#title').value=e?.title||'';document.querySelector('#date').value=e?.date||new Date().toISOString().slice(0,10);document.querySelector('#timeType').value=e?.timeType||'time';document.querySelector('#time').value=e?.time||'23:00';document.querySelector('#place').value=e?.place||'';document.querySelector('#notes').value=e?.notes||'';
+  document.querySelector('#deleteBtn').style.display=e?'block':'none';toggleTime();document.querySelector('#modal').classList.add('open');document.querySelector('#modal').setAttribute('aria-hidden','false');setTimeout(()=>document.querySelector('#title').focus(),80)
+}
+function closeForm(){document.querySelector('#modal').classList.remove('open');document.querySelector('#modal').setAttribute('aria-hidden','true')}
+function toggleTime(){document.querySelector('#timeField').style.display=document.querySelector('#timeType').value==='time'?'flex':'none'}
+
+document.querySelector('#eventForm').onsubmit=e=>{e.preventDefault();const id=document.querySelector('#eventId').value||`e-${Date.now()}`;const item={id,title:document.querySelector('#title').value.trim(),date:document.querySelector('#date').value,timeType:document.querySelector('#timeType').value,time:document.querySelector('#timeType').value==='time'?document.querySelector('#time').value:'',place:document.querySelector('#place').value.trim(),notes:document.querySelector('#notes').value.trim()};const i=events.findIndex(x=>x.id===id);if(i>=0)events[i]=item;else events.push(item);save();selectedMonth=monthKey(item.date);closeForm();render()};
+document.querySelector('#deleteBtn').onclick=()=>{const id=document.querySelector('#eventId').value;if(id&&confirm('Excluir este show?')){events=events.filter(e=>e.id!==id);save();closeForm();render()}};
+document.querySelector('#addBtn').onclick=()=>openForm();document.querySelector('#closeBtn').onclick=closeForm;document.querySelector('#modal').onclick=e=>{if(e.target.id==='modal')closeForm()};document.querySelector('#timeType').onchange=toggleTime;
+document.querySelector('#todayBtn').onclick=()=>{const n=new Date(),k=`${n.getFullYear()}-${String(n.getMonth()+1).padStart(2,'0')}`;if(events.some(e=>monthKey(e.date)===k)){selectedMonth=k;render()}};
+
+document.querySelector('#exportBtn').onclick=()=>{const blob=new Blob([JSON.stringify({app:'pec-agenda',version:1,exportedAt:new Date().toISOString(),events},null,2)],{type:'application/json'});const a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download=`pec-agenda-backup-${new Date().toISOString().slice(0,10)}.json`;a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)};
+document.querySelector('#importBtn').onclick=()=>document.querySelector('#importFile').click();
+document.querySelector('#importFile').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{const data=JSON.parse(await f.text());if(!Array.isArray(data.events))throw new Error();if(confirm(`Importar ${data.events.length} eventos e substituir a agenda atual?`)){events=data.events;save();selectedMonth=null;render()}}catch{alert('Arquivo de backup inválido.')}e.target.value=''};
+
+function updateStatus(){const el=document.querySelector('#status');const on=navigator.onLine;el.textContent=on?'ONLINE':'OFFLINE';el.classList.toggle('off',!on)}
+addEventListener('online',updateStatus);addEventListener('offline',updateStatus);updateStatus();
+if('serviceWorker' in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+render();
+</script>
+</body>
+</html>

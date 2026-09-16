@@ -1,0 +1,118 @@
+/* Ajustes de estabilidade e responsividade para iPhone */
+html,body{
+  width:100%;
+  max-width:100%;
+  overflow-x:hidden;
+  overscroll-behavior-x:none;
+}
+body{
+  touch-action:pan-y pinch-zoom;
+}
+.app{
+  width:100%;
+  max-width:760px;
+  min-width:0;
+  overflow-x:hidden;
+}
+.backdrop{
+  width:100dvw;
+  max-width:100%;
+  overflow:hidden;
+  overscroll-behavior:none;
+}
+.sheet{
+  width:100%;
+  max-width:760px;
+  min-width:0;
+  overflow-x:hidden;
+  overflow-y:auto;
+  overscroll-behavior:contain;
+  touch-action:pan-y;
+}
+.sheet-head,.grid,.field,.actions{
+  min-width:0;
+  max-width:100%;
+}
+.field input,
+.field select,
+.field textarea{
+  display:block;
+  width:100%;
+  max-width:100%;
+  min-width:0;
+  font-size:16px;
+}
+input[type="date"],
+input[type="time"],
+select{
+  min-width:0;
+  max-width:100%;
+}
+.viewbar{
+  min-width:0;
+  width:100%;
+}
+.viewbtn{
+  min-width:0;
+  white-space:nowrap;
+}
+.swipe,
+.event{
+  max-width:100%;
+  min-width:0;
+}
+.event{
+  overscroll-behavior-x:none;
+}
+.months{
+  max-width:100%;
+  overscroll-behavior-inline:contain;
+}
+
+@media (max-width:520px){
+  .app{
+    padding-left:14px;
+    padding-right:14px;
+  }
+  .backdrop{
+    align-items:flex-end;
+  }
+  .sheet{
+    width:100%;
+    max-width:100%;
+    max-height:calc(100dvh - env(safe-area-inset-top));
+    padding-left:max(14px,env(safe-area-inset-left));
+    padding-right:max(14px,env(safe-area-inset-right));
+    border-radius:24px 24px 0 0;
+  }
+  .sheet h2{
+    font-size:20px;
+  }
+  .grid{
+    display:grid;
+    grid-template-columns:minmax(0,1fr);
+    gap:10px;
+  }
+  .field.full,.hint{
+    grid-column:auto;
+  }
+  .field input,
+  .field select,
+  .field textarea{
+    padding:12px;
+    border-radius:13px;
+  }
+  .field textarea{
+    min-height:68px;
+  }
+  .hint{
+    font-size:10px;
+    padding:9px 10px;
+  }
+  .actions{
+    width:100%;
+  }
+  .primary{
+    min-width:0;
+  }
+}

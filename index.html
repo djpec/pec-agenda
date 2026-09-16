@@ -87,10 +87,52 @@
 
 <script>
 const KEY='pec-agenda-v1';
+const DEFAULT_EVENTS=[
+  {id:'seed-20260905-vegas',title:'Las Vegas Lounge',date:'2026-09-05',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20260906-authentic',title:'Authentic Bar',date:'2026-09-06',timeType:'time',time:'01:00',place:'',notes:''},
+  {id:'seed-20260907-vegas',title:'Las Vegas Lounge',date:'2026-09-07',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20260911-vegas',title:'Las Vegas Lounge',date:'2026-09-11',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20260911-sos',title:'S.O.S Bar',date:'2026-09-11',timeType:'time',time:'01:00',place:'',notes:''},
+  {id:'seed-20260912-joia',title:'Joia Fronteira',date:'2026-09-12',timeType:'time',time:'01:00',place:'Foz do Iguaçu',notes:''},
+  {id:'seed-20260916-vegas',title:'Las Vegas Lounge',date:'2026-09-16',timeType:'time',time:'02:00',place:'',notes:''},
+  {id:'seed-20260918-aline',title:'Jantar Aline',date:'2026-09-18',timeType:'time',time:'19:30',place:'Condomínio Golfe, Wish',notes:''},
+  {id:'seed-20260918-vegas',title:'Las Vegas Lounge',date:'2026-09-18',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20260919-valentina',title:'15 anos — Valentina Neme',date:'2026-09-19',timeType:'allnight',time:'',place:'',notes:''},
+  {id:'seed-20260925-panda',title:'Rolê Panda',date:'2026-09-25',timeType:'time',time:'22:00',place:'Authentic Bar',notes:''},
+  {id:'seed-20260925-vegas',title:'Las Vegas Lounge',date:'2026-09-25',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261001-vegas',title:'Las Vegas Lounge',date:'2026-10-01',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261003-sos',title:'S.O.S Bar',date:'2026-10-03',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261003-vegas',title:'Las Vegas Lounge',date:'2026-10-03',timeType:'time',time:'03:00',place:'',notes:''},
+  {id:'seed-20261011-vegas',title:'Las Vegas Lounge',date:'2026-10-11',timeType:'time',time:'02:00',place:'',notes:''},
+  {id:'seed-20261015-vegas',title:'Las Vegas Lounge',date:'2026-10-15',timeType:'time',time:'00:00',place:'',notes:''},
+  {id:'seed-20261017-sos',title:'S.O.S Bar',date:'2026-10-17',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261021-vegas',title:'Las Vegas Lounge',date:'2026-10-21',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261024-casamento',title:'Casamento Eduardo Daleaste',date:'2026-10-24',timeType:'tbd',time:'',place:'',notes:''},
+  {id:'seed-20261024-vegas',title:'Las Vegas Lounge',date:'2026-10-24',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261031-vegas',title:'Las Vegas Lounge',date:'2026-10-31',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261202-vegas',title:'Las Vegas Lounge',date:'2026-12-02',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261204-vegas',title:'Las Vegas Lounge',date:'2026-12-04',timeType:'time',time:'03:00',place:'',notes:''},
+  {id:'seed-20261210-vegas',title:'Las Vegas Lounge',date:'2026-12-10',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261218-vegas',title:'Las Vegas Lounge',date:'2026-12-18',timeType:'time',time:'23:00',place:'',notes:''},
+  {id:'seed-20261224-vegas',title:'Las Vegas Lounge',date:'2026-12-24',timeType:'time',time:'05:00',place:'',notes:''},
+  {id:'seed-20261226-vegas',title:'Las Vegas Lounge',date:'2026-12-26',timeType:'time',time:'03:00',place:'',notes:''},
+  {id:'seed-20261230-vegas',title:'Las Vegas Lounge',date:'2026-12-30',timeType:'time',time:'02:00',place:'',notes:''},
+  {id:'seed-20261231-vegas',title:'Las Vegas Lounge',date:'2026-12-31',timeType:'time',time:'04:00',place:'',notes:''},
+  {id:'seed-20270220-casamento',title:'Casamento Matheus e Francieli',date:'2027-02-20',timeType:'tbd',time:'',place:'',notes:''},
+  {id:'seed-20270918-casamento',title:'Casamento Vitor e Eduarda',date:'2027-09-18',timeType:'tbd',time:'',place:'',notes:''}
+];
 let events=load();
 let selectedMonth=null;
 
-function load(){try{return JSON.parse(localStorage.getItem(KEY))||[]}catch{return[]}}
+function load(){
+  try{
+    const saved=localStorage.getItem(KEY);
+    if(saved!==null)return JSON.parse(saved)||[];
+    const seeded=DEFAULT_EVENTS.map(e=>({...e}));
+    localStorage.setItem(KEY,JSON.stringify(seeded));
+    return seeded;
+  }catch{return DEFAULT_EVENTS.map(e=>({...e}))}
+}
 function save(){localStorage.setItem(KEY,JSON.stringify(events))}
 function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function monthKey(date){return date.slice(0,7)}

@@ -1,0 +1,18 @@
+{
+  "name": "pec Agenda",
+  "short_name": "pec Agenda",
+  "description": "Agenda pessoal de shows e eventos do DJ pec.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#0d0e10",
+  "theme_color": "#0d0e10",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

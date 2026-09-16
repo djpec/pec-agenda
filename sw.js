@@ -1,4 +1,4 @@
-const CACHE='pec-agenda-v2';
+const CACHE='pec-agenda-v3';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg'];
 
 self.addEventListener('install',event=>{

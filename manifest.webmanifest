@@ -1,18 +1,13 @@
 {
-  "name": "pec Agenda",
-  "short_name": "pec Agenda",
-  "description": "Agenda pessoal de shows e eventos do DJ pec.",
+  "name": "pec Manager",
+  "short_name": "pec",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",
-  "background_color": "#0d0e10",
-  "theme_color": "#0d0e10",
+  "background_color": "#0b0c0e",
+  "theme_color": "#0b0c0e",
+  "description": "Agenda, orçamentos e contratos do pec.",
   "icons": [
-    {
-      "src": "./icon.svg",
-      "sizes": "any",
-      "type": "image/svg+xml",
-      "purpose": "any maskable"
-    }
+    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }

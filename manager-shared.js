@@ -15,11 +15,12 @@
     if(!document.querySelector('#pecManagerGlobalStyle')){
       const s=document.createElement('style');s.id='pecManagerGlobalStyle';s.textContent=`
         html{background:#08090b!important}
-        body{background:transparent!important;isolation:isolate}
+        body{background:transparent!important;position:relative;isolation:isolate}
         body::before{display:none!important}
-        #pecManagerGlobalBg,#pecManagerGlobalShade{position:fixed;inset:-18px;pointer-events:none}
-        #pecManagerGlobalBg{z-index:-2;background-size:cover;background-position:center;background-repeat:no-repeat;transform:scale(1.02)}
-        #pecManagerGlobalShade{z-index:-1;background:rgba(7,8,10,var(--pec-bg-shade,.88));backdrop-filter:blur(var(--pec-bg-blur,0px));-webkit-backdrop-filter:blur(var(--pec-bg-blur,0px))}
+        body > *:not(#pecManagerGlobalBg):not(#pecManagerGlobalShade){position:relative;z-index:1}
+        #pecManagerGlobalBg,#pecManagerGlobalShade{position:fixed;inset:-20px;pointer-events:none}
+        #pecManagerGlobalBg{z-index:0;background-size:cover;background-position:center;background-repeat:no-repeat;transform:scale(1.03)}
+        #pecManagerGlobalShade{z-index:0;background:rgba(7,8,10,var(--pec-bg-shade,.88));backdrop-filter:blur(var(--pec-bg-blur,0px));-webkit-backdrop-filter:blur(var(--pec-bg-blur,0px))}
         @media print{#pecManagerGlobalBg,#pecManagerGlobalShade{display:none!important}body{background:#fff!important}}
       `;document.head.appendChild(s);
     }
@@ -70,10 +71,13 @@
       const local=currentBg();
       if(error)return;
       if(remote){
-        const prefs={theme:remote.theme||'auto',background_darkness:remote.background_darkness??88,background_blur:remote.background_blur??0};saveLocalPrefs(prefs);
-        if(remote.background_image){localStorage.setItem(BG_KEY,remote.background_image);localStorage.setItem(LEGACY_BG,remote.background_image);apply(remote.background_image,prefs)}
-        else if(local){await upsertPrefs(prefs);apply(local,prefs)}
-        else apply('',prefs);
+        const prefs={theme:remote.theme||'auto',background_darkness:remote.background_darkness??88,background_blur:remote.background_blur??0};
+        saveLocalPrefs(prefs);
+        if(remote.background_image){
+          localStorage.setItem(BG_KEY,remote.background_image);localStorage.setItem(LEGACY_BG,remote.background_image);apply(remote.background_image,prefs);
+        }else if(local){
+          await upsertPrefs(prefs);apply(local,prefs);
+        }else apply('',prefs);
       }else if(local){await upsertPrefs();apply(local,localPrefs())}
       else await upsertPrefs();
     }finally{syncing=false}
@@ -83,8 +87,6 @@
   apply(currentBg(),localPrefs());
   syncCloud();
 
-  // O seletor de imagem da Agenda já existia e grava no localStorage.
-  // Este observador transforma qualquer alteração local em preferência da conta.
   setInterval(()=>{
     const now=currentBg();
     if(now!==lastBg){lastBg=now;apply(now,localPrefs());upsertPrefs()}

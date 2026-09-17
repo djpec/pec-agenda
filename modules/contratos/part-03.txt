@@ -1,0 +1,354 @@
+">
+<aside class="sidebar">
+<div class="pec-manager-panel">
+  <div class="pec-manager-head"><a href="./" class="pec-manager-back"><span>p</span> pec Manager</a><b id="pecContractCloud">LOCAL</b></div>
+  <div class="pec-manager-grid">
+    <label>Status<select id="pecContractStatus"><option value="draft">Rascunho</option><option value="sent">Enviado</option><option value="signed">Assinado</option><option value="cancelled">Cancelado</option></select></label>
+    <button type="button" class="pec-manager-save" onclick="pecSaveContract()">Salvar online</button>
+    <button type="button" onclick="pecNewContract()">Novo</button>
+    <button type="button" onclick="pecContractToAgenda()">Adicionar à agenda</button>
+  </div>
+  <div id="pecContractHistory" class="pec-manager-history"></div>
+</div>
+
+<div class="brand">
+<div class="brand-mark">
+<div class="logo">p</div>
+<div>
+<h1>Contratos pec</h1>
+<p>Gerador profissional de contratos</p>
+</div>
+</div>
+<div class="status"><span class="status-dot"></span> salvo localmente</div>
+</div>
+<details class="section" open="">
+<summary>Tipo e identificação</summary>
+<div class="section-body">
+<div class="field">
+<label for="contractType">Modalidade da apresentação</label>
+<select id="contractType">
+<option value="warmup_performance">Warm-up + Performance</option>
+<option value="warmup">Warm-up</option>
+<option value="performance">Performance</option>
+</select>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="contractNumber">Nº do contrato</label>
+<input id="contractNumber" placeholder="PEC-AAAAMMDD" title="Gerado automaticamente pela data de início do evento" type="text"/>
+<small class="field-help">Gerado pela data de início do evento.</small></div>
+<div class="field">
+<label for="issueDate">Data de emissão</label>
+<input id="issueDate" type="date"/>
+</div>
+</div>
+
+<div class="field">
+<label for="signatureCity">Cidade da assinatura</label>
+<input id="signatureCity" placeholder="Ex.: Foz do Iguaçu/PR" value="Santa Terezinha de Itaipu/PR"/>
+<small class="field-help">
+    Local declarado na linha de assinatura. Pode ser alterado em cada contrato.
+  </small>
+</div>
+</div>
+</details>
+<details class="section">
+<summary>Seus dados</summary>
+<div class="section-body">
+<div class="field">
+<label for="providerName">Nome completo</label>
+<input id="providerName" value="Pedro Henrique Pontes Cechinel"/>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="providerCpf">CPF</label>
+<input id="providerCpf" placeholder="000.000.000-00" value="127.542.089-33"/>
+</div>
+<div class="field">
+<label for="providerPhone">Telefone</label>
+<input id="providerPhone" placeholder="(45) 9 0000-0000" value="(45) 9 9108-7615"/>
+</div>
+</div>
+<div class="field">
+<label for="providerAddress">Endereço</label>
+<textarea id="providerAddress">Rua Pernambuco, 1132 - Parque dos Estados - Santa Terezinha de Itaipu, Paraná - CEP: 85.876-066</textarea>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="providerEmail">E-mail</label>
+<input id="providerEmail" value="contato@djpec.com"/>
+</div>
+<div class="field">
+<label for="providerSite">Site</label>
+<input id="providerSite" value="djpec.com"/>
+</div>
+</div>
+<div class="field">
+<label for="providerPix">Chave Pix</label>
+<input id="providerPix" value="contato@djpec.com"/>
+</div>
+<div class="field">
+<label for="providerEquipment">Equipamento padrão fornecido</label>
+<input id="providerEquipment" value="Equipamento DDJ (Controladora)"/>
+</div>
+</div>
+</details>
+<details class="section" open="">
+<summary>Dados do contratante</summary>
+<div class="section-body">
+<div class="field">
+<label for="clientName">Nome / Razão social</label>
+<input id="clientName" placeholder="Nome do cliente"/>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="clientDoc">CPF / CNPJ</label>
+<input id="clientDoc" placeholder="Documento"/>
+</div>
+<div class="field">
+<label for="clientRg">RG (opcional)</label>
+<input id="clientRg" placeholder="RG do contratante"/>
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="clientPhone">Telefone</label>
+<input id="clientPhone" placeholder="WhatsApp"/>
+</div>
+<div class="field">
+<label for="clientEmail">E-mail</label>
+<input id="clientEmail" placeholder="cliente@email.com"/>
+</div>
+</div>
+<div class="field">
+<label for="clientAddress">Endereço completo</label>
+<textarea id="clientAddress" placeholder="Rua, número, bairro, cidade, estado e CEP"></textarea>
+</div>
+</div>
+</details>
+<details class="section" open="">
+<summary>Evento</summary>
+<div class="section-body">
+<div class="grid-2">
+<div class="field">
+<label for="eventType">Tipo de evento</label>
+<input id="eventType" placeholder="Casamento, aniversário..."/>
+</div>
+<div class="field">
+<label for="guestCount">Convidados</label>
+<input id="guestCount" min="0" placeholder="0" type="number"/>
+</div>
+</div>
+<div class="field">
+<label for="eventName">Nome do evento</label>
+<input id="eventName" placeholder="Opcional"/>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="startDate">Data de início</label>
+<input id="startDate" type="date"/>
+</div>
+<div class="field">
+<label for="startTime">Horário de início</label>
+<input id="startTime" type="time"/>
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="endDate">Data de término</label>
+<input id="endDate" type="date"/>
+</div>
+<div class="field">
+<label for="endTime">Horário de término</label>
+<input id="endTime" type="time"/>
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="arrivalDate">Data de chegada técnica</label>
+<input id="arrivalDate" type="date"/>
+</div>
+<div class="field">
+<label for="arrivalTime">Horário de chegada</label>
+<input id="arrivalTime" type="time"/>
+</div>
+</div>
+<div class="field">
+<label for="durationDisplay">Duração calculada</label>
+<input id="durationDisplay" readonly="" type="text" value="Aguardando período"/>
+</div>
+<div class="field">
+<label for="venueName">Local do evento</label>
+<input id="venueName" placeholder="Nome do espaço"/>
+</div>
+<div class="field">
+<label for="venueAddress">Endereço do evento</label>
+<textarea id="venueAddress" placeholder="Endereço completo do local"></textarea>
+</div>
+<div class="field">
+<label for="musicBrief">Briefing musical / restrições</label>
+<textarea id="musicBrief" placeholder="Estilos desejados, músicas obrigatórias, músicas proibidas..."></textarea>
+</div>
+</div>
+</details>
+<details class="section" open="">
+<summary>Valores e pagamento</summary>
+<div class="section-body">
+<div class="grid-2">
+<div class="field">
+<label for="baseValue">Valor da apresentação</label>
+<input id="baseValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div class="field">
+<label for="signalValue">Sinal</label>
+<input id="signalValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="balanceDaysBefore">Saldo até quantos dias antes</label>
+<input id="balanceDaysBefore" min="0" step="1" type="number" value="1"/>
+</div>
+<div class="field">
+<label for="cancellationPercent">Multa de cancelamento (%)</label>
+<input id="cancellationPercent" max="100" min="0" step="1" type="number" value="20"/>
+</div>
+</div>
+<div class="field">
+<label for="paymentMethod">Meios de pagamento aceitos</label>
+<input id="paymentMethod" value="Pix, transferência bancária ou dinheiro em espécie"/>
+</div>
+<div class="field">
+<label for="paymentTerms">Observações de pagamento</label>
+<textarea id="paymentTerms">A reserva da data será confirmada após a assinatura e o pagamento do sinal.</textarea>
+</div>
+<div class="field">
+<label for="extraHourValue">Valor da hora adicional</label>
+<input id="extraHourValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</div>
+</details>
+<details class="section" open="">
+<summary>Produtos e serviços extras</summary>
+<div class="section-body">
+<div class="extras-editor" id="extrasEditor"></div>
+<button class="add-btn" id="addExtra" type="button">+ Adicionar produto ou serviço</button>
+</div>
+</details>
+<details class="section">
+<summary>Equipamentos e rider técnico</summary>
+<div class="section-body">
+<div class="field">
+<label for="includedEquipment">Equipamentos incluídos</label>
+<textarea id="includedEquipment">01 (uma) DDJ (Controladora)</textarea>
+</div>
+<div class="field">
+<label for="clientStructure">Estrutura exigida do contratante</label>
+<textarea id="clientStructure">01 (uma) mesa firme, plana, coberta e limpa para os equipamentos; pontos de energia elétrica aterrados de 110 V ou 220 V; e sistema de som completo e compatível com o tamanho do local e do público.</textarea>
+</div>
+</div>
+</details>
+<details class="section">
+<summary>Deslocamento e despesas externas</summary>
+<div class="section-body">
+<div class="field">
+<label for="originCity">Cidade de saída</label>
+<input id="originCity" value="Santa Terezinha de Itaipu/PR"/>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="travelValue">Deslocamento</label>
+<input id="travelValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div class="field">
+<label for="tollValue">Pedágios</label>
+<input id="tollValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</div>
+<div class="grid-2">
+<div class="field">
+<label for="parkingValue">Estacionamento</label>
+<input id="parkingValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div class="field">
+<label for="lodgingValue">Hospedagem</label>
+<input id="lodgingValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+</div>
+<div class="field">
+<label for="otherTravelValue">Outras despesas externas</label>
+<input id="otherTravelValue" min="0" placeholder="0,00" step="0.01" type="number"/>
+</div>
+<div class="field">
+<label for="travelNotes">Condições de deslocamento / hospedagem</label>
+<textarea id="travelNotes" placeholder="Ex.: hospedagem fornecida pelo contratante, pedágio reembolsado mediante comprovante..."></textarea>
+</div>
+<small class="field-help">Ao preencher algum valor ou observação, a cláusula de deslocamento aparece automaticamente.</small>
+</div>
+</details>
+<details class="section">
+<summary>Cláusulas opcionais</summary>
+<div class="section-body">
+<div class="switch-row">
+<span>Alimentação e hidratação fornecidas</span>
+<label class="switch"><input checked="" id="mealIncluded" type="checkbox"/><span class="slider"></span></label>
+</div><div class="switch-row">
+<span>Uso de imagem e divulgação</span>
+<label class="switch"><input id="clauseImage" type="checkbox"/><span class="slider"></span></label>
+</div>
+<div class="switch-row">
+<span>Condições climáticas</span>
+<label class="switch"><input checked="" id="clauseWeather" type="checkbox"/><span class="slider"></span></label>
+</div>
+<div class="switch-row">
+<span>Testemunhas</span>
+<label class="switch"><input checked="" id="clauseWitnesses" type="checkbox"/><span class="slider"></span></label>
+</div>
+<div class="switch-row">
+<span>Foro contratual</span>
+<label class="switch"><input checked="" id="clauseForum" type="checkbox"/><span class="slider"></span></label>
+</div>
+<div class="field">
+<label for="customClause">Cláusula ou observação personalizada</label>
+<textarea id="customClause" placeholder="Texto opcional que será acrescentado ao contrato"></textarea>
+</div>
+</div>
+</details>
+<div class="actions">
+<button class="btn btn-secondary" id="saveBtn" type="button">Salvar dados</button>
+<button class="btn btn-secondary" id="resetBtn" type="button">Restaurar padrão</button>
+<button class="btn btn-primary btn-wide" id="printBtn" type="button">Exportar / Imprimir PDF</button>
+</div>
+</aside>
+<main class="workspace">
+<div class="topbar">
+<div>
+<h2>Pré-visualização do contrato</h2>
+<p>O documento é atualizado automaticamente conforme você preenche os campos.</p>
+</div>
+<div class="status">A4 • texto vetorial • alta qualidade</div>
+</div>
+<div class="document-shell">
+<article class="paper" id="paper"><section class="contract-page page-one"><header class="contract-header">
+<div class="contract-logo">
+<div class="pmark">p</div>
+<div>
+<strong>pec</strong>
+<span>DJ • Eventos • Experiências</span>
+</div>
+</div>
+<div class="contract-meta">
+<strong id="outContractNumber">Contrato nº —</strong>
+<span id="outIssueDate">Emitido em —</span>
+</div>
+</header><h1 class="title" id="outTitle">Contrato de Prestação de Serviços Artísticos</h1><p class="subtitle">Instrumento particular de contratação de apresentação musical e serviços relacionados</p><section class="summary-box">
+<div class="summary-item">
+<span class="summary-label">Evento</span>
+<span class="summary-value" id="outEvent">A definir</span>
+</div>
+<div class="summary-item">
+<span class="summary-label">Período</span>
+<span class="summary-value" id="outEventDate">A definir</span>
+</div>
+<div class="summary-item">
+<s

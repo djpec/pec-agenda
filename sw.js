@@ -1,4 +1,4 @@
-const CACHE='pec-agenda-v4';
+const CACHE='pec-agenda-v5';
 const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css'];
 
 self.addEventListener('install',event=>{
@@ -13,7 +13,7 @@ self.addEventListener('activate',event=>{
 
 async function injectMobileFix(response){
   const html=await response.text();
-  const tag='<link rel="stylesheet" href="./mobile-fix.css?v=4">';
+  const tag='<link rel="stylesheet" href="./mobile-fix.css?v=5">';
   const patched=html.includes('mobile-fix.css')?html:html.replace('</head>',`${tag}</head>`);
   return new Response(patched,{
     status:response.status,

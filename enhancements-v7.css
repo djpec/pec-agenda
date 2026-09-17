@@ -1,0 +1,12 @@
+#pecBgLayer{position:fixed;inset:0;z-index:0;pointer-events:none;background-size:cover;background-position:center;background-repeat:no-repeat;opacity:.2;filter:brightness(.5) saturate(.85)}
+.app{position:relative;z-index:1}
+.calendar-add-btn{width:100%;margin-top:10px;border:0;background:var(--accent);color:#111;border-radius:14px;padding:12px 14px;font-weight:950;font-size:12px}
+.personalize-card{margin-top:18px;border-top:1px solid var(--line);padding-top:18px}
+.personalize-card h3{font-size:13px;margin:0 0 8px;color:var(--muted)}
+.personalize-card p{font-size:11px;line-height:1.45;color:var(--muted);margin:0 0 10px}
+.personalize-row{display:flex;gap:8px;flex-wrap:wrap}
+#pecBgFile{display:none}
+@media(max-width:520px){
+  .calendar-add-btn{padding:11px 12px}
+  #pecBgLayer{background-position:center top}
+}

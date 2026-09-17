@@ -1,17 +1,17 @@
-const CACHE='pec-manager-v10';
+const CACHE='pec-manager-v11';
 const CORE=['./','./index.html','./agenda.html','./orcamentos.html','./contratos.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./cloud-fix.js','./enhancements-v7.js','./manager-module.js','./manager-shared.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)));self.skipWaiting()});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k!==CACHE).map(k=>caches.delete(k)))));self.clients.claim()});
 async function patchPage(response,key){
   const html=await response.text();let patched=html;
-  const sharedTag='<script src="./manager-shared.js?v=10"></script>';
-  const managerTag='<script src="./manager-module.js?v=10"></script>';
+  const sharedTag='<script src="./manager-shared.js?v=11"></script>';
+  const managerTag='<script src="./manager-module.js?v=11"></script>';
   if(!patched.includes('manager-shared.js'))patched=patched.replace('</body>',`${sharedTag}</body>`);
   if(!patched.includes('manager-module.js'))patched=patched.replace('</body>',`${managerTag}</body>`);
   if(key==='./agenda.html'){
-    const styleTag='<link rel="stylesheet" href="./mobile-fix.css?v=10">';
-    const cloudTag='<script src="./cloud-fix.js?v=10"></script>';
-    const enhanceTag='<script src="./enhancements-v7.js?v=10"></script>';
+    const styleTag='<link rel="stylesheet" href="./mobile-fix.css?v=11">';
+    const cloudTag='<script src="./cloud-fix.js?v=11"></script>';
+    const enhanceTag='<script src="./enhancements-v7.js?v=11"></script>';
     if(!patched.includes('mobile-fix.css'))patched=patched.replace('</head>',`${styleTag}</head>`);
     if(!patched.includes('cloud-fix.js'))patched=patched.replace('</body>',`${cloudTag}</body>`);
     if(!patched.includes('enhancements-v7.js'))patched=patched.replace('</body>',`${enhanceTag}</body>`);

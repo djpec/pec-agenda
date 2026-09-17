@@ -1,0 +1,393 @@
+ <textarea data-fixed="totalDesc"></textarea></label>
+        </div>
+      </div>
+
+      <p class="note" id="perItemInvestmentNote">
+        No modo separado, o valor aparece dentro de cada item do “Escopo combinado”.
+      </p>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Opcionais / adicionais</summary>
+    <div class="fields">
+      <label class="check">
+        <input id="showExtras" type="checkbox">
+        Exibir opcionais
+      </label>
+      <div id="extrasEditor" class="editor-list"></div>
+      <button class="add" onclick="addExtra()">+ Adicionar opcional</button>
+      <p class="note">
+        Cada serviço agora pode ter proporção da imagem, ajuste “preencher / encaixar”
+        e posição da foto.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Pagamento e observações</summary>
+    <div class="fields">
+      <label>Sinal <input data-fixed="deposit"></label>
+      <label>Saldo <input data-fixed="balance"></label>
+      <label>Forma de pagamento <input data-fixed="payment"></label>
+      <label>Observações <textarea data-fixed="notes"></textarea></label>
+      <label>Rider técnico (um item por linha) <textarea data-fixed="rider"></textarea></label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Contato</summary>
+    <div class="fields">
+      <label>Telefone <input data-fixed="phone"></label>
+      <label>E-mail <input data-fixed="email"></label>
+      <label>Site <input data-fixed="site"></label>
+      <label>Instagram <input data-fixed="instagram"></label>
+    </div>
+  </details>
+</aside>
+
+<main class="stage">
+  <article class="sheet">
+    <div class="doc" id="doc">
+
+      <header class="topbar">
+        <div class="brand">pec <small>DJ &amp; Performance</small></div>
+        <div class="docmeta">
+          PROPOSTA COMERCIAL<br>
+          EMISSÃO <span data-bind="issueDate"></span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <div>
+            <div class="hero-kicker" id="themeLabel">Casamento</div>
+            <h1 id="themeTitle">Uma experiência musical pensada para o seu casamento.</h1>
+            <p data-bind="intro"></p>
+          </div>
+
+          <div class="event-card">
+            <span class="label">Preparado para</span>
+            <strong data-bind="client"></strong>
+            <div class="row">
+              <div>
+                <span class="label">Data</span>
+                <strong data-bind="eventDate"></strong>
+              </div>
+              <div>
+                <span class="label">Horário</span>
+                <strong data-bind="time"></strong>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <span class="label">Local</span>
+              <strong><span data-bind="venue"></span> — <span data-bind="city"></span></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <span class="section-eyebrow">O que foi definido</span>
+            <h2>Escopo da apresentação</h2>
+          </div>
+          <div class="section-intro">
+            Esta proposta formaliza os serviços e condições alinhados para o evento.
+          </div>
+        </div>
+        <div id="scopePreview" class="scope-grid"></div>
+      </section>
+
+      <section class="section" id="singleInvestmentSection">
+        <div class="investment">
+          <div>
+            <span class="cap">Valor do serviço principal</span>
+            <div class="desc" data-bind="totalDesc"></div>
+          </div>
+          <div class="price-wrap">
+            <span class="price-label">VALOR PRINCIPAL</span>
+            <div class="price" data-bind="total"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="extrasSection">
+        <div class="section-heading">
+          <div>
+            <span class="section-eyebrow">Opcionais</span>
+            <h2>Opcionais para acrescentar</h2>
+          </div>
+          <div class="section-intro">
+            Os itens abaixo são opcionais e não estão incluídos no valor principal.
+          </div>
+        </div>
+
+        <div class="extras-alert">
+          <strong>Itens opcionais</strong>
+          <span>Cada valor abaixo é somado ao valor principal somente se você escolher incluir o serviço.</span>
+        </div>
+
+        <div id="extrasPreview" class="extras-grid"></div>
+      </section>
+
+      <section class="section" id="termsSection">
+        <div class="section-heading terms-heading">
+          <div>
+            <span class="section-eyebrow">Informações finais</span>
+            <h2>Condições da proposta</h2>
+          </div>
+          <div class="section-intro">
+            Pagamento, requisitos técnicos e observações para formalização do evento.
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <h3>Condições comerciais</h3>
+            <p><strong>Sinal:</strong> <span data-bind="deposit"></span></p>
+            <p style="margin-top:7px;"><strong>Saldo:</strong> <span data-bind="balance"></span></p>
+            <p style="margin-top:7px;"><strong>Pagamento:</strong> <span data-bind="payment"></span></p>
+          </div>
+          <div class="info-box">
+            <h3>Rider técnico</h3>
+            <ul id="riderPreview"></ul>
+          </div>
+        </div>
+        <div class="notes" data-bind="notes"></div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-brand">
+          <div class="footer-mark">pec</div>
+          <div class="footer-copy">
+            <strong>DJ &amp; Performance</strong>
+            <span>Proposta preparada para <span data-bind="client"></span>.</span>
+          </div>
+        </div>
+        <div class="footer-right">
+          <span data-link="site"></span> &nbsp;·&nbsp; <span data-link="instagram"></span><br>
+          <span data-link="email"></span> &nbsp;·&nbsp; <span data-bind="phone"></span>
+        </div>
+      </footer>
+
+      <div class="print-footer" aria-hidden="true">
+        <div class="print-footer-brand">
+          <strong>pec</strong>
+          <span>DJ &amp; Performance</span>
+        </div>
+        <div class="print-footer-contact">
+          <span data-link="site"></span>
+          <span class="sep">•</span>
+          <span data-link="instagram"></span>
+          <span class="sep">•</span>
+          <span data-bind="phone"></span>
+        </div>
+      </div>
+
+    </div>
+  </article>
+</main>
+
+<script>
+const THEME_TEXT = {
+  casamento:{
+    label:"Casamento",
+    title:"Uma experiência musical pensada para o seu casamento."
+  },
+  xv:{
+    label:"Festa de XV",
+    title:"Uma noite com personalidade, energia e presença."
+  },
+  geral:{
+    label:"Eventos em Geral",
+    title:"Uma entrega musical profissional para o seu evento."
+  }
+};
+
+const DEFAULT = {
+  theme:"casamento",
+  palette:"terracota",
+  pageSize:"a4",
+  orientation:"portrait",
+  pdfScale:120,
+  client:"Juliana",
+  issueDate:"2026-09-10",
+  eventDate:"2026-09-19",
+  venue:"Espaço Marias",
+  city:"Foz do Iguaçu - PR",
+  time:"A definir",
+  duration:"7 horas",
+  musicStyle:"Open Format",
+  intro:"Uma proposta personalizada para transformar o evento em uma experiência musical elegante, dinâmica e alinhada ao perfil dos convidados.",
+  heroImage:"",
+  scope:[
+    {
+      title:"Warm-up + Performance",
+      description:"Som ambiente e warm-up na recepção, seguido da apresentação principal do DJ pec.",
+      duration:"7 horas totais",
+      time:"5h de abertura + 2h de performance",
+      value:"R$ 2.000,00"
+    }
+  ],
+  investmentMode:"single",
+  total:"R$ 2.000,00",
+  totalDesc:"Valor referente somente ao serviço principal descrito no escopo acima.",
+  showExtras:true,
+  extras:[
+    {
+      title:"Jatos de CO₂",
+      description:"Efeito criogênico de palco com disparos sincronizados nos momentos de maior energia.",
+      value:"A partir de R$ 2.800,00",
+      ratio:"4/3",
+      fit:"cover",
+      position:"center",
+      image:""
+    },
+    {
+      title:"Bazuca de CO₂",
+      description:"Equipamento portátil para interação com o público durante a apresentação.",
+      value:"R$ 700,00",
+      ratio:"4/3",
+      fit:"cover",
+      position:"center",
+      image:""
+    }
+  ],
+  deposit:"50% na assinatura do contrato para garantia da data.",
+  balance:"50% até 1 dia antes do evento.",
+  payment:"Pix ou transferência bancária.",
+  notes:"A data será considerada reservada após a confirmação do sinal e assinatura do contrato. Deslocamento, hospedagem ou estrutura adicional poderão ser informados separadamente quando aplicável.",
+  rider:"01 mesa firme e plana para os equipamentos do DJ.\nPontos de energia aterrados próximos à cabine ou palco.\nSistema de som adequado ao espaço e ao número de convidados.\nAlimentação e hidratação durante o período do evento.",
+  phone:"(45) 9 9108-7615",
+  email:"contato@djpec.com",
+  site:"djpec.com",
+  instagram:"@djpec_"
+};
+
+let data = load();
+
+function clone(v){return JSON.parse(JSON.stringify(v))}
+
+function normalizeScope(item){
+  return {
+    title:item.title || "",
+    description:item.description || "",
+    duration:item.duration || "",
+    time:item.time || "",
+    value:item.value || ""
+  };
+}
+
+function normalizeExtra(extra){
+  return {
+    title: extra.title || "",
+    description: extra.description || "",
+    value: extra.value || "",
+    ratio: extra.ratio || "4/3",
+    fit: extra.fit || "cover",
+    position: extra.position || "center",
+    image: extra.image || ""
+  };
+}
+function load(){
+  const raw = localStorage.getItem("pecProposalFluidV3");
+  if(!raw) return clone(DEFAULT);
+  try{
+    const x = JSON.parse(raw);
+    return {
+      ...clone(DEFAULT),
+      ...x,
+      palette: x.palette || "terracota",
+      pageSize: x.pageSize || "a4",
+      orientation: x.orientation || "portrait",
+      pdfScale: Number(x.pdfScale || 120),
+      heroImage: "",
+      investmentMode: x.investmentMode || "single",
+      scope: Array.isArray(x.scope) ? x.scope.map(normalizeScope) : clone(DEFAULT.scope),
+      extras: Array.isArray(x.extras) ? x.extras.map(e => normalizeExtra({...e, image:""})) : clone(DEFAULT.extras)
+    };
+  }catch{
+    return clone(DEFAULT);
+  }
+}
+function save(){
+  const c = clone(data);
+  c.heroImage = "";
+  c.extras = c.extras.map(e => ({...normalizeExtra(e), image:""}));
+  localStorage.setItem("pecProposalFluidV3", JSON.stringify(c));
+}
+function esc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function dateBR(v){
+  if(!v) return "—";
+  const p = v.split("-");
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : v;
+}
+function fillFixed(){
+  document.querySelectorAll("[data-fixed]").forEach(el => el.value = data[el.dataset.fixed] ?? "");
+  document.getElementById("showExtras").checked = !!data.showExtras;
+}
+function renderBindings(){
+  document.querySelectorAll("[data-bind]").forEach(el => {
+    let v = data[el.dataset.bind] || "—";
+    if(el.dataset.bind === "issueDate" || el.dataset.bind === "eventDate") v = dateBR(v);
+    el.textContent = v;
+  });
+
+  document.querySelectorAll("[data-link]").forEach(el => {
+    const k = el.dataset.link;
+    const v = data[k] || "—";
+    let href = "";
+
+    if(k === "email" && v !== "—") href = `mailto:${v}`;
+    if(k === "site" && v !== "—") href = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+    if(k === "instagram" && v !== "—"){
+      const u = v.replace(/^@/,"").replace(/\/$/,"");
+      href = `https://www.instagram.com/${u}/`;
+    }
+
+    el.innerHTML = "";
+    if(!href){
+      el.textContent = v;
+      return;
+    }
+
+    const a = document.createElement("a");
+    a.className = "contact-link";
+    a.textContent = v;
+    a.href = href;
+    if(k !== "email"){
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
+    el.appendChild(a);
+  });
+}
+function renderTheme(){
+  const t = THEME_TEXT[data.theme] || THEME_TEXT.casamento;
+  document.body.dataset.theme = data.theme;
+  document.body.dataset.palette = data.palette || "terracota";
+  document.getElementById("themeLabel").textContent = t.label;
+  document.getElementById("themeTitle").textContent = t.title;
+  const bg = document.getElementById("heroBg");
+  bg.style.backgroundImage = data.heroImage ? `url("${data.heroImage}")` : "none";
+}
+function renderScopeEditor(){
+  const c = document.getElementById("scopeEditor");
+  c.innerHTML = data.scope.map((s,i) => `
+    <div class="editor-item">
+      <div class="editor-item-head">
+        <strong>Item ${String(i+1).padStart(2,"0")}</strong>
+        <button class="remove" onclick="removeScope(${i})">Remover</button>
+      </div>
+      <div class="fields" style="padd

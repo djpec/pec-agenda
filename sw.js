@@ -1,5 +1,5 @@
-const CACHE='pec-agenda-v6';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./cloud-fix.js'];
+const CACHE='pec-agenda-v7';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./cloud-fix.js','./enhancements-v7.css','./enhancements-v7.js'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
@@ -13,11 +13,15 @@ self.addEventListener('activate',event=>{
 
 async function patchHtml(response){
   const html=await response.text();
-  const styleTag='<link rel="stylesheet" href="./mobile-fix.css?v=6">';
-  const scriptTag='<script src="./cloud-fix.js?v=6"></script>';
+  const mobileTag='<link rel="stylesheet" href="./mobile-fix.css?v=7">';
+  const extraStyle='<link rel="stylesheet" href="./enhancements-v7.css?v=7">';
+  const cloudTag='<script src="./cloud-fix.js?v=7"></script>';
+  const extraScript='<script src="./enhancements-v7.js?v=7"></script>';
   let patched=html;
-  if(!patched.includes('mobile-fix.css')) patched=patched.replace('</head>',`${styleTag}</head>`);
-  if(!patched.includes('cloud-fix.js')) patched=patched.replace('</body>',`${scriptTag}</body>`);
+  if(!patched.includes('mobile-fix.css')) patched=patched.replace('</head>',`${mobileTag}</head>`);
+  if(!patched.includes('enhancements-v7.css')) patched=patched.replace('</head>',`${extraStyle}</head>`);
+  if(!patched.includes('cloud-fix.js')) patched=patched.replace('</body>',`${cloudTag}</body>`);
+  if(!patched.includes('enhancements-v7.js')) patched=patched.replace('</body>',`${extraScript}</body>`);
   return new Response(patched,{
     status:response.status,
     statusText:response.statusText,

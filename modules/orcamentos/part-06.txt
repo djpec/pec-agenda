@@ -1,0 +1,300 @@
+ent.getElementById("singleInvestmentEditor");
+  const note = document.getElementById("perItemInvestmentNote");
+
+  if(singleSection) singleSection.classList.toggle("hidden-ui", !single);
+  if(singleEditor) singleEditor.classList.toggle("hidden-ui", !single);
+  if(note) note.classList.toggle("hidden-ui", single);
+
+  document.querySelectorAll(".scope-value-editor").forEach(el=>{
+    el.classList.toggle("hidden-ui", single);
+  });
+}
+
+function renderRider(){
+  const ul = document.getElementById("riderPreview");
+  ul.innerHTML = "";
+  String(data.rider || "")
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean)
+    .forEach(x => {
+      const li = document.createElement("li");
+      li.textContent = x;
+      ul.appendChild(li);
+    });
+}
+function autoDensity(){
+  let score = 0;
+  score += data.scope.length * 2;
+  score += data.extras.length * 2;
+  score += String(data.notes || "").length > 180 ? 2 : 0;
+  score += String(data.rider || "").split("\n").filter(Boolean).length > 4 ? 2 : 0;
+  score += data.scope.reduce((a,s) => a + String(s.description || "").length, 0) > 350 ? 2 : 0;
+
+  const doc = document.getElementById("doc");
+  doc.dataset.density = score >= 10 ? "compact" : "normal";
+}
+function renderAll(){
+  renderTheme();
+  renderBindings();
+  renderScope();
+  renderExtras();
+  renderRider();
+  renderInvestmentMode();
+  renderPdfScale();
+  renderPageFormat();
+  autoDensity();
+  save();
+}
+function addScope(){
+  data.scope.push({
+    title:`Novo serviço ${data.scope.length + 1}`,
+    description:"Descreva o que foi combinado.",
+    duration:"A definir",
+    time:"A definir",
+    value:"R$ 0,00"
+  });
+  renderScopeEditor();
+  renderAll();
+}
+function removeScope(i){
+  if(!confirm(`Remover o item ${i+1}?`)) return;
+  data.scope.splice(i,1);
+  renderScopeEditor();
+  renderAll();
+}
+function addExtra(){
+  data.extras.push({
+    title:`Novo serviço ${data.extras.length + 1}`,
+    description:"Descreva o serviço adicional.",
+    value:"R$ 0,00",
+    ratio:"4/3",
+    fit:"cover",
+    position:"center",
+    image:""
+  });
+  renderExtrasEditor();
+  renderAll();
+}
+function removeExtra(i){
+  if(!confirm(`Remover o serviço ${i+1}?`)) return;
+  data.extras.splice(i,1);
+  renderExtrasEditor();
+  renderAll();
+}
+function xmlEsc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&apos;");
+}
+function exportXML(){
+  const keys = ["theme","palette","pageSize","orientation","pdfScale","investmentMode","client","issueDate","eventDate","venue","city","time","duration","musicStyle","intro","total","totalDesc","deposit","balance","payment","notes","rider","phone","email","site","instagram"];
+  const fixed = keys.map(k => `  <${k}>${xmlEsc(data[k])}</${k}>`).join("\n");
+  const scope = data.scope.map(s => `
+    <item>
+      <title>${xmlEsc(s.title)}</title>
+      <description>${xmlEsc(s.description)}</description>
+      <duration>${xmlEsc(s.duration)}</duration>
+      <time>${xmlEsc(s.time)}</time>
+      <value>${xmlEsc(s.value || "")}</value>
+    </item>`).join("");
+  const extras = data.extras.map(e => `
+    <extra>
+      <title>${xmlEsc(e.title)}</title>
+      <description>${xmlEsc(e.description)}</description>
+      <value>${xmlEsc(e.value)}</value>
+      <ratio>${xmlEsc(e.ratio || "4/3")}</ratio>
+      <fit>${xmlEsc(e.fit || "cover")}</fit>
+      <position>${xmlEsc(e.position || "center")}</position>
+    </extra>`).join("");
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<proposal>
+${fixed}
+  <showExtras>${data.showExtras}</showExtras>
+  <scope>${scope}
+  </scope>
+  <extras>${extras}
+  </extras>
+</proposal>`;
+
+  const blob = new Blob([xml], {type:"application/xml;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `proposta-${String(data.client || "cliente").toLowerCase().replace(/\s+/g,"-")}.xml`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function text(el,tag){return el.querySelector(tag)?.textContent || ""}
+function importXML(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const xml = new DOMParser().parseFromString(r.result,"application/xml");
+      if(xml.querySelector("parsererror")) throw new Error();
+      const root = xml.documentElement;
+      const n = clone(DEFAULT);
+      const keys = ["theme","palette","pageSize","orientation","pdfScale","investmentMode","client","issueDate","eventDate","venue","city","time","duration","musicStyle","intro","total","totalDesc","deposit","balance","payment","notes","rider","phone","email","site","instagram"];
+      keys.forEach(k => {
+        const el = root.querySelector(`:scope > ${k}`);
+        if(el) n[k] = el.textContent;
+      });
+      const show = root.querySelector(":scope > showExtras");
+      if(show) n.showExtras = show.textContent === "true";
+
+      const items = [...root.querySelectorAll(":scope > scope > item")];
+      if(items.length){
+        n.scope = items.map(s => ({
+          title:text(s,"title"),
+          description:text(s,"description"),
+          duration:text(s,"duration"),
+          time:text(s,"time"),
+          value:text(s,"value")
+        }));
+      }
+
+      const ex = [...root.querySelectorAll(":scope > extras > extra")];
+      if(ex.length){
+        n.extras = ex.map(e => normalizeExtra({
+          title:text(e,"title"),
+          description:text(e,"description"),
+          value:text(e,"value"),
+          ratio:text(e,"ratio") || "4/3",
+          fit:text(e,"fit") || "cover",
+          position:text(e,"position") || "center",
+          image:""
+        }));
+      }
+
+      if(!n.palette) n.palette = "terracota";
+
+      data = n;
+      fillFixed();
+      renderScopeEditor();
+      renderExtrasEditor();
+      renderAll();
+      alert("Dados importados.");
+    }catch{
+      alert("Não foi possível importar o XML.");
+    }
+  };
+  r.readAsText(file,"UTF-8");
+}
+function resetData(){
+  if(!confirm("Restaurar os dados de exemplo?")) return;
+  data = clone(DEFAULT);
+  fillFixed();
+  renderScopeEditor();
+  renderExtrasEditor();
+  renderAll();
+}
+
+document.addEventListener("input", e => {
+  const f = e.target.closest("[data-fixed]");
+  if(f){
+    data[f.dataset.fixed] = f.value;
+
+    if(f.dataset.fixed === "investmentMode"){
+      renderScopeEditor();
+    }
+
+    renderAll();
+    return;
+  }
+  const d = e.target.closest("[data-kind]");
+  if(!d) return;
+  const i = Number(d.dataset.index);
+  const p = d.dataset.prop;
+  if(d.dataset.kind === "scope" && data.scope[i]) data.scope[i][p] = d.value;
+  if(d.dataset.kind === "extra" && data.extras[i]) data.extras[i][p] = d.value;
+  renderAll();
+});
+
+document.addEventListener("change", e => {
+  if(e.target.id === "showExtras"){
+    data.showExtras = e.target.checked;
+    renderAll();
+    return;
+  }
+  if(e.target.id === "heroImageInput"){
+    const f = e.target.files?.[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      data.heroImage = r.result;
+      renderAll();
+    };
+    r.readAsDataURL(f);
+    return;
+  }
+  const idx = e.target.dataset.extraImage;
+  if(idx !== undefined){
+    const f = e.target.files?.[0];
+    const i = Number(idx);
+    if(!f || !data.extras[i]) return;
+    const r = new FileReader();
+    r.onload = () => {
+      data.extras[i].image = r.result;
+      renderExtras();
+      autoDensity();
+      save();
+    };
+    r.readAsDataURL(f);
+  }
+});
+
+document.getElementById("xmlInput").addEventListener("change", e => {
+  const f = e.target.files?.[0];
+  if(f) importXML(f);
+  e.target.value = "";
+});
+
+fillFixed();
+renderScopeEditor();
+renderExtrasEditor();
+renderAll();
+</script>
+
+<script>
+(function(){
+  function prepareDynamicPrint(){
+    renderPageFormat();
+  }
+
+  window.addEventListener("beforeprint", prepareDynamicPrint);
+
+  const nativePrint = window.print;
+  window.print = function(){
+    renderPageFormat();
+    setTimeout(() => nativePrint.call(window), 80);
+  };
+})();
+</script>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./theme-system.js?v=9"></script>
+<script>
+const PEC_SB_URL='https://qmhyeotvbktdilrudwys.supabase.co',PEC_SB_KEY='sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT';
+const pecSb=window.supabase?.createClient?window.supabase.createClient(PEC_SB_URL,PEC_SB_KEY):null;
+let pecQuoteUser=null,pecQuoteId=localStorage.getItem('pec-manager-current-quote-id')||'';
+function pecParseMoney(v){const s=String(v??'').replace(/[^0-9,.-]/g,'').replace(/\./g,'').replace(',','.');const n=Number(s);return Number.isFinite(n)?n:0}
+function pecQuoteTotal(){if(data.investmentMode==='perItem')return(data.scope||[]).reduce((a,s)=>a+pecParseMoney(s.value),0);return pecParseMoney(data.total)}
+function pecCloudPayload(){const p=clone(data);p.heroImage='';p.extras=(p.extras||[]).map(e=>({...e,image:''}));return p}
+function pecSetQuoteCloud(ok,text){const el=document.getElementById('pecQuoteCloud');if(!el)return;el.textContent=text|| (ok?'NUVEM ✓':'LOCAL');el.classList.toggle('cloud',!!ok)}
+async function pecInitQuoteCloud(){if(!pecSb)return;const{data:s}=await pecSb.auth.getSession();pecQuoteUser=s.session?.user||null;pecSetQuoteCloud(!!pecQuoteUser);if(pecQuoteUser)pecLoadQuoteHistory()}
+async function pecSaveQuote(){if(!pecQuoteUser){alert('Entre na mesma conta da Agenda antes de salvar online.');return}pecQuoteId=pecQuoteId||`q-${Date.now()}`;localStorage.setItem('pec-manager-current-quote-id',pecQuoteId);const payload=pecCloudPayload();payload._managerId=pecQuoteId;const row={id:pecQuoteId,user_id:pecQuoteUser.id,client_name:data.client||'',event_date:data.eventDate||null,status:document.getElementById('pecQuoteStatus').value,total_value:pecQuoteTotal(),payload,updated_at:new Date().toISOString()};const{error}=await pecSb.from('quotes').upsert(row,{onConflict:'id'});if(error){alert('Não foi possível salvar o orçamento online.');return}pecSetQuoteCloud(true,'SALVO ✓');setTimeout(()=>pecSetQuoteCloud(true),1200);pecLoadQuoteHistory()}
+function pecApplyQuote(payload,status,id){data={...clone(DEFAULT),...payload,scope:Array.isArray(payload.scope)?payload.scope.map(normalizeScope):clone(DEFAULT.scope),extras:Array.isArray(payload.extras)?payload.extras.map(normalizeExtra):clone(DEFAULT.extras)};pecQuoteId=id||payload._managerId||'';localStorage.setItem('pec-manager-current-quote-id',pecQuoteId);document.getElementById('pecQuoteStatus').value=status||'draft';fillFixed();renderScopeEditor();renderExtrasEditor();renderAll()}
+async function pecLoadQuoteHistory(){if(!pecQuoteUser)return;const{data:rows,error}=await pecSb.from('quotes').select('*').order('updated_at',{ascending:false}).limit(20);const c=document.getElementById('pecQuoteHistory');if(error||!rows?.length){c.innerHTML='<div class="pec-manager-empty">Nenhum orçamento salvo na nuvem.</div>';return}c.innerHTML=rows.map((r,i)=>`<button type="button" data-pec-q="${i}"><b>${esc(r.client_name||'Sem cliente')}</b><span>${r.event_date?dateBR(r.event_date):'Sem data'} • ${r.status}</span></button>`).join('');c.querySelectorAll('[data-pec-q]').forEach(b=>b.onclick=()=>{const r=rows[Number(b.dataset.pecQ)];pecApplyQuote(r.payload||{},r.status,r.id)})}
+function pecNewQuote(){if(!confirm('Começar um novo orçamento?'))return;pecQuoteId='';localStorage.removeItem('pec-manager-current-quote-id');data=clone(DEFAULT);data.client='';data.issueDate=new Date(Date.now()-new Date().getTimezoneOffset()*60000).toISOString().slice(0,10);data.eventDate='';data.venue='';data.heroImage='';document.getElementById('pecQuoteStatus').value='draft';fillFixed();renderScopeEditor();renderExtrasEditor();renderAll()}
+function pecQuoteToContract(){const p=pecCloudPayload();p._status=document.getElementById('pecQuoteStatus').value;localStorage.setItem('pec-manager-contract-seed',JSON.stringify(p));location.href='./contratos.html?from=quote'}
+async function pecQuoteToAgenda(){if(!pecQuoteUser){alert('Entre na conta pela Agenda.');return}if(!data.eventDate){alert('Informe a data do evento.');return}const label=(THEME_TEXT[data.theme]?.label||'Evento'),title=data.client?`${label} — ${data.client}`:label;const match=String(data.time||'').match(/^(\d{1,2}):(\d{2})$/),time=match?`${String(match[1]).padStart(2,'0')}:${match[2]}`:null;const id=`quote-${pecQuoteId||Date.now()}`,row={id,user_id:pecQuoteUser.id,title,date:data.eventDate,time_type:time?'time':'tbd',time_value:time?`${time}:00`:null,place:[data.venue,data.city].filter(Boolean).join(', '),notes:`Cliente: ${data.client||'—'} • Orçamento ${document.getElementById('pecQuoteStatus').value}`,completed:false,completed_at:null,updated_at:new Date().toISOString()};const{error}=await pecSb.from('events').upsert(row,{onConflict:'id'});alert(error?'Não foi possível adicionar à agenda.':'Evento adicionado à agenda ✓')}
+pecInitQuoteCloud();
+</script>
+</body>
+</html>

@@ -124,38 +124,6 @@
     };
   }catch(_){ }
 
-  // Fundo personalizado local, comprimido para não pesar no iPhone.
-  function applyBg(data){
-    let layer=document.querySelector('#pecBgLayer');
-    if(!layer){layer=document.createElement('div');layer.id='pecBgLayer';document.body.prepend(layer)}
-    layer.style.backgroundImage=data?`url(${JSON.stringify(data)})`:'none';
-  }
-  function addBgControls(){
-    if(document.querySelector('#pecBgFile'))return;
-    const settings=document.querySelector('.settings');if(!settings)return;
-    const sec=document.createElement('section');sec.className='personalize-card';
-    sec.innerHTML='<h3>Personalização</h3><p>Escolha uma foto para aparecer discretamente no fundo da agenda.</p><div class="personalize-row"><button class="mini" id="pecBgChoose">Escolher imagem</button><button class="mini" id="pecBgRemove">Remover fundo</button><input id="pecBgFile" type="file" accept="image/*"></div>';
-    settings.insertAdjacentElement('afterend',sec);
-    const input=sec.querySelector('#pecBgFile');
-    sec.querySelector('#pecBgChoose').onclick=()=>input.click();
-    sec.querySelector('#pecBgRemove').onclick=()=>{localStorage.removeItem(BG_KEY);applyBg('')};
-    input.onchange=()=>{
-      const file=input.files?.[0];if(!file)return;
-      const reader=new FileReader();reader.onload=()=>{
-        const img=new Image();img.onload=()=>{
-          const max=1600,scale=Math.min(1,max/Math.max(img.width,img.height));
-          const c=document.createElement('canvas');c.width=Math.round(img.width*scale);c.height=Math.round(img.height*scale);
-          c.getContext('2d').drawImage(img,0,0,c.width,c.height);
-          const data=c.toDataURL('image/jpeg',.72);
-          try{localStorage.setItem(BG_KEY,data);applyBg(data)}catch(_){alert('Essa imagem ficou pesada demais. Tente outra foto.')}
-        };img.src=reader.result;
-      };reader.readAsDataURL(file);
-    };
-  }
-
-  applyBg(localStorage.getItem(BG_KEY)||'');
-  addBgControls();
-
   // Reaplica os comportamentos novos e força uma leitura limpa da nuvem.
   try{render()}catch(_){ }
   setTimeout(()=>{try{if(window.pecPullCloud)window.pecPullCloud(false)}catch(_){}},600);

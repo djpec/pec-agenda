@@ -1,18 +1,2722 @@
-<!doctype html><html lang="pt-BR"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><title>Orçamentos | pec Manager</title><style>
-:root{--bg:#0b0c0e;--panel:#141619;--panel2:#1b1e22;--line:#2b3036;--text:#f6f7f8;--muted:#969da6;--accent:#f2c94c;--safe:#63d391;--paper:#fbfaf7;--ink:#191816;--gold:#9b7658}*{box-sizing:border-box}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}body{padding-bottom:30px}.top{position:sticky;top:0;z-index:20;background:#0b0c0eee;border-bottom:1px solid var(--line);backdrop-filter:blur(14px)}.topin{width:min(1200px,100%);margin:auto;padding:10px 14px;display:flex;align-items:center;gap:8px}.home{display:flex;align-items:center;gap:8px;color:#fff;text-decoration:none;font-size:12px;font-weight:850}.home i{font-style:normal;width:28px;height:28px;border-radius:9px;background:var(--accent);color:#111;display:grid;place-items:center}.spacer{flex:1}.status{font-size:9px;font-weight:900;color:var(--muted);padding:7px 9px;border-radius:999px;background:#202328}.status.ok{color:var(--safe);background:#17231c}.action{border:1px solid var(--line);background:#1a1d21;color:#fff;border-radius:11px;padding:9px 11px;font-size:11px;font-weight:850;cursor:pointer}.action.primary{background:var(--accent);border-color:var(--accent);color:#111}.layout{width:min(1200px,100%);margin:auto;display:grid;grid-template-columns:390px minmax(0,1fr);gap:18px;padding:16px}.editor{background:var(--panel);border:1px solid var(--line);border-radius:22px;padding:15px;align-self:start;position:sticky;top:66px;max-height:calc(100vh - 82px);overflow:auto}.editor h1{font-size:18px;margin:0 0 4px}.editor .lead{color:var(--muted);font-size:11px;margin:0 0 14px}.group{border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden;background:var(--panel2)}.group summary{padding:12px 13px;font-size:12px;font-weight:850;cursor:pointer}.fields{padding:0 12px 12px;display:grid;gap:9px}.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}label{display:grid;gap:5px;font-size:10px;font-weight:800;color:#c8ccd1}input,select,textarea{width:100%;min-width:0;background:#0e1012;border:1px solid #393e45;color:#fff;border-radius:9px;padding:10px;font:inherit;font-size:12px;outline:none}textarea{min-height:72px;resize:vertical}.minirow{display:grid;grid-template-columns:1fr 110px 32px;gap:6px;margin-bottom:6px}.minirow button{border:0;border-radius:8px;background:#472626;color:#ffdede}.add{width:100%;border:1px dashed #484e56;background:transparent;color:#ddd;border-radius:9px;padding:9px;font-size:11px;font-weight:800}.history{display:grid;gap:6px;max-height:170px;overflow:auto}.hist{border:1px solid var(--line);background:#111316;color:#fff;border-radius:10px;padding:9px;text-align:left;cursor:pointer}.hist b{font-size:11px;display:block}.hist span{font-size:9px;color:var(--muted)}.previewwrap{min-width:0}.preview{width:min(820px,100%);margin:auto;background:var(--paper);color:var(--ink);box-shadow:0 20px 70px #0007;border-radius:4px;overflow:hidden}.hero{background:linear-gradient(145deg,#1d332d,#15231f);color:#fff;padding:44px 46px 34px}.kicker{font-size:10px;letter-spacing:.14em;text-transform:uppercase;font-weight:900;color:#dbc9aa}.hero h2{font:700 33px/1.08 Georgia,serif;margin:11px 0 9px}.hero p{margin:0;color:#d8dfdb;font-size:13px;line-height:1.55}.paper{padding:34px 46px}.meta{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin-bottom:25px}.meta div{border-top:1px solid #d8d1c8;padding-top:8px}.meta small{display:block;text-transform:uppercase;font-size:8px;letter-spacing:.1em;color:#827b73;font-weight:800}.meta b{font-size:11px}.section{margin:23px 0}.section h3{font:700 18px Georgia,serif;margin:0 0 9px}.scope{border:1px solid #ded8d0;border-radius:14px;padding:16px;background:#fff}.scope b{font-size:14px}.scope p{font-size:11px;color:#66615b;line-height:1.55}.investment{display:flex;align-items:end;justify-content:space-between;border-radius:16px;background:#f1ebe4;padding:18px;margin-top:13px}.investment small{display:block;color:#786d61;font-size:9px;text-transform:uppercase;font-weight:800}.investment strong{font:700 28px Georgia,serif}.extras{display:grid;grid-template-columns:1fr 1fr;gap:9px}.extra{border:1px solid #ddd6ce;border-radius:12px;padding:13px}.extra b{font-size:12px}.extra span{display:block;margin-top:7px;font-weight:900;color:#6b4f39;font-size:11px}.conditions{display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px}.condition{background:#f5f1ec;padding:12px;border-radius:10px;font-size:10px;line-height:1.45}.condition b{display:block;margin-bottom:3px}.footer{border-top:1px solid #ddd6ce;padding-top:14px;margin-top:28px;display:flex;justify-content:space-between;color:#777068;font-size:9px}.empty{color:var(--muted);font-size:10px}.mobiletabs{display:none}
-@media(max-width:800px){.layout{display:block;padding:10px}.editor{position:static;max-height:none;border-radius:18px}.previewwrap{display:none;margin-top:10px}.preview{border-radius:14px}.hero{padding:28px 22px}.hero h2{font-size:26px}.paper{padding:24px 22px}.meta{grid-template-columns:1fr 1fr}.extras{grid-template-columns:1fr}.conditions{grid-template-columns:1fr}.mobiletabs{display:flex;gap:6px}.mobiletabs button{border:1px solid var(--line);background:#17191d;color:#fff;border-radius:10px;padding:8px 10px;font-size:10px;font-weight:800}.layout.show-preview .editor{display:none}.layout.show-preview .previewwrap{display:block}.topin{flex-wrap:wrap}.topin .desktop{display:none}}
-@media print{body{background:#fff}.top,.editor{display:none!important}.layout{display:block;padding:0}.previewwrap{display:block!important}.preview{width:100%;box-shadow:none;border-radius:0}.hero{padding:20mm 17mm 14mm}.paper{padding:12mm 17mm}.footer{margin-top:12mm}}
-</style></head><body>
-<div class="top"><div class="topin"><a class="home" href="./"><i>p</i><span>pec Manager / Orçamentos</span></a><div class="spacer"></div><div class="mobiletabs"><button onclick="mobile('edit')">Editar</button><button onclick="mobile('preview')">Visualizar</button></div><span id="cloud" class="status">LOCAL</span><button class="action desktop" onclick="newQuote()">Novo</button><button class="action desktop" onclick="window.print()">PDF</button><button class="action primary" onclick="saveQuote()">Salvar</button></div></div>
-<div id="layout" class="layout"><aside class="editor"><h1>Orçamento</h1><p class="lead">Modelo integrado ao pec Manager, com histórico na nuvem.</p>
-<details class="group" open><summary>Cliente e evento</summary><div class="fields"><label>Cliente<input id="client"></label><div class="two"><label>Data emissão<input id="issue" type="date"></label><label>Data evento<input id="date" type="date"></label></div><label>Evento<input id="event" value="Evento"></label><label>Tema<select id="theme"><option value="casamento">Casamento</option><option value="xv">Festa de XV</option><option value="geral">Eventos em geral</option></select></label><label>Local<input id="venue"></label><div class="two"><label>Cidade<input id="city" value="Foz do Iguaçu - PR"></label><label>Horário<input id="time" value="A definir"></label></div><div class="two"><label>Duração<input id="duration" value="2 horas"></label><label>Estilo<input id="style" value="Open Format"></label></div></div></details>
-<details class="group" open><summary>Apresentação e investimento</summary><div class="fields"><label>Formato<select id="format"><option>Warm-up + Performance</option><option>Warm-up</option><option>Performance</option></select></label><label>Descrição<textarea id="desc">Performance exclusiva do pec, com repertório construído para o perfil do evento e leitura da pista em tempo real.</textarea></label><div class="two"><label>Tempo / fluxo<input id="flow" value="Conforme alinhado"></label><label>Valor total (R$)<input id="total" type="number" step="0.01" value="600"></label></div></div></details>
-<details class="group"><summary>Serviços adicionais</summary><div class="fields"><div id="extraEditor"></div><button class="add" type="button" onclick="addExtra()">+ Adicionar serviço</button></div></details>
-<details class="group"><summary>Condições</summary><div class="fields"><label>Sinal<input id="deposit" value="50% na assinatura do contrato para garantia da data."></label><label>Saldo<input id="balance" value="50% até 1 dia antes do evento."></label><label>Pagamento<input id="payment" value="Pix ou transferência bancária."></label><label>Observações<textarea id="notes">A data será considerada reservada após a confirmação do sinal e assinatura do contrato.</textarea></label><label>Rider<textarea id="rider">01 mesa firme e plana para os equipamentos do DJ.\nPontos de energia aterrados próximos à cabine ou palco.\nSistema de som adequado ao espaço e ao número de convidados.\nAlimentação e hidratação durante o período do evento.</textarea></label><label>Status<select id="status"><option value="draft">Rascunho</option><option value="sent">Enviado</option><option value="approved">Aprovado</option><option value="declined">Recusado</option></select></label></div></details>
-<details class="group"><summary>Histórico online</summary><div class="fields"><div id="history" class="history"><div class="empty">Entre na mesma conta usada na Agenda.</div></div></div></details>
-<div class="fields"><button class="action" onclick="window.print()">Exportar / imprimir PDF</button><button class="action" onclick="toContract()">Gerar contrato com estes dados</button><button class="action" onclick="toAgenda()">Adicionar à agenda</button><button class="action" onclick="newQuote()">Novo orçamento</button></div></aside>
-<main class="previewwrap"><article class="preview"><section class="hero"><div class="kicker">PROPOSTA COMERCIAL • pec</div><h2 id="pvTitle">Uma entrega musical profissional para o seu evento.</h2><p id="pvIntro">Open Format • experiência de pista • atendimento personalizado</p></section><section class="paper"><div class="meta"><div><small>Cliente</small><b id="pvClient">—</b></div><div><small>Data</small><b id="pvDate">—</b></div><div><small>Local</small><b id="pvVenue">—</b></div><div><small>Horário</small><b id="pvTime">—</b></div></div><section class="section"><h3>Escopo da apresentação</h3><div class="scope"><b id="pvFormat">—</b><p id="pvDesc"></p><small id="pvFlow"></small></div><div class="investment"><div><small>Investimento total</small><strong id="pvTotal">R$ 0,00</strong></div><small id="pvDuration"></small></div></section><section id="pvExtrasSection" class="section"><h3>Serviços adicionais</h3><div id="pvExtras" class="extras"></div></section><section class="section"><h3>Condições comerciais</h3><div class="conditions"><div class="condition"><b>Reserva</b><span id="pvDeposit"></span></div><div class="condition"><b>Saldo</b><span id="pvBalance"></span></div><div class="condition"><b>Pagamento</b><span id="pvPayment"></span></div></div></section><section class="section"><h3>Requisitos mínimos</h3><p id="pvRider" style="white-space:pre-line;font-size:10px;line-height:1.6;color:#5f5a55"></p><p id="pvNotes" style="font-size:10px;line-height:1.6;color:#5f5a55"></p></section><footer class="footer"><span>djpec.com • @djpec_</span><span>contato@djpec.com</span></footer></section></article></main></div>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script>
-const U='https://qmhyeotvbktdilrudwys.supabase.co',K='sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT',sb=window.supabase.createClient(U,K),$=id=>document.getElementById(id);let id=null,user=null,extras=[{title:'Jatos de CO₂',value:'A partir de R$ 2.800,00'},{title:'Bazuca de CO₂',value:'R$ 700,00'}];const fields=['client','issue','date','event','theme','venue','city','time','duration','style','format','desc','flow','total','deposit','balance','payment','notes','rider','status'];const themes={casamento:'Uma experiência musical pensada para o seu casamento.',xv:'Uma noite com personalidade, energia e presença.',geral:'Uma entrega musical profissional para o seu evento.'};function today(){const d=new Date();return new Date(d.getTime()-d.getTimezoneOffset()*60000).toISOString().slice(0,10)}function br(d){if(!d)return'—';const[y,m,da]=d.split('-');return`${da}/${m}/${y}`}function money(v){return Number(v||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'})}function data(){return Object.fromEntries(fields.map(x=>[x,$(x).value]).concat([['extras',extras],['id',id]]))}function apply(d){fields.forEach(x=>{if(d[x]!=null)$(x).value=d[x]});extras=Array.isArray(d.extras)?d.extras:[];renderExtraEditor();render()}function render(){const d=data();$('pvTitle').textContent=themes[d.theme]||themes.geral;$('pvIntro').textContent=`${d.style||'Open Format'} • experiência de pista • proposta personalizada`;$('pvClient').textContent=d.client||'—';$('pvDate').textContent=br(d.date);$('pvVenue').textContent=[d.venue,d.city].filter(Boolean).join(' • ')||'—';$('pvTime').textContent=d.time||'A definir';$('pvFormat').textContent=d.format;$('pvDesc').textContent=d.desc;$('pvFlow').textContent=d.flow;$('pvTotal').textContent=money(d.total);$('pvDuration').textContent=d.duration;$('pvDeposit').textContent=d.deposit;$('pvBalance').textContent=d.balance;$('pvPayment').textContent=d.payment;$('pvRider').textContent=d.rider;$('pvNotes').textContent=d.notes;$('pvExtras').innerHTML=extras.map(e=>`<div class="extra"><b>${esc(e.title)}</b><span>${esc(e.value)}</span></div>`).join('');$('pvExtrasSection').style.display=extras.length?'block':'none'}function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}function renderExtraEditor(){$('extraEditor').innerHTML=extras.map((e,i)=>`<div class="minirow"><input value="${esc(e.title)}" oninput="extras[${i}].title=this.value;render()"><input value="${esc(e.value)}" oninput="extras[${i}].value=this.value;render()"><button onclick="extras.splice(${i},1);renderExtraEditor();render()">×</button></div>`).join('')}function addExtra(){extras.push({title:'Novo serviço',value:'R$ 0,00'});renderExtraEditor();render()}fields.forEach(x=>$(x).addEventListener('input',render));
-async function init(){if(!$('issue').value)$('issue').value=today();renderExtraEditor();render();const{data:s}=await sb.auth.getSession();user=s.session?.user||null;$('cloud').textContent=user?'NUVEM ✓':'LOCAL';$('cloud').classList.toggle('ok',!!user);if(user)loadHistory();if(new URLSearchParams(location.search).get('new')==='1')newQuote()}async function saveQuote(){if(!user){alert('Entre na conta pela Agenda para salvar online.');return}const d=data();id=id||`q-${Date.now()}`;d.id=id;const row={id,user_id:user.id,client_name:d.client||'',event_date:d.date||null,status:d.status,total_value:Number(d.total||0),payload:d,updated_at:new Date().toISOString()};const{error}=await sb.from('quotes').upsert(row,{onConflict:'id'});if(error)alert('Não foi possível salvar.');else{alert('Orçamento salvo na nuvem ✓');loadHistory()}}async function loadHistory(){const{data:r}=await sb.from('quotes').select('*').order('updated_at',{ascending:false}).limit(20);$('history').innerHTML=(r||[]).map(q=>`<button class="hist" onclick='loadQuote(${JSON.stringify(q.payload).replace(/'/g,"&#39;")})'><b>${esc(q.client_name||'Sem cliente')}</b><span>${br(q.event_date)} • ${q.status}</span></button>`).join('')||'<div class="empty">Nenhum orçamento salvo.</div>'}function loadQuote(d){id=d.id||null;apply(d)}function newQuote(){id=null;['client','venue'].forEach(x=>$(x).value='');$('date').value='';$('issue').value=today();$('event').value='Evento';$('status').value='draft';render()}function toContract(){const d=data();localStorage.setItem('pec-manager-contract-seed',JSON.stringify(d));location.href='./contratos.html?from=quote'}async function toAgenda(){if(!user){alert('Entre na conta pela Agenda.');return}const d=data();if(!d.date){alert('Informe a data do evento.');return}if(!confirm('Adicionar este evento à agenda?'))return;const hh=/^\d{2}:\d{2}$/.test(d.time)?d.time:null,eventId=`quote-${id||Date.now()}`;const row={id:eventId,user_id:user.id,title:d.event||`Evento — ${d.client||'Cliente'}`,date:d.date,time_type:hh?'time':'tbd',time_value:hh?`${hh}:00`:null,place:[d.venue,d.city].filter(Boolean).join(', '),notes:`Cliente: ${d.client||'—'} • Orçamento ${d.status}`,completed:false,completed_at:null,updated_at:new Date().toISOString()};const{error}=await sb.from('events').upsert(row,{onConflict:'id'});alert(error?'Não foi possível adicionar.':'Evento adicionado à agenda ✓')}function mobile(mode){$('layout').classList.toggle('show-preview',mode==='preview')}init();
-</script></body></html>
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Proposta DJ pec — Valores claros</title>
+<style>
+:root{
+  --app:#ececea;
+  --panel:#141414;
+  --panel2:#1c1c1c;
+  --paper:#fcfbf8;
+  --ink:#171717;
+  --muted:#6d6a66;
+  --line:#ded9d2;
+  --accent:#9b7658;
+  --accent2:#2f5148;
+  --soft:#f3eee8;
+  --hero:#1d332d;
+  --heroText:#fffdf9;
+  --serif: Georgia, "Times New Roman", serif;
+  --sans: Arial, Helvetica, sans-serif;
+  --section-gap:28px;
+  --hero-min:225px;
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:12px;
+  --extra-image-width:46%;
+}
+
+/* Temas por tipo de evento */
+body[data-theme="casamento"]{
+  --paper:#fcfaf6;
+  --ink:#191714;
+  --muted:#746d66;
+  --line:#dfd6cc;
+  --soft:#f3ede6;
+  --heroText:#fffaf4;
+}
+body[data-theme="xv"]{
+  --paper:#fcfbfd;
+  --ink:#1b1720;
+  --muted:#756c7d;
+  --line:#dfd8e5;
+  --soft:#f4eff7;
+  --heroText:#fff;
+}
+body[data-theme="geral"]{
+  --paper:#fbfcfd;
+  --ink:#171b20;
+  --muted:#69737d;
+  --line:#dce2e7;
+  --soft:#f1f4f6;
+  --heroText:#fff;
+}
+
+/* Paletas */
+body[data-palette="terracota"]{
+  --accent:#9d7657;
+  --accent2:#36564d;
+  --hero:#223a33;
+}
+body[data-palette="azul"]{
+  --accent:#496c90;
+  --accent2:#2c4157;
+  --hero:#213240;
+}
+body[data-palette="verde"]{
+  --accent:#6e7d5e;
+  --accent2:#324539;
+  --hero:#2a3b31;
+}
+body[data-palette="rose"]{
+  --accent:#b07a82;
+  --accent2:#725c67;
+  --hero:#4a3842;
+}
+body[data-palette="roxo"]{
+  --accent:#8266a8;
+  --accent2:#4e3c68;
+  --hero:#342742;
+}
+body[data-palette="dourado"]{
+  --accent:#a88b4d;
+  --accent2:#544937;
+  --hero:#2c2925;
+}
+
+*{box-sizing:border-box}
+html,body{
+  margin:0;
+  padding:0;
+  background:var(--app);
+  font-family:var(--sans);
+  color:var(--ink);
+}
+body{
+  display:grid;
+  grid-template-columns:390px minmax(0,1fr);
+  min-height:100vh;
+}
+
+/* EDITOR */
+.editor{
+  position:sticky;
+  top:0;
+  height:100vh;
+  overflow:auto;
+  padding:22px;
+  background:var(--panel);
+  color:#fff;
+  border-right:1px solid #2c2c2c;
+}
+.editor h1{margin:0 0 6px;font-size:23px}
+.editor .lead{margin:0 0 17px;color:#bcbcbc;font-size:12px;line-height:1.5}
+.actions{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:8px;
+  margin-bottom:16px;
+}
+button,.file-btn{
+  border:0;
+  border-radius:10px;
+  padding:10px 11px;
+  font-size:12px;
+  font-weight:700;
+  cursor:pointer;
+  text-align:center;
+}
+.primary{background:#f3f3f3;color:#111}
+.secondary{background:#2c2c2c;color:#fff}
+.danger{background:#4a2626;color:#ffdcdc}
+.file-btn input{display:none}
+details{
+  margin-bottom:10px;
+  overflow:hidden;
+  background:var(--panel2);
+  border:1px solid #343434;
+  border-radius:12px;
+}
+summary{padding:13px 14px;font-size:13px;font-weight:700;cursor:pointer}
+.fields{display:grid;gap:9px;padding:0 14px 14px}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+label{
+  display:grid;
+  gap:5px;
+  color:#ddd;
+  font-size:11px;
+  font-weight:700;
+}
+input,textarea,select{
+  width:100%;
+  padding:9px 10px;
+  background:#111;
+  color:#fff;
+  border:1px solid #444;
+  border-radius:8px;
+  font:inherit;
+  font-size:12px;
+  outline:none;
+}
+textarea{
+  min-height:76px;
+  resize:vertical;
+  line-height:1.42;
+}
+input:focus,textarea:focus,select:focus{border-color:#8b8b8b}
+.editor-list{display:grid;gap:10px}
+.editor-item{
+  padding:11px;
+  background:#171717;
+  border:1px solid #383838;
+  border-radius:12px;
+}
+.editor-item-head{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  margin-bottom:10px;
+}
+.editor-item-head strong{font-size:12px}
+.remove{padding:6px 8px;background:#4b2727;color:#ffd9d9;font-size:10px;border-radius:8px}
+.add{width:100%;background:#ededed;color:#111;border-radius:10px}
+.check{display:flex;align-items:center;gap:8px}
+.check input{width:auto}
+.note{margin:0;color:#a9a9a9;font-size:10px;line-height:1.45}
+
+/* STAGE */
+.stage{padding:28px;overflow:auto}
+.sheet{
+  width:210mm;
+  max-width:100%;
+  margin:0 auto;
+  background:var(--paper);
+  box-shadow:0 18px 48px rgba(0,0,0,.13);
+  border-radius:30px;
+  overflow:hidden;
+}
+.doc{padding:14mm 15mm 13mm}
+.topbar{
+  display:flex;
+  align-items:flex-start;
+  justify-content:space-between;
+  gap:20px;
+  padding-bottom:15px;
+  border-bottom:1px solid var(--line);
+}
+.brand{
+  font-size:34px;
+  font-weight:900;
+  letter-spacing:-4px;
+  line-height:1;
+}
+.brand small{
+  margin-left:9px;
+  color:var(--accent);
+  font-size:8.5px;
+  letter-spacing:1.6px;
+  text-transform:uppercase;
+  vertical-align:middle;
+}
+.docmeta{
+  color:var(--muted);
+  font-size:10px;
+  line-height:1.55;
+  text-align:right;
+}
+
+/* HERO */
+.hero{
+  position:relative;
+  min-height:var(--hero-min);
+  margin-top:20px;
+  overflow:hidden;
+  background:var(--hero);
+  color:var(--heroText);
+  border-radius:var(--radius-lg);
+}
+.hero-bg{
+  position:absolute;
+  inset:0;
+  background-size:cover;
+  background-position:center;
+  opacity:.18;
+  filter:saturate(.72) contrast(.92);
+  transform:scale(1.03);
+}
+.hero-shade{
+  position:absolute;
+  inset:0;
+  background:
+    linear-gradient(90deg,rgba(0,0,0,.44) 0%,rgba(0,0,0,.21) 52%,rgba(0,0,0,.12) 100%),
+    linear-gradient(0deg,rgba(0,0,0,.12),transparent 55%);
+}
+.hero-inner{
+  position:relative;
+  z-index:2;
+  display:grid;
+  grid-template-columns:1.18fr .82fr;
+  gap:26px;
+  min-height:var(--hero-min);
+  padding:26px 28px;
+}
+.hero-kicker{
+  margin-bottom:11px;
+  color:rgba(255,255,255,.74);
+  font-size:8.5px;
+  font-weight:700;
+  letter-spacing:1.8px;
+  text-transform:uppercase;
+}
+.hero h1{
+  margin:0;
+  font-family:var(--serif);
+  font-size:31px;
+  line-height:1.07;
+  font-weight:400;
+  letter-spacing:-.55px;
+  max-width:470px;
+}
+.hero p{
+  margin:13px 0 0;
+  color:rgba(255,255,255,.88);
+  font-size:12.6px;
+  line-height:1.66;
+  max-width:470px;
+}
+.event-card{
+  align-self:end;
+  padding:15px 16px;
+  background:rgba(255,255,255,.12);
+  border:1px solid rgba(255,255,255,.19);
+  backdrop-filter:blur(5px);
+  border-radius:var(--radius-md);
+}
+.event-card .label{
+  display:block;
+  margin-bottom:3px;
+  color:rgba(255,255,255,.65);
+  font-size:7.8px;
+  letter-spacing:1.15px;
+  text-transform:uppercase;
+}
+.event-card strong{
+  display:block;
+  font-size:12px;
+  line-height:1.5;
+}
+.event-card .row{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+  margin-top:10px;
+}
+
+/* FLOW */
+.section{margin-top:var(--section-gap)}
+.section-heading{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:end;
+  margin-bottom:13px;
+}
+.section-eyebrow{
+  display:block;
+  margin-bottom:5px;
+  color:var(--accent);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:1.55px;
+  text-transform:uppercase;
+}
+.section h2{
+  margin:0;
+  font-family:var(--serif);
+  font-size:24px;
+  font-weight:400;
+  letter-spacing:-.35px;
+}
+.section-intro{
+  max-width:260px;
+  color:var(--muted);
+  font-size:10.8px;
+  line-height:1.55;
+  text-align:right;
+}
+
+/* SCOPE */
+.scope-grid{
+  display:grid;
+  grid-template-columns:repeat(2,minmax(0,1fr));
+  gap:12px;
+}
+.scope-grid.single{grid-template-columns:1fr}
+.scope-item{
+  padding:15px 16px;
+  background:#fff;
+  border:1px solid var(--line);
+  break-inside:avoid;
+  page-break-inside:avoid;
+  border-radius:var(--radius-md);
+}
+.scope-num{
+  display:block;
+  margin-bottom:9px;
+  color:var(--accent);
+  font-family:var(--serif);
+  font-size:20px;
+  line-height:1;
+}
+.scope-item h3{
+  margin:0 0 7px;
+  font-family:var(--serif);
+  font-size:18px;
+  font-weight:400;
+}
+.scope-item p{
+  margin:0;
+  color:#444;
+  font-size:11.8px;
+  line-height:1.6;
+  white-space:pre-line;
+}
+.scope-meta{
+  display:flex;
+  flex-wrap:wrap;
+  gap:5px 11px;
+  margin-top:10px;
+  padding-top:9px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:9.8px;
+}
+
+/* INVESTMENT */
+.investment{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:center;
+  padding:18px 19px;
+  background:var(--soft);
+  border-left:4px solid var(--accent);
+  border-radius:var(--radius-md);
+}
+.investment .cap{
+  display:block;
+  margin-bottom:4px;
+  color:var(--muted);
+  font-size:8px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+.investment .desc{font-size:11.2px;line-height:1.55;color:#454545}
+.investment .price{
+  font-family:var(--serif);
+  font-size:27px;
+  white-space:nowrap;
+  color:var(--ink);
+}
+
+/* EXTRAS */
+.extras-grid{
+  display:grid;
+  grid-template-columns:1fr;
+  gap:12px;
+}
+.extra{
+  display:grid;
+  grid-template-columns:minmax(240px,var(--extra-image-width)) minmax(0,1fr);
+  background:#fff;
+  border:1px solid var(--line);
+  break-inside:avoid;
+  page-break-inside:avoid;
+  border-radius:var(--radius-lg);
+  overflow:hidden;
+}
+.extra.no-image{grid-template-columns:1fr}
+.extra-media{
+  position:relative;
+  overflow:hidden;
+  background:var(--soft);
+  aspect-ratio: var(--media-ratio, 4 / 3);
+  min-height:100%;
+}
+.extra-media img{
+  width:100%;
+  height:100%;
+  object-fit:cover;
+  display:block;
+}
+.extra-media.fit-contain img{
+  object-fit:contain;
+  background:var(--soft);
+}
+.extra-media.position-top img{object-position:center top}
+.extra-media.position-center img{object-position:center center}
+.extra-media.position-bottom img{object-position:center bottom}
+
+.extra-copy{
+  padding:16px 17px;
+  display:flex;
+  flex-direction:column;
+  justify-content:flex-start;
+}
+.extra-kicker{
+  margin-bottom:5px;
+  color:var(--accent);
+  font-size:7.9px;
+  font-weight:700;
+  letter-spacing:1.2px;
+  text-transform:uppercase;
+}
+.extra h3{
+  margin:0 0 7px;
+  font-family:var(--serif);
+  font-size:18px;
+  font-weight:400;
+}
+.extra p{
+  margin:0;
+  color:#464646;
+  font-size:11.2px;
+  line-height:1.58;
+  white-space:pre-line;
+}
+.extra-value{
+  margin-top:11px;
+  padding:11px 0 0 0;
+  border-top:1px solid var(--line);
+  font-size:11.7px;
+  line-height:1.56;
+  white-space:pre-line;
+}
+.extra-value strong{
+  color:var(--accent);
+  font-size:13.8px;
+}
+
+/* TERMS */
+.info-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:12px;
+}
+.info-box{
+  padding:14px 15px;
+  background:#fff;
+  border:1px solid var(--line);
+  break-inside:avoid;
+  page-break-inside:avoid;
+  border-radius:var(--radius-md);
+}
+.info-box h3{
+  margin:0 0 8px;
+  color:var(--accent);
+  font-size:8px;
+  letter-spacing:1.3px;
+  text-transform:uppercase;
+}
+.info-box p,.info-box li{
+  font-size:10.8px;
+  line-height:1.55;
+  color:#444;
+}
+.info-box p{margin:0}
+.info-box ul{margin:0;padding-left:17px}
+.notes{
+  margin-top:12px;
+  padding:13px 14px;
+  background:var(--soft);
+  color:#484848;
+  font-size:10.6px;
+  line-height:1.58;
+  border-left:3px solid var(--accent2);
+  border-radius:var(--radius-md);
+}
+
+/* FOOTER */
+.footer{
+  display:grid;
+  grid-template-columns:1fr auto;
+  gap:20px;
+  align-items:end;
+  margin-top:26px;
+  padding-top:14px;
+  border-top:1px solid var(--line);
+  color:var(--muted);
+  font-size:9.7px;
+  line-height:1.5;
+}
+.footer strong{color:var(--ink);font-size:10.5px}
+.footer-right{text-align:right}
+.contact-link{
+  color:inherit;
+  text-decoration:none;
+  border-bottom:1px dotted rgba(0,0,0,.24);
+}
+.contact-link:hover{color:var(--accent)}
+
+/* AUTO DENSITY */
+.doc[data-density="compact"]{
+  --section-gap:21px;
+  --hero-min:198px;
+}
+.doc[data-density="compact"] .hero{margin-top:16px}
+.doc[data-density="compact"] .hero-inner{padding:21px 24px;gap:20px}
+.doc[data-density="compact"] .section-heading{margin-bottom:10px}
+.doc[data-density="compact"] .scope-item{padding:13px 14px}
+.doc[data-density="compact"] .investment{padding:15px 17px}
+.doc[data-density="compact"] .extra-copy{padding:13px 14px}
+.doc[data-density="compact"] .footer{margin-top:20px}
+
+/* Responsive */
+@media screen and (max-width:900px){
+  body{display:block}
+  .editor{position:relative;height:auto}
+  .stage{padding:10px}
+  .sheet{width:100%;border-radius:20px}
+  .doc{padding:24px 20px}
+  .hero-inner,.scope-grid,.info-grid{grid-template-columns:1fr}
+  .event-card{align-self:auto}
+  .section-heading{grid-template-columns:1fr}
+  .section-intro{text-align:left;max-width:none}
+  .extra{grid-template-columns:1fr}
+  .extra.no-image{grid-template-columns:1fr}
+}
+
+/* Print */
+@page{size:A4 portrait;margin:12mm 11mm 12mm}
+
+@media print{
+  html,body{
+    display:block!important;
+    width:auto!important;
+    min-width:0!important;
+    margin:0!important;
+    padding:0!important;
+    background:#fff!important;
+  }
+  .editor{display:none!important}
+  .stage{padding:0!important;overflow:visible!important}
+  .sheet{
+    width:auto!important;
+    max-width:none!important;
+    margin:0!important;
+    background:transparent!important;
+    box-shadow:none!important;
+    border-radius:0!important;
+  }
+  .doc{padding:0!important;background:transparent!important}
+  .topbar,.hero,.scope-item,.investment,.extra,.info-box,.notes,.footer{
+    break-inside:avoid!important;
+    page-break-inside:avoid!important;
+  }
+  .section-heading{
+    break-after:avoid!important;
+    page-break-after:avoid!important;
+  }
+  .hero{margin-top:14px!important}
+  .section{margin-top:20px!important}
+  .footer{margin-bottom:0!important}
+  *{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+}
+
+/* ============================================================
+   PAGINAÇÃO BALANCEADA — SEM DIMINUIR FONTES
+   Mantém a leitura confortável e distribui melhor o conteúdo
+   entre páginas quando o orçamento ultrapassa 1 folha.
+   ============================================================ */
+
+.print-break-before{
+  break-before:page !important;
+  page-break-before:always !important;
+}
+
+@page{
+  size:A4 portrait;
+  margin:10mm 11mm 10mm;
+}
+
+@media print{
+  html,body{
+    display:block !important;
+    width:auto !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  .editor{
+    display:none !important;
+  }
+
+  .stage{
+    padding:0 !important;
+    overflow:visible !important;
+  }
+
+  .sheet{
+    width:auto !important;
+    max-width:none !important;
+    margin:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    overflow:visible !important;
+  }
+
+  .doc{
+    width:auto !important;
+    padding:0 !important;
+    background:transparent !important;
+  }
+
+  /* IMPORTANTE:
+     não reduzimos a tipografia. Apenas tiramos espaços verticais
+     exagerados que o navegador soma na impressão. */
+  .hero{
+    margin-top:14px !important;
+  }
+
+  .section{
+    margin-top:18px !important;
+  }
+
+  .section-heading{
+    margin-bottom:10px !important;
+    break-after:avoid !important;
+    page-break-after:avoid !important;
+  }
+
+  .footer{
+    margin-top:16px !important;
+    padding-top:11px !important;
+  }
+
+  /* Mantém blocos pequenos íntegros, mas permite que conjuntos grandes
+     atravessem páginas ao invés de deixar um rombo em branco. */
+  .scope-item,
+  .investment,
+  .extra,
+  .info-box{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .notes,
+  .footer{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  .info-grid{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  #termsSection{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
+
+
+/* ============================================================
+   V6 — INVESTIMENTO FLEXÍVEL + PÁGINA 2 INTENCIONAL + RODAPÉ
+   ============================================================ */
+
+.hidden-ui{
+  display:none !important;
+}
+
+/* Valor dentro de cada item do escopo */
+.scope-item{
+  position:relative;
+}
+.scope-price{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:11px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+}
+.scope-price-label{
+  color:var(--muted);
+  font-size:7.7px;
+  font-weight:700;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.scope-price-value{
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:18px;
+  line-height:1;
+  white-space:nowrap;
+}
+
+/* Página 2 passa a ter abertura própria */
+.terms-heading{
+  margin-bottom:13px;
+}
+
+/* Rodapé um pouco mais elaborado, mas ainda discreto */
+.footer{
+  position:relative;
+  grid-template-columns:1fr auto;
+  gap:22px;
+  margin-top:24px;
+  padding:15px 17px 14px;
+  background:var(--soft);
+  border-top:0;
+  border-radius:var(--radius-md);
+  overflow:hidden;
+}
+.footer::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:72px;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.footer-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.footer-mark{
+  color:var(--ink);
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-2.5px;
+  line-height:1;
+}
+.footer-copy strong{
+  display:block;
+  margin-bottom:2px;
+  color:var(--ink);
+  font-size:9.2px;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+.footer-copy span{
+  color:var(--muted);
+  font-size:9.5px;
+  line-height:1.4;
+}
+.footer-right{
+  color:var(--muted);
+  font-size:9.4px;
+  line-height:1.55;
+  text-align:right;
+}
+
+/* Na tela tudo continua fluido. Na impressão, a seção de condições
+   pode receber a classe abaixo para começar na página 2. */
+.print-page-two{
+  break-before:page !important;
+  page-break-before:always !important;
+}
+
+@media print{
+  /* Mantém os tamanhos de fonte da versão que você aprovou.
+     Ajustamos somente espaçamento e a quebra antes das condições. */
+  .section{
+    margin-top:18px !important;
+  }
+
+  #termsSection{
+    margin-top:0 !important;
+  }
+
+  .terms-heading{
+    margin-bottom:11px !important;
+  }
+
+  .footer{
+    margin-top:16px !important;
+    padding:13px 15px 12px !important;
+  }
+
+  .scope-price,
+  .footer{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+}
+
+
+/* ============================================================
+   V9 — FOLHA SELECIONÁVEL / FLUXO CONTÍNUO
+   ============================================================ */
+
+:root{
+  --sheet-width:210mm;
+  --sheet-min-height:297mm;
+}
+
+/* Na tela existe uma única folha contínua. Se o conteúdo passar da
+   altura escolhida, o papel cresce visualmente em vez de simular
+   uma quebra no meio do orçamento. */
+.sheet{
+  width:var(--sheet-width) !important;
+  min-height:var(--sheet-min-height);
+  max-width:100%;
+}
+
+/* Não existe mais nenhuma quebra obrigatória antes de pagamento/rider. */
+.print-page-two{
+  break-before:auto !important;
+  page-break-before:auto !important;
+}
+
+#termsSection{
+  margin-top:var(--section-gap);
+}
+
+/* A5 fica naturalmente mais estreito: reorganiza as colunas sem
+   reduzir a tipografia. */
+body[data-paper-narrow="true"] .hero-inner{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .event-card{
+  align-self:auto;
+}
+body[data-paper-narrow="true"] .scope-grid,
+body[data-paper-narrow="true"] .info-grid{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .section-heading{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .section-intro{
+  max-width:none;
+  text-align:left;
+}
+body[data-paper-narrow="true"] .extra{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .extra-media{
+  min-height:210px;
+}
+
+@media print{
+  /* O tamanho da página é injetado dinamicamente pelo JavaScript. */
+  .sheet{
+    width:auto !important;
+    min-height:0 !important;
+    max-width:none !important;
+  }
+
+  .doc{
+    width:auto !important;
+  }
+
+  /* Tudo segue em fluxo normal. O navegador só quebra quando a folha
+     selecionada realmente termina. */
+  #termsSection{
+    margin-top:18px !important;
+    break-before:auto !important;
+    page-break-before:auto !important;
+  }
+
+  .final-page-group{
+    display:block !important;
+    break-before:auto !important;
+    page-break-before:auto !important;
+  }
+
+  /* Rodapé apenas uma vez: na última página. O JS calcula o espaço
+     necessário para levá-lo ao fim da última folha quando possível. */
+  .final-footer{
+    display:grid !important;
+    margin-top:var(--print-footer-gap, 16px) !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  /* A5 em retrato: mantém a leitura com uma coluna. */
+  body[data-paper-narrow="true"] .hero-inner{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .scope-grid,
+  body[data-paper-narrow="true"] .info-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .section-heading{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .section-intro{
+    text-align:left !important;
+    max-width:none !important;
+  }
+
+  body[data-paper-narrow="true"] .extra{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* ============================================================
+   V11 — RODAPÉ CORRIGIDO EM TODAS AS PÁGINAS
+   ============================================================ */
+
+.print-footer{
+  display:none;
+}
+
+@media print{
+
+  /*
+    O rodapé normal do documento fica visível apenas na tela.
+    Na impressão usamos o rodapé abaixo, repetido pelo Chrome.
+  */
+  .footer{
+    display:none !important;
+  }
+
+  /*
+    IMPORTANTE:
+    bottom: 0, sem valores negativos.
+    Isso evita o bug de o Chrome jogar o rodapé para o topo
+    ou sobrepor a área de conteúdo em alguns tamanhos de folha.
+  */
+  .print-footer{
+    display:flex !important;
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    height:12mm !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8mm !important;
+    padding:0 1mm !important;
+    background:var(--paper) !important;
+    border-top:1px solid var(--line) !important;
+    color:var(--muted) !important;
+    z-index:999999 !important;
+    font-size:8.3px !important;
+    line-height:1.2 !important;
+  }
+
+  .print-footer-brand{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    white-space:nowrap !important;
+  }
+
+  .print-footer-brand strong{
+    color:var(--ink) !important;
+    font-size:16px !important;
+    font-weight:900 !important;
+    letter-spacing:-1.2px !important;
+    line-height:1 !important;
+  }
+
+  .print-footer-brand span{
+    color:var(--accent) !important;
+    font-size:7px !important;
+    font-weight:700 !important;
+    letter-spacing:1px !important;
+    text-transform:uppercase !important;
+    line-height:1 !important;
+  }
+
+  .print-footer-contact{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:6px !important;
+    white-space:nowrap !important;
+    text-align:right !important;
+  }
+
+  .print-footer .contact-link{
+    color:inherit !important;
+    border-bottom:0 !important;
+  }
+
+  .print-footer .sep{
+    opacity:.42 !important;
+  }
+
+  /*
+    Mantém o conteúdo longe do rodapé.
+    A margem inferior real é definida no @page dinâmico.
+  */
+  .doc{
+    padding-bottom:0 !important;
+  }
+}
+
+
+/* ============================================================
+   V13 — PDF MAIS LEGÍVEL EM CELULAR
+   O HTML normal permanece igual. Só a impressão/PDF muda.
+   ============================================================ */
+
+@media print{
+
+  /* GRANDE — padrão recomendado */
+  body[data-pdf-text-size="large"] .hero p{
+    font-size:14.8px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="large"] .event-card strong{
+    font-size:13.6px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="large"] .section-intro{
+    font-size:12.3px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="large"] .scope-item p{
+    font-size:14px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="large"] .scope-meta{
+    font-size:11.5px !important;
+    line-height:1.45 !important;
+  }
+
+  body[data-pdf-text-size="large"] .investment .desc{
+    font-size:13px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra p{
+    font-size:13.4px !important;
+    line-height:1.56 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra-value{
+    font-size:13.6px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra-value strong{
+    font-size:15.5px !important;
+  }
+
+  body[data-pdf-text-size="large"] .info-box p,
+  body[data-pdf-text-size="large"] .info-box li{
+    font-size:13px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="large"] .notes{
+    font-size:12.6px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="large"] .print-footer{
+    font-size:9.6px !important;
+  }
+
+  /* EXTRA GRANDE */
+  body[data-pdf-text-size="xlarge"] .hero p{
+    font-size:15px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .event-card strong{
+    font-size:14px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .section-intro{
+    font-size:12.6px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .scope-item p{
+    font-size:14.3px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .scope-meta{
+    font-size:11.7px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .investment .desc{
+    font-size:13.3px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra p{
+    font-size:13.6px !important;
+    line-height:1.56 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra-value{
+    font-size:13.8px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra-value strong{
+    font-size:16px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .info-box p,
+  body[data-pdf-text-size="xlarge"] .info-box li{
+    font-size:13.2px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .notes{
+    font-size:12.8px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .print-footer{
+    font-size:9.6px !important;
+  }
+}
+
+
+/* ============================================================
+   V15 — CONTROLE FINO DO TAMANHO DOS TEXTOS DO PDF
+   ============================================================ */
+
+.pdf-scale-control{
+  display:grid;
+  gap:9px;
+  padding:11px;
+  background:#171717;
+  border:1px solid #393939;
+  border-radius:11px;
+}
+
+.pdf-scale-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#ddd;
+  font-size:11px;
+  font-weight:700;
+}
+
+.pdf-scale-head strong{
+  min-width:50px;
+  padding:5px 8px;
+  color:#111;
+  background:#f1f1f1;
+  border-radius:999px;
+  font-size:11px;
+  text-align:center;
+}
+
+.pdf-scale-row{
+  display:grid;
+  grid-template-columns:34px 1fr 34px;
+  gap:8px;
+  align-items:center;
+}
+
+.pdf-scale-btn{
+  width:34px;
+  height:34px;
+  padding:0;
+  color:#fff;
+  background:#303030;
+  border:1px solid #454545;
+  border-radius:9px;
+  font-size:18px;
+  line-height:1;
+}
+
+.pdf-scale-range{
+  width:100%;
+  min-height:0;
+  height:20px;
+  padding:0;
+  accent-color:#f0f0f0;
+  cursor:pointer;
+}
+
+.pdf-scale-labels{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  color:#8f8f8f;
+  font-size:9px;
+}
+
+
+/* ============================================================
+   V16 — VALORES MAIS CLAROS PARA O CLIENTE
+   ============================================================ */
+
+.investment{
+  position:relative;
+}
+
+.investment-warning{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  padding:6px 9px;
+  color:var(--accent2);
+  background:rgba(255,255,255,.72);
+  border:1px solid color-mix(in srgb, var(--accent2) 26%, transparent);
+  border-radius:999px;
+  font-size:9.4px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.price-wrap{
+  display:grid;
+  justify-items:end;
+  gap:3px;
+}
+
+.price-label{
+  color:var(--muted);
+  font-size:7.4px;
+  font-weight:800;
+  letter-spacing:1.05px;
+}
+
+.extras-alert{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:-1px 0 12px;
+  padding:10px 12px;
+  color:#4b473f;
+  background:color-mix(in srgb, var(--accent) 9%, #fff);
+  border:1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius:12px;
+  font-size:10.6px;
+  line-height:1.45;
+}
+
+.extras-alert strong{
+  flex:0 0 auto;
+  padding:3px 7px;
+  color:#fff;
+  background:var(--accent);
+  border-radius:999px;
+  font-size:7.7px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.extra-copy{
+  position:relative;
+}
+
+.optional-badge{
+  display:inline-flex;
+  align-self:flex-start;
+  margin-bottom:7px;
+  padding:5px 8px;
+  color:var(--accent2);
+  background:color-mix(in srgb, var(--accent2) 8%, #fff);
+  border:1px solid color-mix(in srgb, var(--accent2) 25%, var(--line));
+  border-radius:999px;
+  font-size:7.4px;
+  font-weight:800;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+.extra-value{
+  display:grid;
+  gap:3px;
+}
+
+.extra-value-label{
+  color:var(--muted);
+  font-size:7.5px;
+  font-weight:800;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+.extra-value-main{
+  color:var(--accent2);
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:400;
+  line-height:1.1;
+}
+
+.extra-total-with{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed var(--line);
+  color:var(--muted);
+  font-size:9.7px;
+  line-height:1.35;
+}
+
+.extra-total-with strong{
+  color:var(--ink);
+  white-space:nowrap;
+}
+
+@media print{
+  .extras-alert{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .investment-warning{
+    font-size:9.2px !important;
+  }
+
+  .extra-value-main{
+    font-size:21px !important;
+  }
+
+  .extra-total-with{
+    font-size:9.4px !important;
+  }
+}
+
+
+/* ============================================================
+   V17 — LIMPEZA VISUAL DOS OPCIONAIS
+   ============================================================ */
+
+.investment-warning,
+.extra-total-with{
+  display:none !important;
+}
+
+
+/* ============================================================
+   V20 — TEXTO DOS OPCIONAIS AJUSTADO
+   ============================================================ */
+
+.extra-copy{
+  min-width:0;
+  padding:14px 16px;
+}
+
+.optional-badge{
+  margin-bottom:6px;
+  padding:4px 7px;
+  font-size:6.9px;
+  letter-spacing:.85px;
+}
+
+.extra-kicker{
+  margin-bottom:4px;
+  font-size:7.2px;
+  letter-spacing:1.1px;
+}
+
+.extra h3{
+  margin:0 0 6px;
+  font-size:16px;
+  line-height:1.18;
+}
+
+.extra p{
+  font-size:10.3px;
+  line-height:1.5;
+}
+
+.extra-value{
+  margin-top:10px;
+  padding-top:10px;
+}
+
+.extra-value-label{
+  font-size:7.1px;
+  letter-spacing:.85px;
+}
+
+.extra-value-main{
+  font-size:17px;
+  line-height:1.05;
+}
+
+@media print{
+  .extra-copy{
+    padding:13px 15px !important;
+  }
+
+  .extra h3{
+    font-size:15.5px !important;
+  }
+
+  .extra p{
+    font-size:10px !important;
+    line-height:1.48 !important;
+  }
+
+  .extra-value-main{
+    font-size:16.5px !important;
+  }
+}
+
+</style>
+</head>
+<body data-theme="casamento" data-palette="terracota">
+
+<aside class="editor">
+  <h1>Proposta DJ pec</h1>
+  <p class="lead">
+    Ajustei os cantos para um visual mais refinado e adicionei controles de
+    proporção da imagem nos serviços adicionais, para o card ficar mais elegante.
+  </p>
+
+  <div class="actions">
+    <button class="primary" onclick="window.print()">Imprimir / PDF</button>
+    <button class="secondary" onclick="exportXML()">Exportar XML</button>
+    <label class="file-btn secondary">Importar XML<input id="xmlInput" type="file" accept=".xml,text/xml"></label>
+    <button class="danger" onclick="resetData()">Restaurar exemplo</button>
+  </div>
+
+  <details open>
+    <summary>Tema e visual</summary>
+    <div class="fields">
+      <label>
+        Tipo de evento
+        <select data-fixed="theme">
+          <option value="casamento">Casamento</option>
+          <option value="xv">Festa de XV</option>
+          <option value="geral">Eventos em Geral</option>
+        </select>
+      </label>
+
+      <label>
+        Paleta de cores
+        <select data-fixed="palette">
+          <option value="terracota">Terracota elegante</option>
+          <option value="azul">Azul premium</option>
+          <option value="verde">Verde oliva</option>
+          <option value="rose">Rose sofisticado</option>
+          <option value="roxo">Roxo elegante</option>
+          <option value="dourado">Grafite dourado</option>
+        </select>
+      </label>
+
+      <label>
+        Foto de fundo suave (opcional)
+        <input id="heroImageInput" type="file" accept="image/*">
+      </label>
+
+      <div class="two">
+        <label>
+          Tamanho da folha
+          <select data-fixed="pageSize">
+            <option value="a5">A5 — 148 × 210 mm</option>
+            <option value="a4">A4 — 210 × 297 mm</option>
+            <option value="letter">Carta — 216 × 279 mm</option>
+            <option value="legal">Legal — 216 × 356 mm</option>
+            <option value="a3">A3 — 297 × 420 mm</option>
+            <option value="long">A4 alongado — 210 × 420 mm</option>
+          </select>
+        </label>
+
+        <label>
+          Orientação
+          <select data-fixed="orientation">
+            <option value="portrait">Retrato</option>
+            <option value="landscape">Paisagem</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="pdf-scale-control">
+        <div class="pdf-scale-head">
+          <span>Tamanho dos textos no PDF</span>
+          <strong id="pdfScaleValue">120%</strong>
+        </div>
+
+        <div class="pdf-scale-row">
+          <button type="button" class="pdf-scale-btn" onclick="changePdfScale(-5)">−</button>
+
+          <input
+            id="pdfScaleRange"
+            class="pdf-scale-range"
+            data-fixed="pdfScale"
+            type="range"
+            min="90"
+            max="150"
+            step="5"
+            value="120"
+          >
+
+          <button type="button" class="pdf-scale-btn" onclick="changePdfScale(5)">+</button>
+        </div>
+
+        <div class="pdf-scale-labels">
+          <span>Menor</span>
+          <span>Recomendado: 120%</span>
+          <span>Maior</span>
+        </div>
+      </div>
+
+      <p class="note">
+        Esse controle altera somente os textos informativos do PDF. Títulos e preços
+        principais mantêm a proporção do layout. Se aumentar bastante, o orçamento
+        pode usar mais páginas — sem espremer a leitura.
+      </p>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Cliente e evento</summary>
+    <div class="fields">
+      <label>Cliente <input data-fixed="client"></label>
+      <div class="two">
+        <label>Emissão <input data-fixed="issueDate" type="date"></label>
+        <label>Evento <input data-fixed="eventDate" type="date"></label>
+      </div>
+      <label>Local <input data-fixed="venue"></label>
+      <label>Cidade / Estado <input data-fixed="city"></label>
+      <div class="two">
+        <label>Horário <input data-fixed="time"></label>
+        <label>Duração <input data-fixed="duration"></label>
+      </div>
+      <label>Estilo musical <input data-fixed="musicStyle"></label>
+      <label>Mensagem inicial <textarea data-fixed="intro"></textarea></label>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Escopo combinado</summary>
+    <div class="fields">
+      <div id="scopeEditor" class="editor-list"></div>
+      <button class="add" onclick="addScope()">+ Adicionar item ao escopo</button>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Investimento</summary>
+    <div class="fields">
+      <label>
+        Como mostrar o investimento?
+        <select data-fixed="investmentMode">
+          <option value="single">1 valor único para a proposta</option>
+          <option value="perItem">Valores separados por item do escopo</option>
+        </select>
+      </label>
+
+      <div id="singleInvestmentEditor">
+        <div class="fields" style="padding:0;">
+          <label>Valor total <input data-fixed="total"></label>
+          <label>Descrição curta <textarea data-fixed="totalDesc"></textarea></label>
+        </div>
+      </div>
+
+      <p class="note" id="perItemInvestmentNote">
+        No modo separado, o valor aparece dentro de cada item do “Escopo combinado”.
+      </p>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Opcionais / adicionais</summary>
+    <div class="fields">
+      <label class="check">
+        <input id="showExtras" type="checkbox">
+        Exibir opcionais
+      </label>
+      <div id="extrasEditor" class="editor-list"></div>
+      <button class="add" onclick="addExtra()">+ Adicionar opcional</button>
+      <p class="note">
+        Cada serviço agora pode ter proporção da imagem, ajuste “preencher / encaixar”
+        e posição da foto.
+      </p>
+    </div>
+  </details>
+
+  <details>
+    <summary>Pagamento e observações</summary>
+    <div class="fields">
+      <label>Sinal <input data-fixed="deposit"></label>
+      <label>Saldo <input data-fixed="balance"></label>
+      <label>Forma de pagamento <input data-fixed="payment"></label>
+      <label>Observações <textarea data-fixed="notes"></textarea></label>
+      <label>Rider técnico (um item por linha) <textarea data-fixed="rider"></textarea></label>
+    </div>
+  </details>
+
+  <details>
+    <summary>Contato</summary>
+    <div class="fields">
+      <label>Telefone <input data-fixed="phone"></label>
+      <label>E-mail <input data-fixed="email"></label>
+      <label>Site <input data-fixed="site"></label>
+      <label>Instagram <input data-fixed="instagram"></label>
+    </div>
+  </details>
+</aside>
+
+<main class="stage">
+  <article class="sheet">
+    <div class="doc" id="doc">
+
+      <header class="topbar">
+        <div class="brand">pec <small>DJ &amp; Performance</small></div>
+        <div class="docmeta">
+          PROPOSTA COMERCIAL<br>
+          EMISSÃO <span data-bind="issueDate"></span>
+        </div>
+      </header>
+
+      <section class="hero">
+        <div class="hero-bg" id="heroBg"></div>
+        <div class="hero-shade"></div>
+        <div class="hero-inner">
+          <div>
+            <div class="hero-kicker" id="themeLabel">Casamento</div>
+            <h1 id="themeTitle">Uma experiência musical pensada para o seu casamento.</h1>
+            <p data-bind="intro"></p>
+          </div>
+
+          <div class="event-card">
+            <span class="label">Preparado para</span>
+            <strong data-bind="client"></strong>
+            <div class="row">
+              <div>
+                <span class="label">Data</span>
+                <strong data-bind="eventDate"></strong>
+              </div>
+              <div>
+                <span class="label">Horário</span>
+                <strong data-bind="time"></strong>
+              </div>
+            </div>
+            <div style="margin-top:10px;">
+              <span class="label">Local</span>
+              <strong><span data-bind="venue"></span> — <span data-bind="city"></span></strong>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section">
+        <div class="section-heading">
+          <div>
+            <span class="section-eyebrow">O que foi definido</span>
+            <h2>Escopo da apresentação</h2>
+          </div>
+          <div class="section-intro">
+            Esta proposta formaliza os serviços e condições alinhados para o evento.
+          </div>
+        </div>
+        <div id="scopePreview" class="scope-grid"></div>
+      </section>
+
+      <section class="section" id="singleInvestmentSection">
+        <div class="investment">
+          <div>
+            <span class="cap">Valor do serviço principal</span>
+            <div class="desc" data-bind="totalDesc"></div>
+          </div>
+          <div class="price-wrap">
+            <span class="price-label">VALOR PRINCIPAL</span>
+            <div class="price" data-bind="total"></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="section" id="extrasSection">
+        <div class="section-heading">
+          <div>
+            <span class="section-eyebrow">Opcionais</span>
+            <h2>Opcionais para acrescentar</h2>
+          </div>
+          <div class="section-intro">
+            Os itens abaixo são opcionais e não estão incluídos no valor principal.
+          </div>
+        </div>
+
+        <div class="extras-alert">
+          <strong>Itens opcionais</strong>
+          <span>Cada valor abaixo é somado ao valor principal somente se você escolher incluir o serviço.</span>
+        </div>
+
+        <div id="extrasPreview" class="extras-grid"></div>
+      </section>
+
+      <section class="section" id="termsSection">
+        <div class="section-heading terms-heading">
+          <div>
+            <span class="section-eyebrow">Informações finais</span>
+            <h2>Condições da proposta</h2>
+          </div>
+          <div class="section-intro">
+            Pagamento, requisitos técnicos e observações para formalização do evento.
+          </div>
+        </div>
+
+        <div class="info-grid">
+          <div class="info-box">
+            <h3>Condições comerciais</h3>
+            <p><strong>Sinal:</strong> <span data-bind="deposit"></span></p>
+            <p style="margin-top:7px;"><strong>Saldo:</strong> <span data-bind="balance"></span></p>
+            <p style="margin-top:7px;"><strong>Pagamento:</strong> <span data-bind="payment"></span></p>
+          </div>
+          <div class="info-box">
+            <h3>Rider técnico</h3>
+            <ul id="riderPreview"></ul>
+          </div>
+        </div>
+        <div class="notes" data-bind="notes"></div>
+      </section>
+
+      <footer class="footer">
+        <div class="footer-brand">
+          <div class="footer-mark">pec</div>
+          <div class="footer-copy">
+            <strong>DJ &amp; Performance</strong>
+            <span>Proposta preparada para <span data-bind="client"></span>.</span>
+          </div>
+        </div>
+        <div class="footer-right">
+          <span data-link="site"></span> &nbsp;·&nbsp; <span data-link="instagram"></span><br>
+          <span data-link="email"></span> &nbsp;·&nbsp; <span data-bind="phone"></span>
+        </div>
+      </footer>
+
+      <div class="print-footer" aria-hidden="true">
+        <div class="print-footer-brand">
+          <strong>pec</strong>
+          <span>DJ &amp; Performance</span>
+        </div>
+        <div class="print-footer-contact">
+          <span data-link="site"></span>
+          <span class="sep">•</span>
+          <span data-link="instagram"></span>
+          <span class="sep">•</span>
+          <span data-bind="phone"></span>
+        </div>
+      </div>
+
+    </div>
+  </article>
+</main>
+
+<script>
+const THEME_TEXT = {
+  casamento:{
+    label:"Casamento",
+    title:"Uma experiência musical pensada para o seu casamento."
+  },
+  xv:{
+    label:"Festa de XV",
+    title:"Uma noite com personalidade, energia e presença."
+  },
+  geral:{
+    label:"Eventos em Geral",
+    title:"Uma entrega musical profissional para o seu evento."
+  }
+};
+
+const DEFAULT = {
+  theme:"casamento",
+  palette:"terracota",
+  pageSize:"a4",
+  orientation:"portrait",
+  pdfScale:120,
+  client:"Juliana",
+  issueDate:"2026-09-10",
+  eventDate:"2026-09-19",
+  venue:"Espaço Marias",
+  city:"Foz do Iguaçu - PR",
+  time:"A definir",
+  duration:"7 horas",
+  musicStyle:"Open Format",
+  intro:"Uma proposta personalizada para transformar o evento em uma experiência musical elegante, dinâmica e alinhada ao perfil dos convidados.",
+  heroImage:"",
+  scope:[
+    {
+      title:"Warm-up + Performance",
+      description:"Som ambiente e warm-up na recepção, seguido da apresentação principal do DJ pec.",
+      duration:"7 horas totais",
+      time:"5h de abertura + 2h de performance",
+      value:"R$ 2.000,00"
+    }
+  ],
+  investmentMode:"single",
+  total:"R$ 2.000,00",
+  totalDesc:"Valor referente somente ao serviço principal descrito no escopo acima.",
+  showExtras:true,
+  extras:[
+    {
+      title:"Jatos de CO₂",
+      description:"Efeito criogênico de palco com disparos sincronizados nos momentos de maior energia.",
+      value:"A partir de R$ 2.800,00",
+      ratio:"4/3",
+      fit:"cover",
+      position:"center",
+      image:""
+    },
+    {
+      title:"Bazuca de CO₂",
+      description:"Equipamento portátil para interação com o público durante a apresentação.",
+      value:"R$ 700,00",
+      ratio:"4/3",
+      fit:"cover",
+      position:"center",
+      image:""
+    }
+  ],
+  deposit:"50% na assinatura do contrato para garantia da data.",
+  balance:"50% até 1 dia antes do evento.",
+  payment:"Pix ou transferência bancária.",
+  notes:"A data será considerada reservada após a confirmação do sinal e assinatura do contrato. Deslocamento, hospedagem ou estrutura adicional poderão ser informados separadamente quando aplicável.",
+  rider:"01 mesa firme e plana para os equipamentos do DJ.\nPontos de energia aterrados próximos à cabine ou palco.\nSistema de som adequado ao espaço e ao número de convidados.\nAlimentação e hidratação durante o período do evento.",
+  phone:"(45) 9 9108-7615",
+  email:"contato@djpec.com",
+  site:"djpec.com",
+  instagram:"@djpec_"
+};
+
+let data = load();
+
+function clone(v){return JSON.parse(JSON.stringify(v))}
+
+function normalizeScope(item){
+  return {
+    title:item.title || "",
+    description:item.description || "",
+    duration:item.duration || "",
+    time:item.time || "",
+    value:item.value || ""
+  };
+}
+
+function normalizeExtra(extra){
+  return {
+    title: extra.title || "",
+    description: extra.description || "",
+    value: extra.value || "",
+    ratio: extra.ratio || "4/3",
+    fit: extra.fit || "cover",
+    position: extra.position || "center",
+    image: extra.image || ""
+  };
+}
+function load(){
+  const raw = localStorage.getItem("pecProposalFluidV3");
+  if(!raw) return clone(DEFAULT);
+  try{
+    const x = JSON.parse(raw);
+    return {
+      ...clone(DEFAULT),
+      ...x,
+      palette: x.palette || "terracota",
+      pageSize: x.pageSize || "a4",
+      orientation: x.orientation || "portrait",
+      pdfScale: Number(x.pdfScale || 120),
+      heroImage: "",
+      investmentMode: x.investmentMode || "single",
+      scope: Array.isArray(x.scope) ? x.scope.map(normalizeScope) : clone(DEFAULT.scope),
+      extras: Array.isArray(x.extras) ? x.extras.map(e => normalizeExtra({...e, image:""})) : clone(DEFAULT.extras)
+    };
+  }catch{
+    return clone(DEFAULT);
+  }
+}
+function save(){
+  const c = clone(data);
+  c.heroImage = "";
+  c.extras = c.extras.map(e => ({...normalizeExtra(e), image:""}));
+  localStorage.setItem("pecProposalFluidV3", JSON.stringify(c));
+}
+function esc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&#039;");
+}
+function dateBR(v){
+  if(!v) return "—";
+  const p = v.split("-");
+  return p.length === 3 ? `${p[2]}/${p[1]}/${p[0]}` : v;
+}
+function fillFixed(){
+  document.querySelectorAll("[data-fixed]").forEach(el => el.value = data[el.dataset.fixed] ?? "");
+  document.getElementById("showExtras").checked = !!data.showExtras;
+}
+function renderBindings(){
+  document.querySelectorAll("[data-bind]").forEach(el => {
+    let v = data[el.dataset.bind] || "—";
+    if(el.dataset.bind === "issueDate" || el.dataset.bind === "eventDate") v = dateBR(v);
+    el.textContent = v;
+  });
+
+  document.querySelectorAll("[data-link]").forEach(el => {
+    const k = el.dataset.link;
+    const v = data[k] || "—";
+    let href = "";
+
+    if(k === "email" && v !== "—") href = `mailto:${v}`;
+    if(k === "site" && v !== "—") href = /^https?:\/\//i.test(v) ? v : `https://${v}`;
+    if(k === "instagram" && v !== "—"){
+      const u = v.replace(/^@/,"").replace(/\/$/,"");
+      href = `https://www.instagram.com/${u}/`;
+    }
+
+    el.innerHTML = "";
+    if(!href){
+      el.textContent = v;
+      return;
+    }
+
+    const a = document.createElement("a");
+    a.className = "contact-link";
+    a.textContent = v;
+    a.href = href;
+    if(k !== "email"){
+      a.target = "_blank";
+      a.rel = "noopener noreferrer";
+    }
+    el.appendChild(a);
+  });
+}
+function renderTheme(){
+  const t = THEME_TEXT[data.theme] || THEME_TEXT.casamento;
+  document.body.dataset.theme = data.theme;
+  document.body.dataset.palette = data.palette || "terracota";
+  document.getElementById("themeLabel").textContent = t.label;
+  document.getElementById("themeTitle").textContent = t.title;
+  const bg = document.getElementById("heroBg");
+  bg.style.backgroundImage = data.heroImage ? `url("${data.heroImage}")` : "none";
+}
+function renderScopeEditor(){
+  const c = document.getElementById("scopeEditor");
+  c.innerHTML = data.scope.map((s,i) => `
+    <div class="editor-item">
+      <div class="editor-item-head">
+        <strong>Item ${String(i+1).padStart(2,"0")}</strong>
+        <button class="remove" onclick="removeScope(${i})">Remover</button>
+      </div>
+      <div class="fields" style="padding:0;">
+        <label>Título <input data-kind="scope" data-index="${i}" data-prop="title" value="${esc(s.title)}"></label>
+        <label>Descrição <textarea data-kind="scope" data-index="${i}" data-prop="description">${esc(s.description)}</textarea></label>
+        <div class="two">
+          <label>Duração <input data-kind="scope" data-index="${i}" data-prop="duration" value="${esc(s.duration)}"></label>
+          <label>Horário <input data-kind="scope" data-index="${i}" data-prop="time" value="${esc(s.time)}"></label>
+        </div>
+        <label class="scope-value-editor ${data.investmentMode === "perItem" ? "" : "hidden-ui"}">
+          Valor deste item
+          <input data-kind="scope" data-index="${i}" data-prop="value" value="${esc(s.value || "")}">
+        </label>
+      </div>
+    </div>
+  `).join("");
+}
+function renderScope(){
+  const c = document.getElementById("scopePreview");
+  c.classList.toggle("single", data.scope.length === 1);
+  c.innerHTML = data.scope.map((s,i) => `
+    <div class="scope-item">
+      <span class="scope-num">${String(i+1).padStart(2,"0")}</span>
+      <h3>${esc(s.title || "Serviço")}</h3>
+      <p>${esc(s.description || "—")}</p>
+      <div class="scope-meta">
+        <span>${esc(s.duration || "—")}</span><span>•</span><span>${esc(s.time || "—")}</span>
+      </div>
+      ${data.investmentMode === "perItem" ? `
+        <div class="scope-price">
+          <span class="scope-price-label">Investimento</span>
+          <span class="scope-price-value">${esc(s.value || "—")}</span>
+        </div>
+      ` : ""}
+    </div>
+  `).join("");
+}
+function renderExtrasEditor(){
+  const c = document.getElementById("extrasEditor");
+  c.innerHTML = data.extras.map((e,i) => `
+    <div class="editor-item">
+      <div class="editor-item-head">
+        <strong>Serviço ${String(i+1).padStart(2,"0")}</strong>
+        <button class="remove" onclick="removeExtra(${i})">Remover</button>
+      </div>
+      <div class="fields" style="padding:0;">
+        <label>Título <input data-kind="extra" data-index="${i}" data-prop="title" value="${esc(e.title)}"></label>
+        <label>Descrição <textarea data-kind="extra" data-index="${i}" data-prop="description">${esc(e.description)}</textarea></label>
+        <label>Valor / condição <input data-kind="extra" data-index="${i}" data-prop="value" value="${esc(e.value)}"></label>
+        <div class="two">
+          <label>
+            Proporção da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="ratio">
+              <option value="16/9" ${e.ratio==="16/9" ? "selected" : ""}>Panorâmica 16:9</option>
+              <option value="4/3" ${e.ratio==="4/3" ? "selected" : ""}>Horizontal 4:3</option>
+              <option value="1/1" ${e.ratio==="1/1" ? "selected" : ""}>Quadrada 1:1</option>
+              <option value="3/4" ${e.ratio==="3/4" ? "selected" : ""}>Retrato 3:4</option>
+            </select>
+          </label>
+          <label>
+            Ajuste da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="fit">
+              <option value="cover" ${e.fit==="cover" ? "selected" : ""}>Preencher</option>
+              <option value="contain" ${e.fit==="contain" ? "selected" : ""}>Encaixar</option>
+            </select>
+          </label>
+        </div>
+        <div class="two">
+          <label>
+            Posição da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="position">
+              <option value="top" ${e.position==="top" ? "selected" : ""}>Topo</option>
+              <option value="center" ${e.position==="center" ? "selected" : ""}>Centro</option>
+              <option value="bottom" ${e.position==="bottom" ? "selected" : ""}>Base</option>
+            </select>
+          </label>
+          <label>Imagem <input type="file" accept="image/*" data-extra-image="${i}"></label>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+function highlightCurrency(text){
+  const safe = esc(text || "—");
+  return safe.replace(/(R\$\s?[\d\.\,]+)/g, "<strong>$1</strong>");
+}
+
+function parseMoneyBR(value){
+  const text = String(value || "").trim();
+  const match = text.match(/R\$\s*([\d\.\,]+)/i) || text.match(/([\d\.\,]+)/);
+  if(!match) return null;
+
+  let num = match[1];
+
+  if(num.includes(",")){
+    num = num.replace(/\./g, "").replace(",", ".");
+  }else{
+    const parts = num.split(".");
+    if(parts.length > 2){
+      num = parts.join("");
+    }else if(parts.length === 2 && parts[1].length === 3){
+      num = parts.join("");
+    }
+  }
+
+  const parsed = Number(num);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatMoneyBR(value){
+  if(!Number.isFinite(value)) return "";
+  return value.toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL",
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function getBaseInvestmentValue(){
+  if(data.investmentMode === "perItem"){
+    const values = data.scope
+      .map(item => parseMoneyBR(item.value))
+      .filter(v => Number.isFinite(v));
+
+    if(!values.length) return null;
+    return values.reduce((sum, value) => sum + value, 0);
+  }
+
+  return parseMoneyBR(data.total);
+}
+
+function formatOptionalValue(value){
+  const text = String(value || "").trim();
+  if(!text) return "—";
+
+  const exactMoney = text.match(/^\s*R\$\s*[\d\.\,]+\s*$/i);
+
+  if(exactMoney){
+    return `+ ${esc(text)}`;
+  }
+
+  return highlightCurrency(text);
+}
+
+function renderExtras(){
+  const sec = document.getElementById("extrasSection");
+  sec.style.display = (data.showExtras && data.extras.length) ? "block" : "none";
+  const c = document.getElementById("extrasPreview");
+  const baseValue = getBaseInvestmentValue();
+
+  c.innerHTML = data.extras.map((raw) => {
+    const e = normalizeExtra(raw);
+    const ratio = e.ratio || "4/3";
+    const fitClass = e.fit === "contain" ? "fit-contain" : "fit-cover";
+    const positionClass = `position-${e.position || "center"}`;
+
+    const extraValue = parseMoneyBR(e.value);
+    const canCalculateTotal =
+      Number.isFinite(baseValue) &&
+      Number.isFinite(extraValue) &&
+      !/a partir|sob consulta|consultar|desde/i.test(String(e.value || ""));
+
+    const totalWithOptional = "";
+
+    return `
+      <div class="extra ${e.image ? "" : "no-image"}">
+        ${e.image ? `
+          <div class="extra-media ${fitClass} ${positionClass}" style="--media-ratio:${ratio};">
+            <img src="${e.image}" alt="${esc(e.title || "Serviço")}">
+          </div>` : ""}
+        <div class="extra-copy">
+          <div class="optional-badge">Opcional · não incluso</div>
+          <div class="extra-kicker">Se desejar acrescentar</div>
+          <h3>${esc(e.title || "Serviço")}</h3>
+          <p>${esc(e.description || "—")}</p>
+
+          <div class="extra-value">
+            <span class="extra-value-label">Valor adicional</span>
+            <div class="extra-value-main">${formatOptionalValue(e.value)}</div>
+            ${totalWithOptional}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+
+const PAGE_FORMATS = {
+  a5:     {label:"A5", width:148,   height:210},
+  a4:     {label:"A4", width:210,   height:297},
+  letter: {label:"Carta", width:215.9, height:279.4},
+  legal:  {label:"Legal", width:215.9, height:355.6},
+  a3:     {label:"A3", width:297,   height:420},
+  long:   {label:"A4 alongado", width:210, height:420}
+};
+
+function getPageDimensions(){
+  const base = PAGE_FORMATS[data.pageSize] || PAGE_FORMATS.a4;
+  const landscape = data.orientation === "landscape";
+
+  return landscape
+    ? {width:base.height, height:base.width, label:base.label}
+    : {width:base.width, height:base.height, label:base.label};
+}
+
+function ensureDynamicPageStyle(){
+  let style = document.getElementById("dynamicPageStyle");
+
+  if(!style){
+    style = document.createElement("style");
+    style.id = "dynamicPageStyle";
+    document.head.appendChild(style);
+  }
+
+  const page = getPageDimensions();
+
+  style.textContent = `
+    @page {
+      size: ${page.width}mm ${page.height}mm;
+      margin: 10mm 11mm 19mm;
+    }
+  `;
+}
+
+function renderPageFormat(){
+  const page = getPageDimensions();
+
+  document.documentElement.style.setProperty("--sheet-width", `${page.width}mm`);
+  document.documentElement.style.setProperty("--sheet-min-height", `${page.height}mm`);
+
+  /*
+    Só tratamos como estreita quando a largura útil é realmente pequena.
+    Carta/A4 continuam com o layout normal.
+  */
+  document.body.dataset.paperNarrow = page.width < 185 ? "true" : "false";
+
+  ensureDynamicPageStyle();
+}
+
+function pxPerMmForPrint(){
+  const probe = document.createElement("div");
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.width = "100mm";
+  probe.style.height = "1px";
+  document.body.appendChild(probe);
+  const px = probe.getBoundingClientRect().width / 100;
+  probe.remove();
+  return px;
+}
+
+function resetFinalFooterGap(){
+  const footer = document.getElementById("finalFooter");
+  if(footer){
+    footer.style.removeProperty("--print-footer-gap");
+  }
+}
+
+function pinFooterToLastPrintedPage(){
+  resetFinalFooterGap();
+
+  const doc = document.getElementById("doc");
+  const footer = document.getElementById("finalFooter");
+
+  if(!doc || !footer) return;
+
+  const page = getPageDimensions();
+  const mm = pxPerMmForPrint();
+
+  /* Margens do @page: 10mm superior + 13mm inferior. */
+  const printableHeight = (page.height - 23) * mm;
+
+  if(printableHeight <= 0) return;
+
+  const docRect = doc.getBoundingClientRect();
+  const footerRect = footer.getBoundingClientRect();
+
+  const docTop = docRect.top + window.scrollY;
+  const footerTop = (footerRect.top + window.scrollY) - docTop;
+  const footerHeight = footerRect.height;
+
+  /*
+    Descobre em qual folha o rodapé começa e quanto espaço resta.
+    Se couber nessa folha, usamos só o espaço necessário para encostar
+    o rodapé no final. Se não couber, ele vai para a próxima e é
+    posicionado na base dela.
+  */
+  const remainder = ((footerTop % printableHeight) + printableHeight) % printableHeight;
+  const breathing = 4 * mm;
+
+  let gap;
+
+  if(remainder + footerHeight + breathing <= printableHeight){
+    gap = printableHeight - remainder - footerHeight;
+  }else{
+    gap = (printableHeight - remainder) + printableHeight - footerHeight;
+  }
+
+  gap = Math.max(16, gap);
+  footer.style.setProperty("--print-footer-gap", `${gap}px`);
+}
+
+
+function renderPdfScale(){
+  document.body.removeAttribute("data-pdf-text-size");
+
+  const scale = Math.max(90, Math.min(150, Number(data.pdfScale || 120)));
+  data.pdfScale = scale;
+
+  const value = document.getElementById("pdfScaleValue");
+  const range = document.getElementById("pdfScaleRange");
+
+  if(value) value.textContent = `${scale}%`;
+  if(range && Number(range.value) !== scale) range.value = scale;
+
+  let style = document.getElementById("dynamicPdfTextScale");
+
+  if(!style){
+    style = document.createElement("style");
+    style.id = "dynamicPdfTextScale";
+    document.head.appendChild(style);
+  }
+
+  const f = scale / 100;
+  const px = (base) => `${(base * f).toFixed(2)}px`;
+
+  style.textContent = `
+    @media print {
+      body .hero p{
+        font-size:${px(12.6)} !important;
+        line-height:1.58 !important;
+      }
+
+      body .event-card strong{
+        font-size:${px(12)} !important;
+        line-height:1.48 !important;
+      }
+
+      body .section-intro{
+        font-size:${px(10.8)} !important;
+        line-height:1.50 !important;
+      }
+
+      body .scope-item p{
+        font-size:${px(11.8)} !important;
+        line-height:1.58 !important;
+      }
+
+      body .scope-meta{
+        font-size:${px(9.8)} !important;
+        line-height:1.45 !important;
+      }
+
+      body .investment .desc{
+        font-size:${px(11.2)} !important;
+        line-height:1.48 !important;
+      }
+
+      body .extra p{
+        font-size:${px(11.2)} !important;
+        line-height:1.56 !important;
+      }
+
+      body .extra-value{
+        font-size:${px(11.7)} !important;
+        line-height:1.50 !important;
+      }
+
+      body .extra-value strong{
+        font-size:${px(13.8)} !important;
+      }
+
+      body .info-box p,
+      body .info-box li{
+        font-size:${px(10.8)} !important;
+        line-height:1.52 !important;
+      }
+
+      body .notes{
+        font-size:${px(10.6)} !important;
+        line-height:1.52 !important;
+      }
+
+      body .print-footer{
+        font-size:${px(8.3)} !important;
+      }
+    }
+  `;
+}
+
+function changePdfScale(delta){
+  const current = Number(data.pdfScale || 120);
+  const next = Math.max(90, Math.min(150, current + delta));
+  data.pdfScale = next;
+
+  const range = document.getElementById("pdfScaleRange");
+  if(range) range.value = next;
+
+  renderPdfScale();
+  save();
+}
+
+function renderInvestmentMode(){
+  const single = data.investmentMode !== "perItem";
+
+  const singleSection = document.getElementById("singleInvestmentSection");
+  const singleEditor = document.getElementById("singleInvestmentEditor");
+  const note = document.getElementById("perItemInvestmentNote");
+
+  if(singleSection) singleSection.classList.toggle("hidden-ui", !single);
+  if(singleEditor) singleEditor.classList.toggle("hidden-ui", !single);
+  if(note) note.classList.toggle("hidden-ui", single);
+
+  document.querySelectorAll(".scope-value-editor").forEach(el=>{
+    el.classList.toggle("hidden-ui", single);
+  });
+}
+
+function renderRider(){
+  const ul = document.getElementById("riderPreview");
+  ul.innerHTML = "";
+  String(data.rider || "")
+    .split("\n")
+    .map(x => x.trim())
+    .filter(Boolean)
+    .forEach(x => {
+      const li = document.createElement("li");
+      li.textContent = x;
+      ul.appendChild(li);
+    });
+}
+function autoDensity(){
+  let score = 0;
+  score += data.scope.length * 2;
+  score += data.extras.length * 2;
+  score += String(data.notes || "").length > 180 ? 2 : 0;
+  score += String(data.rider || "").split("\n").filter(Boolean).length > 4 ? 2 : 0;
+  score += data.scope.reduce((a,s) => a + String(s.description || "").length, 0) > 350 ? 2 : 0;
+
+  const doc = document.getElementById("doc");
+  doc.dataset.density = score >= 10 ? "compact" : "normal";
+}
+function renderAll(){
+  renderTheme();
+  renderBindings();
+  renderScope();
+  renderExtras();
+  renderRider();
+  renderInvestmentMode();
+  renderPdfScale();
+  renderPageFormat();
+  autoDensity();
+  save();
+}
+function addScope(){
+  data.scope.push({
+    title:`Novo serviço ${data.scope.length + 1}`,
+    description:"Descreva o que foi combinado.",
+    duration:"A definir",
+    time:"A definir",
+    value:"R$ 0,00"
+  });
+  renderScopeEditor();
+  renderAll();
+}
+function removeScope(i){
+  if(!confirm(`Remover o item ${i+1}?`)) return;
+  data.scope.splice(i,1);
+  renderScopeEditor();
+  renderAll();
+}
+function addExtra(){
+  data.extras.push({
+    title:`Novo serviço ${data.extras.length + 1}`,
+    description:"Descreva o serviço adicional.",
+    value:"R$ 0,00",
+    ratio:"4/3",
+    fit:"cover",
+    position:"center",
+    image:""
+  });
+  renderExtrasEditor();
+  renderAll();
+}
+function removeExtra(i){
+  if(!confirm(`Remover o serviço ${i+1}?`)) return;
+  data.extras.splice(i,1);
+  renderExtrasEditor();
+  renderAll();
+}
+function xmlEsc(v){
+  return String(v ?? "")
+    .replaceAll("&","&amp;")
+    .replaceAll("<","&lt;")
+    .replaceAll(">","&gt;")
+    .replaceAll('"',"&quot;")
+    .replaceAll("'","&apos;");
+}
+function exportXML(){
+  const keys = ["theme","palette","pageSize","orientation","pdfScale","investmentMode","client","issueDate","eventDate","venue","city","time","duration","musicStyle","intro","total","totalDesc","deposit","balance","payment","notes","rider","phone","email","site","instagram"];
+  const fixed = keys.map(k => `  <${k}>${xmlEsc(data[k])}</${k}>`).join("\n");
+  const scope = data.scope.map(s => `
+    <item>
+      <title>${xmlEsc(s.title)}</title>
+      <description>${xmlEsc(s.description)}</description>
+      <duration>${xmlEsc(s.duration)}</duration>
+      <time>${xmlEsc(s.time)}</time>
+      <value>${xmlEsc(s.value || "")}</value>
+    </item>`).join("");
+  const extras = data.extras.map(e => `
+    <extra>
+      <title>${xmlEsc(e.title)}</title>
+      <description>${xmlEsc(e.description)}</description>
+      <value>${xmlEsc(e.value)}</value>
+      <ratio>${xmlEsc(e.ratio || "4/3")}</ratio>
+      <fit>${xmlEsc(e.fit || "cover")}</fit>
+      <position>${xmlEsc(e.position || "center")}</position>
+    </extra>`).join("");
+
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<proposal>
+${fixed}
+  <showExtras>${data.showExtras}</showExtras>
+  <scope>${scope}
+  </scope>
+  <extras>${extras}
+  </extras>
+</proposal>`;
+
+  const blob = new Blob([xml], {type:"application/xml;charset=utf-8"});
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = `proposta-${String(data.client || "cliente").toLowerCase().replace(/\s+/g,"-")}.xml`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+function text(el,tag){return el.querySelector(tag)?.textContent || ""}
+function importXML(file){
+  const r = new FileReader();
+  r.onload = () => {
+    try{
+      const xml = new DOMParser().parseFromString(r.result,"application/xml");
+      if(xml.querySelector("parsererror")) throw new Error();
+      const root = xml.documentElement;
+      const n = clone(DEFAULT);
+      const keys = ["theme","palette","pageSize","orientation","pdfScale","investmentMode","client","issueDate","eventDate","venue","city","time","duration","musicStyle","intro","total","totalDesc","deposit","balance","payment","notes","rider","phone","email","site","instagram"];
+      keys.forEach(k => {
+        const el = root.querySelector(`:scope > ${k}`);
+        if(el) n[k] = el.textContent;
+      });
+      const show = root.querySelector(":scope > showExtras");
+      if(show) n.showExtras = show.textContent === "true";
+
+      const items = [...root.querySelectorAll(":scope > scope > item")];
+      if(items.length){
+        n.scope = items.map(s => ({
+          title:text(s,"title"),
+          description:text(s,"description"),
+          duration:text(s,"duration"),
+          time:text(s,"time"),
+          value:text(s,"value")
+        }));
+      }
+
+      const ex = [...root.querySelectorAll(":scope > extras > extra")];
+      if(ex.length){
+        n.extras = ex.map(e => normalizeExtra({
+          title:text(e,"title"),
+          description:text(e,"description"),
+          value:text(e,"value"),
+          ratio:text(e,"ratio") || "4/3",
+          fit:text(e,"fit") || "cover",
+          position:text(e,"position") || "center",
+          image:""
+        }));
+      }
+
+      if(!n.palette) n.palette = "terracota";
+
+      data = n;
+      fillFixed();
+      renderScopeEditor();
+      renderExtrasEditor();
+      renderAll();
+      alert("Dados importados.");
+    }catch{
+      alert("Não foi possível importar o XML.");
+    }
+  };
+  r.readAsText(file,"UTF-8");
+}
+function resetData(){
+  if(!confirm("Restaurar os dados de exemplo?")) return;
+  data = clone(DEFAULT);
+  fillFixed();
+  renderScopeEditor();
+  renderExtrasEditor();
+  renderAll();
+}
+
+document.addEventListener("input", e => {
+  const f = e.target.closest("[data-fixed]");
+  if(f){
+    data[f.dataset.fixed] = f.value;
+
+    if(f.dataset.fixed === "investmentMode"){
+      renderScopeEditor();
+    }
+
+    renderAll();
+    return;
+  }
+  const d = e.target.closest("[data-kind]");
+  if(!d) return;
+  const i = Number(d.dataset.index);
+  const p = d.dataset.prop;
+  if(d.dataset.kind === "scope" && data.scope[i]) data.scope[i][p] = d.value;
+  if(d.dataset.kind === "extra" && data.extras[i]) data.extras[i][p] = d.value;
+  renderAll();
+});
+
+document.addEventListener("change", e => {
+  if(e.target.id === "showExtras"){
+    data.showExtras = e.target.checked;
+    renderAll();
+    return;
+  }
+  if(e.target.id === "heroImageInput"){
+    const f = e.target.files?.[0];
+    if(!f) return;
+    const r = new FileReader();
+    r.onload = () => {
+      data.heroImage = r.result;
+      renderAll();
+    };
+    r.readAsDataURL(f);
+    return;
+  }
+  const idx = e.target.dataset.extraImage;
+  if(idx !== undefined){
+    const f = e.target.files?.[0];
+    const i = Number(idx);
+    if(!f || !data.extras[i]) return;
+    const r = new FileReader();
+    r.onload = () => {
+      data.extras[i].image = r.result;
+      renderExtras();
+      autoDensity();
+      save();
+    };
+    r.readAsDataURL(f);
+  }
+});
+
+document.getElementById("xmlInput").addEventListener("change", e => {
+  const f = e.target.files?.[0];
+  if(f) importXML(f);
+  e.target.value = "";
+});
+
+fillFixed();
+renderScopeEditor();
+renderExtrasEditor();
+renderAll();
+</script>
+
+<script>
+(function(){
+  function prepareDynamicPrint(){
+    renderPageFormat();
+  }
+
+  window.addEventListener("beforeprint", prepareDynamicPrint);
+
+  const nativePrint = window.print;
+  window.print = function(){
+    renderPageFormat();
+    setTimeout(() => nativePrint.call(window), 80);
+  };
+})();
+</script>
+
+
+<!-- pec Manager integration: original document above is preserved -->
+<link rel="stylesheet" href="./manager-ui.css?v=12">
+<script src="./vendor/supabase-2.116.0.js"></script>
+<script src="./manager-shared.js?v=12"></script>
+<script src="./manager-document.js?v=12"></script>
+<script src="./quote-cloud.js?v=12"></script>
+<!-- /pec Manager integration -->
+</body>
+</html>

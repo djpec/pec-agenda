@@ -36,6 +36,9 @@
     .auth-box{margin-top:18px}.auth-user{background:#181b1f;border:1px solid var(--line);border-radius:16px;padding:14px}.auth-user b{font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis}.auth-user small{color:var(--muted);font-size:11px}.auth-note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:10px}.auth-message{font-size:11px;line-height:1.4;margin-top:10px;color:var(--accent);min-height:16px}.auth-buttons{display:flex;gap:8px;margin-top:12px}.auth-buttons button{flex:1}.secondary{border:1px solid var(--line);background:#202329;color:var(--text);border-radius:15px;padding:14px;font-weight:850}.logout{border:0;background:#2b1718;color:#ff8b8b;border-radius:15px;padding:13px 15px;font-weight:850;width:100%;margin-top:10px}
     @media(max-width:520px){body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}.app{padding:12px 12px 24px}header{padding-bottom:14px}.mark{width:39px;height:39px;border-radius:13px}.brand b{font-size:18px}.brand small{font-size:11px}.status{font-size:8px;padding:6px 7px}.hero{padding:18px;border-radius:23px}.hero h1{font-size:25px;margin-top:9px}.hero .meta{font-size:13px}.countdown{margin-top:14px}.toolbar{margin-top:20px}.toolbar h2{font-size:19px}.viewbtn{font-size:11px;padding:9px 5px}.event{padding:12px;grid-template-columns:52px minmax(0,1fr);gap:10px;min-height:70px;border-radius:18px}.swipe{border-radius:18px}.time{height:46px;border-radius:12px;font-size:13px}.info h3{font-size:14px}.info p{font-size:11px}.day{margin-top:12px}.day-head{padding-bottom:7px}.calendar{padding:9px;border-radius:20px}.weekdays,.calgrid{gap:3px}.calday{padding:5px 4px;border-radius:10px}.calnum{font-size:10px}.fab{width:56px;height:56px;padding:0;justify-content:center;border-radius:50%;right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}.fab span{display:none}.grid{grid-template-columns:minmax(0,1fr)}.field.full,.hint{grid-column:auto}.sheet{padding-left:14px;padding-right:14px}.auth-buttons{flex-direction:column}}
   </style>
+<link rel="stylesheet" href="./manager-ui.css?v=12">
+<link rel="stylesheet" href="./mobile-fix.css?v=12">
+<link rel="stylesheet" href="./enhancements-v7.css?v=12">
 </head>
 <body>
 <div class="app">
@@ -123,12 +126,13 @@
   </section>
 </div>
 
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./vendor/supabase-2.116.0.js"></script>
+<script src="./manager-shared.js?v=12"></script>
 <script>
 const KEY='pec-agenda-v1',VIEW_KEY='pec-agenda-view',PENDING_KEY='pec-agenda-pending-v1',SYNCED_USER_KEY='pec-agenda-synced-user';
 const SUPABASE_URL='https://qmhyeotvbktdilrudwys.supabase.co';
 const SUPABASE_KEY='sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT';
-const sb=window.supabase?.createClient?window.supabase.createClient(SUPABASE_URL,SUPABASE_KEY):null;
+const sb=window.PM.client;
 
 const DEFAULT_EVENTS=[
 {id:'seed-20260905-vegas',title:'Las Vegas Lounge',date:'2026-09-05',timeType:'time',time:'23:00',place:'',notes:''},{id:'seed-20260906-authentic',title:'Authentic Bar',date:'2026-09-06',timeType:'time',time:'01:00',place:'',notes:''},{id:'seed-20260907-vegas',title:'Las Vegas Lounge',date:'2026-09-07',timeType:'time',time:'23:00',place:'',notes:''},{id:'seed-20260911-vegas',title:'Las Vegas Lounge',date:'2026-09-11',timeType:'time',time:'23:00',place:'',notes:''},{id:'seed-20260911-sos',title:'S.O.S Bar',date:'2026-09-11',timeType:'time',time:'01:00',place:'',notes:''},{id:'seed-20260912-joia',title:'Joia Fronteira',date:'2026-09-12',timeType:'time',time:'01:00',place:'Foz do Iguaçu',notes:''},{id:'seed-20260916-vegas',title:'Las Vegas Lounge',date:'2026-09-16',timeType:'time',time:'02:00',place:'',notes:''},{id:'seed-20260918-aline',title:'Jantar Aline',date:'2026-09-18',timeType:'time',time:'19:30',place:'Condomínio Golfe, Wish',notes:''},{id:'seed-20260918-vegas',title:'Las Vegas Lounge',date:'2026-09-18',timeType:'time',time:'23:00',place:'',notes:''},{id:'seed-20260919-valentina',title:'15 anos — Valentina Neme',date:'2026-09-19',timeType:'allnight',time:'',place:'',notes:''},{id:'seed-20260925-panda',title:'Rolê Panda',date:'2026-09-25',timeType:'time',time:'22:00',place:'Authentic Bar',notes:''},{id:'seed-20260925-vegas',title:'Las Vegas Lounge',date:'2026-09-25',timeType:'time',time:'23:00',place:'',notes:''},
@@ -194,7 +198,10 @@ document.querySelector('#accountBtn').onclick=openAccount;document.querySelector
 function handleNetwork(){updateCloudUI();if(navigator.onLine&&currentUser)syncFromCloud()}
 addEventListener('online',handleNetwork);addEventListener('offline',handleNetwork);
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
-render();initAuth();
+render();addEventListener('load',()=>initAuth());
 </script>
+<script src="./cloud-fix.js?v=12"></script>
+<script src="./enhancements-v7.js?v=12"></script>
+<script src="./manager-agenda.js?v=12"></script>
 </body>
 </html>

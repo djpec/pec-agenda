@@ -1,0 +1,468 @@
+-box li{
+    font-size:13.2px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .notes{
+    font-size:12.8px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .print-footer{
+    font-size:9.6px !important;
+  }
+}
+
+
+/* ============================================================
+   V15 — CONTROLE FINO DO TAMANHO DOS TEXTOS DO PDF
+   ============================================================ */
+
+.pdf-scale-control{
+  display:grid;
+  gap:9px;
+  padding:11px;
+  background:#171717;
+  border:1px solid #393939;
+  border-radius:11px;
+}
+
+.pdf-scale-head{
+  display:flex;
+  align-items:center;
+  justify-content:space-between;
+  gap:10px;
+  color:#ddd;
+  font-size:11px;
+  font-weight:700;
+}
+
+.pdf-scale-head strong{
+  min-width:50px;
+  padding:5px 8px;
+  color:#111;
+  background:#f1f1f1;
+  border-radius:999px;
+  font-size:11px;
+  text-align:center;
+}
+
+.pdf-scale-row{
+  display:grid;
+  grid-template-columns:34px 1fr 34px;
+  gap:8px;
+  align-items:center;
+}
+
+.pdf-scale-btn{
+  width:34px;
+  height:34px;
+  padding:0;
+  color:#fff;
+  background:#303030;
+  border:1px solid #454545;
+  border-radius:9px;
+  font-size:18px;
+  line-height:1;
+}
+
+.pdf-scale-range{
+  width:100%;
+  min-height:0;
+  height:20px;
+  padding:0;
+  accent-color:#f0f0f0;
+  cursor:pointer;
+}
+
+.pdf-scale-labels{
+  display:flex;
+  justify-content:space-between;
+  gap:8px;
+  color:#8f8f8f;
+  font-size:9px;
+}
+
+
+/* ============================================================
+   V16 — VALORES MAIS CLAROS PARA O CLIENTE
+   ============================================================ */
+
+.investment{
+  position:relative;
+}
+
+.investment-warning{
+  display:inline-flex;
+  align-items:center;
+  gap:6px;
+  margin-top:8px;
+  padding:6px 9px;
+  color:var(--accent2);
+  background:rgba(255,255,255,.72);
+  border:1px solid color-mix(in srgb, var(--accent2) 26%, transparent);
+  border-radius:999px;
+  font-size:9.4px;
+  font-weight:700;
+  line-height:1.2;
+}
+
+.price-wrap{
+  display:grid;
+  justify-items:end;
+  gap:3px;
+}
+
+.price-label{
+  color:var(--muted);
+  font-size:7.4px;
+  font-weight:800;
+  letter-spacing:1.05px;
+}
+
+.extras-alert{
+  display:flex;
+  align-items:flex-start;
+  gap:10px;
+  margin:-1px 0 12px;
+  padding:10px 12px;
+  color:#4b473f;
+  background:color-mix(in srgb, var(--accent) 9%, #fff);
+  border:1px solid color-mix(in srgb, var(--accent) 30%, var(--line));
+  border-radius:12px;
+  font-size:10.6px;
+  line-height:1.45;
+}
+
+.extras-alert strong{
+  flex:0 0 auto;
+  padding:3px 7px;
+  color:#fff;
+  background:var(--accent);
+  border-radius:999px;
+  font-size:7.7px;
+  letter-spacing:.8px;
+  text-transform:uppercase;
+}
+
+.extra-copy{
+  position:relative;
+}
+
+.optional-badge{
+  display:inline-flex;
+  align-self:flex-start;
+  margin-bottom:7px;
+  padding:5px 8px;
+  color:var(--accent2);
+  background:color-mix(in srgb, var(--accent2) 8%, #fff);
+  border:1px solid color-mix(in srgb, var(--accent2) 25%, var(--line));
+  border-radius:999px;
+  font-size:7.4px;
+  font-weight:800;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+.extra-value{
+  display:grid;
+  gap:3px;
+}
+
+.extra-value-label{
+  color:var(--muted);
+  font-size:7.5px;
+  font-weight:800;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+
+.extra-value-main{
+  color:var(--accent2);
+  font-family:var(--serif);
+  font-size:22px;
+  font-weight:400;
+  line-height:1.1;
+}
+
+.extra-total-with{
+  display:flex;
+  justify-content:space-between;
+  gap:12px;
+  margin-top:8px;
+  padding-top:8px;
+  border-top:1px dashed var(--line);
+  color:var(--muted);
+  font-size:9.7px;
+  line-height:1.35;
+}
+
+.extra-total-with strong{
+  color:var(--ink);
+  white-space:nowrap;
+}
+
+@media print{
+  .extras-alert{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .investment-warning{
+    font-size:9.2px !important;
+  }
+
+  .extra-value-main{
+    font-size:21px !important;
+  }
+
+  .extra-total-with{
+    font-size:9.4px !important;
+  }
+}
+
+
+/* ============================================================
+   V17 — LIMPEZA VISUAL DOS OPCIONAIS
+   ============================================================ */
+
+.investment-warning,
+.extra-total-with{
+  display:none !important;
+}
+
+
+/* ============================================================
+   V20 — TEXTO DOS OPCIONAIS AJUSTADO
+   ============================================================ */
+
+.extra-copy{
+  min-width:0;
+  padding:14px 16px;
+}
+
+.optional-badge{
+  margin-bottom:6px;
+  padding:4px 7px;
+  font-size:6.9px;
+  letter-spacing:.85px;
+}
+
+.extra-kicker{
+  margin-bottom:4px;
+  font-size:7.2px;
+  letter-spacing:1.1px;
+}
+
+.extra h3{
+  margin:0 0 6px;
+  font-size:16px;
+  line-height:1.18;
+}
+
+.extra p{
+  font-size:10.3px;
+  line-height:1.5;
+}
+
+.extra-value{
+  margin-top:10px;
+  padding-top:10px;
+}
+
+.extra-value-label{
+  font-size:7.1px;
+  letter-spacing:.85px;
+}
+
+.extra-value-main{
+  font-size:17px;
+  line-height:1.05;
+}
+
+@media print{
+  .extra-copy{
+    padding:13px 15px !important;
+  }
+
+  .extra h3{
+    font-size:15.5px !important;
+  }
+
+  .extra p{
+    font-size:10px !important;
+    line-height:1.48 !important;
+  }
+
+  .extra-value-main{
+    font-size:16.5px !important;
+  }
+}
+
+</style>
+
+<style id="pec-manager-integration-style">
+.pec-manager-panel{margin:0 0 14px;padding:11px;background:rgba(255,255,255,.045);border:1px solid #343434;border-radius:13px}.pec-manager-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.pec-manager-back{display:flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-size:11px;font-weight:800}.pec-manager-back span{width:23px;height:23px;border-radius:7px;background:#f2c94c;color:#111;display:grid;place-items:center;font-weight:950}.pec-manager-head b{font-size:8px;letter-spacing:.08em;color:#9fa6ae}.pec-manager-head b.cloud{color:#6bd49b}.pec-manager-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pec-manager-grid label{grid-column:1/-1}.pec-manager-grid button{padding:8px 9px;background:#2b2e33;color:#fff;border-radius:8px;font-size:10px}.pec-manager-grid .pec-manager-save{background:#f2c94c;color:#111}.pec-manager-history{display:grid;gap:5px;margin-top:8px;max-height:130px;overflow:auto}.pec-manager-history button{border:1px solid #393d43;background:#111317;color:#fff;border-radius:8px;padding:7px 8px;text-align:left}.pec-manager-history button b{display:block;font-size:10px}.pec-manager-history button span{font-size:8px;color:#999}.pec-manager-empty{font-size:9px;color:#999;padding:4px}
+html[data-pec-ui="light"] .pec-manager-panel{background:#f3f5f7;border-color:#d9dee4}html[data-pec-ui="light"] .pec-manager-back{color:#17191d}html[data-pec-ui="light"] .pec-manager-grid button{background:#e4e7eb;color:#17191d}html[data-pec-ui="light"] .pec-manager-grid .pec-manager-save{background:#f2c94c;color:#111}html[data-pec-ui="light"] .pec-manager-history button{background:#fff;color:#17191d;border-color:#d9dee4}
+@media print{.pec-manager-panel,#pecThemeToggle{display:none!important}}
+</style>
+</head>
+<body data-theme="casamento" data-palette="terracota">
+
+<aside class="editor">
+<div class="pec-manager-panel">
+  <div class="pec-manager-head"><a href="./" class="pec-manager-back"><span>p</span> pec Manager</a><b id="pecQuoteCloud">LOCAL</b></div>
+  <div class="pec-manager-grid">
+    <label>Status<select id="pecQuoteStatus"><option value="draft">Rascunho</option><option value="sent">Enviado</option><option value="approved">Aprovado</option><option value="declined">Recusado</option></select></label>
+    <button type="button" class="pec-manager-save" onclick="pecSaveQuote()">Salvar online</button>
+    <button type="button" onclick="pecNewQuote()">Novo</button>
+    <button type="button" onclick="pecQuoteToContract()">Gerar contrato</button>
+    <button type="button" onclick="pecQuoteToAgenda()">Adicionar à agenda</button>
+  </div>
+  <div id="pecQuoteHistory" class="pec-manager-history"></div>
+</div>
+
+  <h1>Proposta DJ pec</h1>
+  <p class="lead">
+    Ajustei os cantos para um visual mais refinado e adicionei controles de
+    proporção da imagem nos serviços adicionais, para o card ficar mais elegante.
+  </p>
+
+  <div class="actions">
+    <button class="primary" onclick="window.print()">Imprimir / PDF</button>
+    <button class="secondary" onclick="exportXML()">Exportar XML</button>
+    <label class="file-btn secondary">Importar XML<input id="xmlInput" type="file" accept=".xml,text/xml"></label>
+    <button class="danger" onclick="resetData()">Restaurar exemplo</button>
+  </div>
+
+  <details open>
+    <summary>Tema e visual</summary>
+    <div class="fields">
+      <label>
+        Tipo de evento
+        <select data-fixed="theme">
+          <option value="casamento">Casamento</option>
+          <option value="xv">Festa de XV</option>
+          <option value="geral">Eventos em Geral</option>
+        </select>
+      </label>
+
+      <label>
+        Paleta de cores
+        <select data-fixed="palette">
+          <option value="terracota">Terracota elegante</option>
+          <option value="azul">Azul premium</option>
+          <option value="verde">Verde oliva</option>
+          <option value="rose">Rose sofisticado</option>
+          <option value="roxo">Roxo elegante</option>
+          <option value="dourado">Grafite dourado</option>
+        </select>
+      </label>
+
+      <label>
+        Foto de fundo suave (opcional)
+        <input id="heroImageInput" type="file" accept="image/*">
+      </label>
+
+      <div class="two">
+        <label>
+          Tamanho da folha
+          <select data-fixed="pageSize">
+            <option value="a5">A5 — 148 × 210 mm</option>
+            <option value="a4">A4 — 210 × 297 mm</option>
+            <option value="letter">Carta — 216 × 279 mm</option>
+            <option value="legal">Legal — 216 × 356 mm</option>
+            <option value="a3">A3 — 297 × 420 mm</option>
+            <option value="long">A4 alongado — 210 × 420 mm</option>
+          </select>
+        </label>
+
+        <label>
+          Orientação
+          <select data-fixed="orientation">
+            <option value="portrait">Retrato</option>
+            <option value="landscape">Paisagem</option>
+          </select>
+        </label>
+      </div>
+
+      <div class="pdf-scale-control">
+        <div class="pdf-scale-head">
+          <span>Tamanho dos textos no PDF</span>
+          <strong id="pdfScaleValue">120%</strong>
+        </div>
+
+        <div class="pdf-scale-row">
+          <button type="button" class="pdf-scale-btn" onclick="changePdfScale(-5)">−</button>
+
+          <input
+            id="pdfScaleRange"
+            class="pdf-scale-range"
+            data-fixed="pdfScale"
+            type="range"
+            min="90"
+            max="150"
+            step="5"
+            value="120"
+          >
+
+          <button type="button" class="pdf-scale-btn" onclick="changePdfScale(5)">+</button>
+        </div>
+
+        <div class="pdf-scale-labels">
+          <span>Menor</span>
+          <span>Recomendado: 120%</span>
+          <span>Maior</span>
+        </div>
+      </div>
+
+      <p class="note">
+        Esse controle altera somente os textos informativos do PDF. Títulos e preços
+        principais mantêm a proporção do layout. Se aumentar bastante, o orçamento
+        pode usar mais páginas — sem espremer a leitura.
+      </p>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Cliente e evento</summary>
+    <div class="fields">
+      <label>Cliente <input data-fixed="client"></label>
+      <div class="two">
+        <label>Emissão <input data-fixed="issueDate" type="date"></label>
+        <label>Evento <input data-fixed="eventDate" type="date"></label>
+      </div>
+      <label>Local <input data-fixed="venue"></label>
+      <label>Cidade / Estado <input data-fixed="city"></label>
+      <div class="two">
+        <label>Horário <input data-fixed="time"></label>
+        <label>Duração <input data-fixed="duration"></label>
+      </div>
+      <label>Estilo musical <input data-fixed="musicStyle"></label>
+      <label>Mensagem inicial <textarea data-fixed="intro"></textarea></label>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Escopo combinado</summary>
+    <div class="fields">
+      <div id="scopeEditor" class="editor-list"></div>
+      <button class="add" onclick="addScope()">+ Adicionar item ao escopo</button>
+    </div>
+  </details>
+
+  <details open>
+    <summary>Investimento</summary>
+    <div class="fields">
+      <label>
+        Como mostrar o investimento?
+        <select data-fixed="investmentMode">
+          <option value="single">1 valor único para a proposta</option>
+          <option value="perItem">Valores separados por item do escopo</option>
+        </select>
+      </label>
+
+      <div id="singleInvestmentEditor">
+        <div class="fields" style="padding:0;">
+          <label>Valor total <input data-fixed="total"></label>
+          <label>Descrição curta 

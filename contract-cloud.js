@@ -1,0 +1,1 @@
+(()=>{console.log('pec contract cloud placeholder')})();

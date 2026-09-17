@@ -1,5 +1,5 @@
-const CACHE='pec-agenda-v5';
-const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css'];
+const CACHE='pec-agenda-v6';
+const ASSETS=['./','./index.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./cloud-fix.js'];
 
 self.addEventListener('install',event=>{
   event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(ASSETS)));
@@ -11,10 +11,13 @@ self.addEventListener('activate',event=>{
   self.clients.claim();
 });
 
-async function injectMobileFix(response){
+async function patchHtml(response){
   const html=await response.text();
-  const tag='<link rel="stylesheet" href="./mobile-fix.css?v=5">';
-  const patched=html.includes('mobile-fix.css')?html:html.replace('</head>',`${tag}</head>`);
+  const styleTag='<link rel="stylesheet" href="./mobile-fix.css?v=6">';
+  const scriptTag='<script src="./cloud-fix.js?v=6"></script>';
+  let patched=html;
+  if(!patched.includes('mobile-fix.css')) patched=patched.replace('</head>',`${styleTag}</head>`);
+  if(!patched.includes('cloud-fix.js')) patched=patched.replace('</body>',`${scriptTag}</body>`);
   return new Response(patched,{
     status:response.status,
     statusText:response.statusText,
@@ -31,10 +34,10 @@ self.addEventListener('fetch',event=>{
         const response=await fetch(event.request,{cache:'no-store'});
         const copy=response.clone();
         caches.open(CACHE).then(cache=>cache.put('./index.html',copy));
-        return injectMobileFix(response);
+        return patchHtml(response);
       }catch{
         const cached=await caches.match('./index.html');
-        return cached?injectMobileFix(cached):Response.error();
+        return cached?patchHtml(cached):Response.error();
       }
     })());
     return;

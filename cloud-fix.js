@@ -1,6 +1,12 @@
 (() => {
   const sleep = ms => new Promise(r => setTimeout(r, ms));
+  const DELETED_KEY = 'pec-agenda-deleted-v1';
   let pulling = false;
+
+  function deletedIds(){
+    try { return new Set(JSON.parse(localStorage.getItem(DELETED_KEY)) || []); }
+    catch { return new Set(); }
+  }
 
   function addManualSyncButton() {
     if (document.querySelector('#manualCloudSync')) return;
@@ -30,6 +36,14 @@
     return await res.json();
   }
 
+  async function enforceDeleted(session){
+    const ids = [...deletedIds()];
+    if (!ids.length || !navigator.onLine) return;
+    for (const id of ids) {
+      try { await sb.from('events').delete().eq('id', id); } catch (_) {}
+    }
+  }
+
   async function pullCloud(manual = false) {
     if (pulling || !navigator.onLine) return;
     if (typeof sb === 'undefined' || !sb) return;
@@ -44,6 +58,7 @@
 
       const session = sessionData.session;
       if (typeof currentUser !== 'undefined') currentUser = session.user;
+      await enforceDeleted(session);
 
       let rows = [];
       let queryError = null;
@@ -55,14 +70,12 @@
         queryError = err;
       }
 
-      if (queryError || rows.length === 0) {
-        try {
-          const directRows = await fetchRowsDirect(session);
-          if (Array.isArray(directRows)) rows = directRows;
-        } catch (err) {
-          if (queryError) throw queryError;
-        }
+      if (queryError) {
+        rows = await fetchRowsDirect(session);
       }
+
+      const removed = deletedIds();
+      rows = (rows || []).filter(r => !removed.has(r.id));
 
       if (rows.length > 0) {
         events = rows.map(fromRow);
@@ -79,23 +92,31 @@
         return;
       }
 
-      // Proteção para navegador novo: se a conta estiver vazia por algum motivo,
-      // mantém a agenda padrão visível e tenta enviá-la para a nuvem.
-      if ((!events || events.length === 0) && typeof DEFAULT_EVENTS !== 'undefined' && DEFAULT_EVENTS.length) {
-        events = DEFAULT_EVENTS.map(e => ({ ...e, completed: false, completedAt: null }));
-        save();
-        if (typeof render === 'function') render();
-        try {
-          const payload = events.map(toRow);
+      // Conta vazia: só envia o que realmente existe no aparelho.
+      // Não recria a agenda padrão, para eventos cancelados/excluídos não voltarem.
+      const syncedBefore = localStorage.getItem(SYNCED_USER_KEY) === session.user.id;
+      if (!syncedBefore && Array.isArray(events) && events.length) {
+        const safeEvents = events.filter(e => !removed.has(e.id));
+        if (safeEvents.length) {
+          const payload = safeEvents.map(toRow);
           const { error: uploadError } = await sb.from('events').upsert(payload, { onConflict: 'id' });
-          if (!uploadError) {
-            localStorage.setItem(SYNCED_USER_KEY, session.user.id);
-            if (typeof setSyncMessage === 'function') setSyncMessage(`${events.length} eventos enviados para a nuvem ✓`);
-          }
-        } catch (_) {}
-      } else if (typeof setSyncMessage === 'function') {
-        setSyncMessage(manual ? 'Nenhum evento encontrado na nuvem.' : 'Nuvem conectada.');
+          if (uploadError) throw uploadError;
+          localStorage.setItem(SYNCED_USER_KEY, session.user.id);
+          if (typeof setSyncMessage === 'function') setSyncMessage(`${safeEvents.length} eventos enviados para a nuvem ✓`);
+          events = safeEvents;
+          save();
+          if (typeof render === 'function') render();
+          return;
+        }
       }
+
+      events = [];
+      save();
+      selectedMonth = null;
+      selectedCalendarDay = null;
+      localStorage.setItem(SYNCED_USER_KEY, session.user.id);
+      if (typeof render === 'function') render();
+      if (typeof setSyncMessage === 'function') setSyncMessage(manual ? 'Agenda sincronizada: nenhum evento na nuvem.' : 'Nuvem conectada.');
     } catch (err) {
       console.error('pec Agenda cloud sync:', err);
       if (typeof setSyncMessage === 'function') setSyncMessage('Falha ao puxar a nuvem. Seus dados locais continuam salvos.');
@@ -105,14 +126,11 @@
     }
   }
 
-  // Substitui a sincronização antiga por uma leitura mais robusta.
-  try {
-    syncFromCloud = pullCloud;
-  } catch (_) {}
+  try { syncFromCloud = pullCloud; } catch (_) {}
 
   window.pecPullCloud = pullCloud;
   addManualSyncButton();
-  window.addEventListener('load', () => setTimeout(() => pullCloud(false), 900));
+  window.addEventListener('load', () => setTimeout(() => pullCloud(false), 700));
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState === 'visible') setTimeout(() => pullCloud(false), 250);
   });

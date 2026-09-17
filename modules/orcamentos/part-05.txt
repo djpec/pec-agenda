@@ -1,0 +1,407 @@
+ing:0;">
+        <label>Título <input data-kind="scope" data-index="${i}" data-prop="title" value="${esc(s.title)}"></label>
+        <label>Descrição <textarea data-kind="scope" data-index="${i}" data-prop="description">${esc(s.description)}</textarea></label>
+        <div class="two">
+          <label>Duração <input data-kind="scope" data-index="${i}" data-prop="duration" value="${esc(s.duration)}"></label>
+          <label>Horário <input data-kind="scope" data-index="${i}" data-prop="time" value="${esc(s.time)}"></label>
+        </div>
+        <label class="scope-value-editor ${data.investmentMode === "perItem" ? "" : "hidden-ui"}">
+          Valor deste item
+          <input data-kind="scope" data-index="${i}" data-prop="value" value="${esc(s.value || "")}">
+        </label>
+      </div>
+    </div>
+  `).join("");
+}
+function renderScope(){
+  const c = document.getElementById("scopePreview");
+  c.classList.toggle("single", data.scope.length === 1);
+  c.innerHTML = data.scope.map((s,i) => `
+    <div class="scope-item">
+      <span class="scope-num">${String(i+1).padStart(2,"0")}</span>
+      <h3>${esc(s.title || "Serviço")}</h3>
+      <p>${esc(s.description || "—")}</p>
+      <div class="scope-meta">
+        <span>${esc(s.duration || "—")}</span><span>•</span><span>${esc(s.time || "—")}</span>
+      </div>
+      ${data.investmentMode === "perItem" ? `
+        <div class="scope-price">
+          <span class="scope-price-label">Investimento</span>
+          <span class="scope-price-value">${esc(s.value || "—")}</span>
+        </div>
+      ` : ""}
+    </div>
+  `).join("");
+}
+function renderExtrasEditor(){
+  const c = document.getElementById("extrasEditor");
+  c.innerHTML = data.extras.map((e,i) => `
+    <div class="editor-item">
+      <div class="editor-item-head">
+        <strong>Serviço ${String(i+1).padStart(2,"0")}</strong>
+        <button class="remove" onclick="removeExtra(${i})">Remover</button>
+      </div>
+      <div class="fields" style="padding:0;">
+        <label>Título <input data-kind="extra" data-index="${i}" data-prop="title" value="${esc(e.title)}"></label>
+        <label>Descrição <textarea data-kind="extra" data-index="${i}" data-prop="description">${esc(e.description)}</textarea></label>
+        <label>Valor / condição <input data-kind="extra" data-index="${i}" data-prop="value" value="${esc(e.value)}"></label>
+        <div class="two">
+          <label>
+            Proporção da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="ratio">
+              <option value="16/9" ${e.ratio==="16/9" ? "selected" : ""}>Panorâmica 16:9</option>
+              <option value="4/3" ${e.ratio==="4/3" ? "selected" : ""}>Horizontal 4:3</option>
+              <option value="1/1" ${e.ratio==="1/1" ? "selected" : ""}>Quadrada 1:1</option>
+              <option value="3/4" ${e.ratio==="3/4" ? "selected" : ""}>Retrato 3:4</option>
+            </select>
+          </label>
+          <label>
+            Ajuste da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="fit">
+              <option value="cover" ${e.fit==="cover" ? "selected" : ""}>Preencher</option>
+              <option value="contain" ${e.fit==="contain" ? "selected" : ""}>Encaixar</option>
+            </select>
+          </label>
+        </div>
+        <div class="two">
+          <label>
+            Posição da imagem
+            <select data-kind="extra" data-index="${i}" data-prop="position">
+              <option value="top" ${e.position==="top" ? "selected" : ""}>Topo</option>
+              <option value="center" ${e.position==="center" ? "selected" : ""}>Centro</option>
+              <option value="bottom" ${e.position==="bottom" ? "selected" : ""}>Base</option>
+            </select>
+          </label>
+          <label>Imagem <input type="file" accept="image/*" data-extra-image="${i}"></label>
+        </div>
+      </div>
+    </div>
+  `).join("");
+}
+function highlightCurrency(text){
+  const safe = esc(text || "—");
+  return safe.replace(/(R\$\s?[\d\.\,]+)/g, "<strong>$1</strong>");
+}
+
+function parseMoneyBR(value){
+  const text = String(value || "").trim();
+  const match = text.match(/R\$\s*([\d\.\,]+)/i) || text.match(/([\d\.\,]+)/);
+  if(!match) return null;
+
+  let num = match[1];
+
+  if(num.includes(",")){
+    num = num.replace(/\./g, "").replace(",", ".");
+  }else{
+    const parts = num.split(".");
+    if(parts.length > 2){
+      num = parts.join("");
+    }else if(parts.length === 2 && parts[1].length === 3){
+      num = parts.join("");
+    }
+  }
+
+  const parsed = Number(num);
+  return Number.isFinite(parsed) ? parsed : null;
+}
+
+function formatMoneyBR(value){
+  if(!Number.isFinite(value)) return "";
+  return value.toLocaleString("pt-BR", {
+    style:"currency",
+    currency:"BRL",
+    minimumFractionDigits:2,
+    maximumFractionDigits:2
+  });
+}
+
+function getBaseInvestmentValue(){
+  if(data.investmentMode === "perItem"){
+    const values = data.scope
+      .map(item => parseMoneyBR(item.value))
+      .filter(v => Number.isFinite(v));
+
+    if(!values.length) return null;
+    return values.reduce((sum, value) => sum + value, 0);
+  }
+
+  return parseMoneyBR(data.total);
+}
+
+function formatOptionalValue(value){
+  const text = String(value || "").trim();
+  if(!text) return "—";
+
+  const exactMoney = text.match(/^\s*R\$\s*[\d\.\,]+\s*$/i);
+
+  if(exactMoney){
+    return `+ ${esc(text)}`;
+  }
+
+  return highlightCurrency(text);
+}
+
+function renderExtras(){
+  const sec = document.getElementById("extrasSection");
+  sec.style.display = (data.showExtras && data.extras.length) ? "block" : "none";
+  const c = document.getElementById("extrasPreview");
+  const baseValue = getBaseInvestmentValue();
+
+  c.innerHTML = data.extras.map((raw) => {
+    const e = normalizeExtra(raw);
+    const ratio = e.ratio || "4/3";
+    const fitClass = e.fit === "contain" ? "fit-contain" : "fit-cover";
+    const positionClass = `position-${e.position || "center"}`;
+
+    const extraValue = parseMoneyBR(e.value);
+    const canCalculateTotal =
+      Number.isFinite(baseValue) &&
+      Number.isFinite(extraValue) &&
+      !/a partir|sob consulta|consultar|desde/i.test(String(e.value || ""));
+
+    const totalWithOptional = "";
+
+    return `
+      <div class="extra ${e.image ? "" : "no-image"}">
+        ${e.image ? `
+          <div class="extra-media ${fitClass} ${positionClass}" style="--media-ratio:${ratio};">
+            <img src="${e.image}" alt="${esc(e.title || "Serviço")}">
+          </div>` : ""}
+        <div class="extra-copy">
+          <div class="optional-badge">Opcional · não incluso</div>
+          <div class="extra-kicker">Se desejar acrescentar</div>
+          <h3>${esc(e.title || "Serviço")}</h3>
+          <p>${esc(e.description || "—")}</p>
+
+          <div class="extra-value">
+            <span class="extra-value-label">Valor adicional</span>
+            <div class="extra-value-main">${formatOptionalValue(e.value)}</div>
+            ${totalWithOptional}
+          </div>
+        </div>
+      </div>
+    `;
+  }).join("");
+}
+
+
+const PAGE_FORMATS = {
+  a5:     {label:"A5", width:148,   height:210},
+  a4:     {label:"A4", width:210,   height:297},
+  letter: {label:"Carta", width:215.9, height:279.4},
+  legal:  {label:"Legal", width:215.9, height:355.6},
+  a3:     {label:"A3", width:297,   height:420},
+  long:   {label:"A4 alongado", width:210, height:420}
+};
+
+function getPageDimensions(){
+  const base = PAGE_FORMATS[data.pageSize] || PAGE_FORMATS.a4;
+  const landscape = data.orientation === "landscape";
+
+  return landscape
+    ? {width:base.height, height:base.width, label:base.label}
+    : {width:base.width, height:base.height, label:base.label};
+}
+
+function ensureDynamicPageStyle(){
+  let style = document.getElementById("dynamicPageStyle");
+
+  if(!style){
+    style = document.createElement("style");
+    style.id = "dynamicPageStyle";
+    document.head.appendChild(style);
+  }
+
+  const page = getPageDimensions();
+
+  style.textContent = `
+    @page {
+      size: ${page.width}mm ${page.height}mm;
+      margin: 10mm 11mm 19mm;
+    }
+  `;
+}
+
+function renderPageFormat(){
+  const page = getPageDimensions();
+
+  document.documentElement.style.setProperty("--sheet-width", `${page.width}mm`);
+  document.documentElement.style.setProperty("--sheet-min-height", `${page.height}mm`);
+
+  /*
+    Só tratamos como estreita quando a largura útil é realmente pequena.
+    Carta/A4 continuam com o layout normal.
+  */
+  document.body.dataset.paperNarrow = page.width < 185 ? "true" : "false";
+
+  ensureDynamicPageStyle();
+}
+
+function pxPerMmForPrint(){
+  const probe = document.createElement("div");
+  probe.style.position = "absolute";
+  probe.style.visibility = "hidden";
+  probe.style.width = "100mm";
+  probe.style.height = "1px";
+  document.body.appendChild(probe);
+  const px = probe.getBoundingClientRect().width / 100;
+  probe.remove();
+  return px;
+}
+
+function resetFinalFooterGap(){
+  const footer = document.getElementById("finalFooter");
+  if(footer){
+    footer.style.removeProperty("--print-footer-gap");
+  }
+}
+
+function pinFooterToLastPrintedPage(){
+  resetFinalFooterGap();
+
+  const doc = document.getElementById("doc");
+  const footer = document.getElementById("finalFooter");
+
+  if(!doc || !footer) return;
+
+  const page = getPageDimensions();
+  const mm = pxPerMmForPrint();
+
+  /* Margens do @page: 10mm superior + 13mm inferior. */
+  const printableHeight = (page.height - 23) * mm;
+
+  if(printableHeight <= 0) return;
+
+  const docRect = doc.getBoundingClientRect();
+  const footerRect = footer.getBoundingClientRect();
+
+  const docTop = docRect.top + window.scrollY;
+  const footerTop = (footerRect.top + window.scrollY) - docTop;
+  const footerHeight = footerRect.height;
+
+  /*
+    Descobre em qual folha o rodapé começa e quanto espaço resta.
+    Se couber nessa folha, usamos só o espaço necessário para encostar
+    o rodapé no final. Se não couber, ele vai para a próxima e é
+    posicionado na base dela.
+  */
+  const remainder = ((footerTop % printableHeight) + printableHeight) % printableHeight;
+  const breathing = 4 * mm;
+
+  let gap;
+
+  if(remainder + footerHeight + breathing <= printableHeight){
+    gap = printableHeight - remainder - footerHeight;
+  }else{
+    gap = (printableHeight - remainder) + printableHeight - footerHeight;
+  }
+
+  gap = Math.max(16, gap);
+  footer.style.setProperty("--print-footer-gap", `${gap}px`);
+}
+
+
+function renderPdfScale(){
+  document.body.removeAttribute("data-pdf-text-size");
+
+  const scale = Math.max(90, Math.min(150, Number(data.pdfScale || 120)));
+  data.pdfScale = scale;
+
+  const value = document.getElementById("pdfScaleValue");
+  const range = document.getElementById("pdfScaleRange");
+
+  if(value) value.textContent = `${scale}%`;
+  if(range && Number(range.value) !== scale) range.value = scale;
+
+  let style = document.getElementById("dynamicPdfTextScale");
+
+  if(!style){
+    style = document.createElement("style");
+    style.id = "dynamicPdfTextScale";
+    document.head.appendChild(style);
+  }
+
+  const f = scale / 100;
+  const px = (base) => `${(base * f).toFixed(2)}px`;
+
+  style.textContent = `
+    @media print {
+      body .hero p{
+        font-size:${px(12.6)} !important;
+        line-height:1.58 !important;
+      }
+
+      body .event-card strong{
+        font-size:${px(12)} !important;
+        line-height:1.48 !important;
+      }
+
+      body .section-intro{
+        font-size:${px(10.8)} !important;
+        line-height:1.50 !important;
+      }
+
+      body .scope-item p{
+        font-size:${px(11.8)} !important;
+        line-height:1.58 !important;
+      }
+
+      body .scope-meta{
+        font-size:${px(9.8)} !important;
+        line-height:1.45 !important;
+      }
+
+      body .investment .desc{
+        font-size:${px(11.2)} !important;
+        line-height:1.48 !important;
+      }
+
+      body .extra p{
+        font-size:${px(11.2)} !important;
+        line-height:1.56 !important;
+      }
+
+      body .extra-value{
+        font-size:${px(11.7)} !important;
+        line-height:1.50 !important;
+      }
+
+      body .extra-value strong{
+        font-size:${px(13.8)} !important;
+      }
+
+      body .info-box p,
+      body .info-box li{
+        font-size:${px(10.8)} !important;
+        line-height:1.52 !important;
+      }
+
+      body .notes{
+        font-size:${px(10.6)} !important;
+        line-height:1.52 !important;
+      }
+
+      body .print-footer{
+        font-size:${px(8.3)} !important;
+      }
+    }
+  `;
+}
+
+function changePdfScale(delta){
+  const current = Number(data.pdfScale || 120);
+  const next = Math.max(90, Math.min(150, current + delta));
+  data.pdfScale = next;
+
+  const range = document.getElementById("pdfScaleRange");
+  if(range) range.value = next;
+
+  renderPdfScale();
+  save();
+}
+
+function renderInvestmentMode(){
+  const single = data.investmentMode !== "perItem";
+
+  const singleSection = document.getElementById("singleInvestmentSection");
+  const singleEditor = docum

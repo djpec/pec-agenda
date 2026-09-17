@@ -36,9 +36,9 @@
     .auth-box{margin-top:18px}.auth-user{background:#181b1f;border:1px solid var(--line);border-radius:16px;padding:14px}.auth-user b{font-size:13px;display:block;overflow:hidden;text-overflow:ellipsis}.auth-user small{color:var(--muted);font-size:11px}.auth-note{font-size:11px;color:var(--muted);line-height:1.45;margin-top:10px}.auth-message{font-size:11px;line-height:1.4;margin-top:10px;color:var(--accent);min-height:16px}.auth-buttons{display:flex;gap:8px;margin-top:12px}.auth-buttons button{flex:1}.secondary{border:1px solid var(--line);background:#202329;color:var(--text);border-radius:15px;padding:14px;font-weight:850}.logout{border:0;background:#2b1718;color:#ff8b8b;border-radius:15px;padding:13px 15px;font-weight:850;width:100%;margin-top:10px}
     @media(max-width:520px){body{padding-bottom:calc(86px + env(safe-area-inset-bottom))}.app{padding:12px 12px 24px}header{padding-bottom:14px}.mark{width:39px;height:39px;border-radius:13px}.brand b{font-size:18px}.brand small{font-size:11px}.status{font-size:8px;padding:6px 7px}.hero{padding:18px;border-radius:23px}.hero h1{font-size:25px;margin-top:9px}.hero .meta{font-size:13px}.countdown{margin-top:14px}.toolbar{margin-top:20px}.toolbar h2{font-size:19px}.viewbtn{font-size:11px;padding:9px 5px}.event{padding:12px;grid-template-columns:52px minmax(0,1fr);gap:10px;min-height:70px;border-radius:18px}.swipe{border-radius:18px}.time{height:46px;border-radius:12px;font-size:13px}.info h3{font-size:14px}.info p{font-size:11px}.day{margin-top:12px}.day-head{padding-bottom:7px}.calendar{padding:9px;border-radius:20px}.weekdays,.calgrid{gap:3px}.calday{padding:5px 4px;border-radius:10px}.calnum{font-size:10px}.fab{width:56px;height:56px;padding:0;justify-content:center;border-radius:50%;right:14px;bottom:calc(14px + env(safe-area-inset-bottom))}.fab span{display:none}.grid{grid-template-columns:minmax(0,1fr)}.field.full,.hint{grid-column:auto}.sheet{padding-left:14px;padding-right:14px}.auth-buttons{flex-direction:column}}
   </style>
-<link rel="stylesheet" href="./mobile-fix.css?v=13">
-<link rel="stylesheet" href="./enhancements-v7.css?v=13">
-<link rel="stylesheet" href="./manager-ui.css?v=13">
+<link rel="stylesheet" href="./mobile-fix.css?v=14">
+<link rel="stylesheet" href="./enhancements-v7.css?v=14">
+<link rel="stylesheet" href="./manager-ui.css?v=14">
 </head>
 <body>
 <div class="app">
@@ -110,7 +110,7 @@
     <form id="authLoggedOut" class="auth-box">
       <div class="grid">
         <div class="field full"><label for="authEmail">E-mail</label><input id="authEmail" type="email" inputmode="email" autocomplete="email" autocapitalize="none" autocorrect="off" required placeholder="seu@email.com" /></div>
-        <div class="field full"><label for="authPassword">Senha</label><input id="authPassword" type="password" autocomplete="current-password" required placeholder="Mínimo 6 caracteres" /></div>
+        <div class="field full"><label for="authPassword">Senha</label><div class="auth-password"><input id="authPassword" type="password" autocomplete="current-password" autocapitalize="none" autocorrect="off" spellcheck="false" required placeholder="Mínimo 6 caracteres" /><button id="togglePassword" type="button" aria-label="Mostrar senha" aria-controls="authPassword" aria-pressed="false">Mostrar</button></div></div>
       </div>
       <div class="auth-buttons"><button id="loginBtn" class="primary" type="submit">Entrar</button><button id="signupBtn" class="secondary" type="button">Criar conta</button></div>
       <div class="auth-note">Na primeira conta, o Supabase pode pedir confirmação por e-mail. Depois, basta entrar com a mesma conta no iPhone e no notebook.</div>
@@ -127,7 +127,7 @@
 </div>
 
 <script src="./vendor/supabase-2.116.0.js"></script>
-<script src="./manager-shared.js?v=13"></script>
+<script src="./manager-shared.js?v=14"></script>
 <script>
 const KEY='pec-agenda-v1',VIEW_KEY='pec-agenda-view',PENDING_KEY='pec-agenda-pending-v1',SYNCED_USER_KEY='pec-agenda-synced-user';
 const SUPABASE_URL='https://qmhyeotvbktdilrudwys.supabase.co';
@@ -182,18 +182,37 @@ function setSyncMessage(msg){document.querySelector('#syncState').textContent=ms
 function updateCloudUI(){const status=document.querySelector('#status'),dot=document.querySelector('#syncDot'),state=document.querySelector('#syncState'),text=document.querySelector('#syncText');status.classList.remove('cloud','off');dot.classList.remove('ok','warn');if(!navigator.onLine){status.textContent='OFFLINE';status.classList.add('off');dot.classList.add('warn');state.textContent=pending().length?`${pending().length} alteração(ões) aguardando internet`:'Offline — dados locais disponíveis';text.textContent='A agenda continua funcionando neste aparelho e sincroniza quando a internet voltar.'}else if(currentUser){status.textContent='NUVEM ✓';status.classList.add('cloud');dot.classList.add('ok');if(!syncBusy&&!pending().length)state.textContent='Sincronizado';text.textContent=`Conectado como ${currentUser.email}. Alterações são salvas online.`}else{status.textContent='Entrar na nuvem';state.textContent='Modo local';text.textContent='Seus dados estão salvos neste aparelho. Entre na nuvem para sincronizar com outros dispositivos.'}document.querySelector('#authLoggedOut').style.display=currentUser?'none':'block';document.querySelector('#authLoggedIn').style.display=currentUser?'block':'none';if(currentUser)document.querySelector('#userEmail').textContent=currentUser.email||'Conta conectada'}
 
 async function initAuth(){if(!sb){updateCloudUI();return}const{data}=await sb.auth.getSession();currentUser=data.session?.user||null;updateCloudUI();if(currentUser)syncFromCloud();sb.auth.onAuthStateChange((event,session)=>{currentUser=session?.user||null;updateCloudUI();if(currentUser&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'))setTimeout(()=>syncFromCloud(),50)})}
+function authErrorMessage(error){
+  const code=error?.code,status=Number(error?.status||0);
+  if(code==='invalid_credentials')return 'E-mail ou senha incorretos. Confira os dados e o preenchimento automático. Use Mostrar para conferir a senha.';
+  if(code==='email_not_confirmed')return 'Confirme sua conta pelo link recebido no e-mail antes de entrar.';
+  if(code==='over_request_rate_limit'||status===429)return 'Muitas tentativas em pouco tempo. Aguarde alguns minutos antes de tentar novamente.';
+  if(code==='request_timeout')return 'A conexão demorou demais. Confira a internet e tente novamente.';
+  if(status>=500)return 'A nuvem está temporariamente indisponível. Tente novamente em alguns instantes.';
+  if(error?.name==='AuthRetryableFetchError'||error?.name==='TypeError')return 'Não foi possível conectar à nuvem. Confira a internet ou tente outra rede.';
+  if(code==='user_banned')return 'Esta conta está temporariamente bloqueada. Entre em contato para verificar o acesso.';
+  return 'Não foi possível entrar agora. Atualize a página e tente novamente.';
+}
+function setPasswordVisibility(visible){
+  const input=document.querySelector('#authPassword'),button=document.querySelector('#togglePassword');
+  input.type=visible?'text':'password';button.textContent=visible?'Ocultar':'Mostrar';
+  button.setAttribute('aria-label',visible?'Ocultar senha':'Mostrar senha');button.setAttribute('aria-pressed',String(visible));
+}
+document.querySelector('#togglePassword').onclick=()=>setPasswordVisibility(document.querySelector('#authPassword').type==='password');
 async function login(){
   const form=document.querySelector('#authLoggedOut'),button=document.querySelector('#loginBtn'),signupButton=document.querySelector('#signupBtn'),msg=document.querySelector('#authMessage');
   if(button.disabled||!form.reportValidity())return;
   if(!navigator.onLine){msg.textContent='Sem internet. Conecte-se para entrar na nuvem.';return}
   if(!sb){msg.textContent='Conexão com a nuvem indisponível. Atualize a página e tente novamente.';return}
   const email=document.querySelector('#authEmail').value.trim(),password=document.querySelector('#authPassword').value;
+  setPasswordVisibility(false);
   button.disabled=true;signupButton.disabled=true;button.textContent='Entrando…';msg.textContent='Conectando à sua conta…';
   try{
     const{error}=await sb.auth.signInWithPassword({email,password});
-    msg.textContent=error?'Não foi possível entrar. Confira e-mail e senha.':'Login realizado ✓';
-  }catch{
-    msg.textContent='Não foi possível conectar à nuvem. Confira a internet e tente novamente.';
+    msg.textContent=error?authErrorMessage(error):'Login realizado ✓';
+    if(!error)document.querySelector('#authPassword').value='';
+  }catch(error){
+    msg.textContent=authErrorMessage(error);
   }finally{
     button.disabled=false;signupButton.disabled=false;button.textContent='Entrar';
   }
@@ -216,6 +235,7 @@ function openAccount(){
   modal.querySelector('.sheet').focus({preventScroll:true});
 }
 function closeAccount(){
+  setPasswordVisibility(false);
   const modal=document.querySelector('#accountModal');
   const trigger=accountTrigger?.isConnected&&accountTrigger!==document.body&&!modal.contains(accountTrigger)?accountTrigger:document.querySelector('#status');
   trigger.focus({preventScroll:true});
@@ -235,8 +255,8 @@ addEventListener('online',handleNetwork);addEventListener('offline',handleNetwor
 if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
 render();addEventListener('load',()=>initAuth());
 </script>
-<script src="./cloud-fix.js?v=13"></script>
-<script src="./enhancements-v7.js?v=13"></script>
-<script src="./manager-agenda.js?v=13"></script>
+<script src="./cloud-fix.js?v=14"></script>
+<script src="./enhancements-v7.js?v=14"></script>
+<script src="./manager-agenda.js?v=14"></script>
 </body>
 </html>

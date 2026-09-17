@@ -1,4 +1,4 @@
-const CACHE='pec-manager-v13';
+const CACHE='pec-manager-v14';
 const CORE=['./','./index.html','./agenda.html','./orcamentos.html','./contratos.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./enhancements-v7.css','./enhancements-v7.js','./cloud-fix.js','./manager-shared.js','./manager-document.js','./manager-agenda.js','./manager-ui.css','./quote-cloud.js','./contract-cloud.js','./vendor/supabase-2.116.0.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('pec-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});

@@ -49,6 +49,9 @@
  body:is([data-pm-page=home],[data-pm-page=agenda]) :is(a,button,input,select,textarea):focus-visible{outline:2px solid #ba951f;outline-offset:3px}
  body[data-pm-page=agenda] #accountModal{z-index:100}
  body[data-pm-page=agenda] #accountModal .sheet{scroll-padding-block:20px}
+ body[data-pm-page=agenda] .auth-password{display:flex;align-items:stretch;gap:8px;min-width:0}
+ body[data-pm-page=agenda] .auth-password>input{flex:1;min-width:0}
+ body[data-pm-page=agenda] .auth-password>button{flex:0 0 auto;min-height:44px;padding:0 12px;border:1px solid var(--line);border-radius:14px;background:var(--card2);color:var(--text);font-size:12px;font-weight:800}
  body[data-pm-page=agenda] .auth-buttons button:disabled{opacity:.65;cursor:wait}
 
  /* Shared controls and document editors; document pages keep their own palette. */

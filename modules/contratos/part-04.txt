@@ -1,0 +1,255 @@
+pan class="summary-label">Local</span>
+<span class="summary-value" id="outVenue">A definir</span>
+</div>
+<div class="summary-item">
+<span class="summary-label">Modalidade / duração</span>
+<span class="summary-value" id="outTime">A definir</span>
+</div>
+</section><section class="parties">
+<p><strong>CONTRATANTE:</strong> <span id="outClientParty">dados a preencher</span>, doravante denominado simplesmente <strong>CONTRATANTE</strong>.</p>
+<p><strong>CONTRATADO:</strong> <span id="outProviderParty">Pedro Henrique Pontes Cechinel</span>, artisticamente conhecido como <strong>pec</strong>, doravante denominado simplesmente <strong>CONTRATADO</strong>.</p>
+<p>As partes identificadas acima celebram o presente Contrato de Prestação de Serviços Artísticos, mediante as cláusulas e condições seguintes.</p>
+</section><section class="clause">
+<h3>Cláusula 1ª — Objeto</h3>
+<p id="outObject">O presente contrato tem por objeto a prestação de serviços artísticos de DJ pelo CONTRATADO no evento indicado neste instrumento.</p>
+</section><section class="clause">
+<h3>Cláusula 2ª — Data, local e horário</h3>
+<p id="outScheduleClause">A apresentação será realizada em data, local e horários informados no resumo da contratação. O CONTRATADO deverá ter acesso ao ambiente e à estrutura técnica no horário de chegada acordado.</p>
+</section><section class="clause">
+<h3>Cláusula 3ª — Repertório e condução artística</h3>
+<p>O CONTRATADO conduzirá musicalmente o evento com autonomia técnica e artística, observando o perfil do público, o briefing fornecido e as restrições previamente informadas pelo CONTRATANTE.</p>
+<p id="outMusicBrief"></p>
+</section><footer class="footer"><span class="footer-site">djpec.com</span><span class="footer-email">contato@djpec.com</span><span>pec • Página 1 de 3</span></footer></section><section class="contract-page page-two"><header class="contract-header compact-header">
+<div class="contract-logo">
+<div class="pmark">p</div>
+<div>
+<strong>pec</strong>
+<span>DJ • Eventos • Experiências</span>
+</div>
+</div>
+<div class="contract-meta"><strong class="contract-number-copy">Contrato nº —</strong><span class="issue-date-copy">Continuação • Condições comerciais</span></div>
+</header><section class="clause equipment-clause">
+<h3>Cláusula 4ª — Equipamentos e estrutura (rider técnico)</h3>
+<p id="outEquipmentClause"></p>
+</section><section class="clause extras-clause">
+<h3 id="extrasClauseTitle">Cláusula 5ª — Produtos e serviços adicionais</h3>
+<p>Integram a contratação, quando preenchidos abaixo, os seguintes produtos e serviços adicionais:</p>
+<table class="extras-table">
+<thead>
+<tr>
+<th>Descrição</th>
+<th>Natureza</th>
+<th>Qtd.</th>
+<th>Valor unit.</th>
+<th>Total</th>
+</tr>
+</thead>
+<tbody id="outExtrasBody"></tbody>
+</table>
+</section><section class="clause">
+<h3 id="paymentClauseTitle">Cláusula 6ª — Valor e pagamento</h3>
+<p id="outPaymentClause"></p>
+<div class="total-box">
+<div class="total-row"><span>Serviço principal</span><strong id="outBaseValue">R$ 0,00</strong></div>
+<div class="total-row" id="travelTotalRow"><span>Deslocamento</span><strong id="outTravelValue">R$ 0,00</strong></div>
+<div class="total-row"><span>Adicionais</span><strong id="outExtrasValue">R$ 0,00</strong></div>
+<div class="total-row"><span>Valor total</span><strong id="outGrandTotal">R$ 0,00</strong></div>
+</div>
+</section><section class="clause">
+<h3 id="reservationClauseTitle">Cláusula 7ª — Reserva, cancelamento e remarcação</h3>
+<p id="outCancellationClause">A data será considerada reservada após a assinatura deste instrumento e o pagamento do sinal acordado. Em caso de cancelamento ou remarcação, as partes buscarão solução proporcional à antecedência, aos custos já assumidos e à possibilidade de aproveitamento da data, sem prejuízo das normas legais aplicáveis.</p>
+</section><footer class="footer"><span class="footer-site">djpec.com</span><span class="footer-email">contato@djpec.com</span><span>pec • Página 2 de 3</span></footer></section><section class="contract-page page-three"><header class="contract-header compact-header">
+<div class="contract-logo">
+<div class="pmark">p</div>
+<div>
+<strong>pec</strong>
+<span>DJ • Eventos • Experiências</span>
+</div>
+</div>
+<div class="contract-meta"><strong class="contract-number-copy">Contrato nº —</strong><span class="issue-date-copy">Continuação • Condições finais</span></div>
+</header><section class="clause">
+<h3 id="delayClauseTitle">Cláusula 8ª — Extensão de horário (hora extra)</h3>
+<p id="outExtraHourClause">O atraso decorrente da organização do evento não prorroga automaticamente o horário final contratado. A permanência além do período previsto dependerá da disponibilidade do CONTRATADO e será cobrada conforme o valor de hora adicional indicado neste contrato.</p>
+</section><section class="clause travel-clause hidden">
+<h3 id="travelClauseTitle">Cláusula 9ª — Deslocamento e viagem</h3>
+<p id="outTravelClause"></p>
+</section><section class="clause meal-clause"><h3>Cláusula 9ª — Alimentação e hidratação</h3><p>O CONTRATANTE compromete-se a fornecer alimentação e hidratação adequadas (água potável, refrigerante ou similares) ao CONTRATADO durante todo o período de permanência no evento, incluindo montagem, apresentação e desmontagem, quando aplicável.</p></section><section class="clause weather-clause">
+<h3 id="weatherClauseTitle">Cláusula 9ª — Segurança e condições climáticas</h3>
+<p>Em eventos externos, o CONTRATANTE deverá garantir cobertura adequada, piso firme e seco, proteção contra chuva, vento, sol e umidade, além de fornecimento de energia elétrica seguro. O CONTRATADO poderá interromper ou não iniciar o serviço quando houver risco às pessoas ou aos equipamentos.</p>
+</section><section class="clause image-clause">
+<h3 id="imageClauseTitle">Cláusula 10ª — Uso de imagem</h3>
+<p>O CONTRATANTE autoriza o registro e a utilização de imagens gerais do evento pelo CONTRATADO para portfólio e divulgação profissional, sem exposição vexatória ou divulgação de informações pessoais. Qualquer restrição deverá ser informada por escrito antes do evento.</p>
+</section><section class="clause custom-clause hidden">
+<h3 id="customClauseTitle">Cláusula adicional</h3>
+<p id="outCustomClause"></p>
+</section><section class="clause forum-clause">
+<h3 id="forumClauseTitle">Cláusula 12ª — Disposições finais e foro</h3>
+<p>As partes declaram ter lido e compreendido as condições deste instrumento. Para dirimir questões decorrentes da contratação, será observado o foro legalmente competente, respeitadas as normas de proteção ao consumidor quando aplicáveis.</p>
+</section><p class="signature-intro signature-intro-top" id="outSignatureIntro">E, por estarem de acordo, as partes assinam o presente instrumento.</p><div class="signature-zone"><section class="signature-grid">
+<div class="signature">
+<strong id="outProviderSignature">Pedro Henrique Pontes Cechinel</strong>
+<span>CONTRATADO • pec</span>
+</div>
+<div class="signature">
+<strong id="outClientSignature">CONTRATANTE</strong>
+<span>CPF/CNPJ: <span id="outClientSignatureDoc">—</span></span>
+</div>
+</section><section class="witnesses" id="witnessesBlock">
+<div class="signature">
+<strong>Testemunha 1</strong>
+<span>Nome e CPF</span>
+</div>
+<div class="signature">
+<strong>Testemunha 2</strong>
+<span>Nome e CPF</span>
+</div>
+</section></div><footer class="footer"><span class="footer-site">djpec.com</span><span class="footer-email">contato@djpec.com</span><span>pec • Página 3 de 3</span></footer></section></article>
+</div>
+<p class="notice">Para gerar o PDF: clique em “Exportar / Imprimir PDF”, selecione “Salvar como PDF”, papel A4, escala 100%, desative os cabeçalhos e rodapés do navegador e ative “gráficos de plano de fundo”.</p>
+</main>
+</div>
+<script>
+    const $ = (id) => document.getElementById(id);
+    const inputs = Array.from(document.querySelectorAll('input, select, textarea'));
+    const STORAGE_KEY = 'pec_contract_generator_v3';
+
+    const defaultExtras = [
+      { description: 'Bazuca de CO₂ + cilindro', nature: 'locacao', qty: 1, unit: 0 }
+    ];
+
+    let extras = [];
+
+    function safeStorageGet(){
+      try{
+        return localStorage.getItem(STORAGE_KEY);
+      }catch(error){
+        return null;
+      }
+    }
+
+    function safeStorageSet(value){
+      try{
+        localStorage.setItem(STORAGE_KEY, value);
+      }catch(error){
+        // O gerador continua funcionando mesmo se o navegador bloquear o armazenamento.
+      }
+    }
+
+    function safeStorageRemove(){
+      try{
+        localStorage.removeItem(STORAGE_KEY);
+      }catch(error){
+        // Sem ação necessária.
+      }
+    }
+
+    function isoToday(){
+      const d = new Date();
+      const offset = d.getTimezoneOffset();
+      return new Date(d.getTime() - offset * 60000).toISOString().slice(0,10);
+    }
+
+    function contractNumberFromDate(value){
+      if(!value) return '';
+      return `PEC-${value.replaceAll('-','')}`;
+    }
+
+    function money(value){
+      return Number(value || 0).toLocaleString('pt-BR',{
+        style:'currency',
+        currency:'BRL'
+      });
+    }
+
+    function dateBR(value){
+      if(!value) return 'A definir';
+      const [y,m,d] = value.split('-');
+      return `${d}/${m}/${y}`;
+    }
+
+    function dateLongBR(value){
+      if(!value) return 'data da assinatura';
+      const [y,m,d] = value.split('-').map(Number);
+      const months = [
+        'janeiro','fevereiro','março','abril','maio','junho',
+        'julho','agosto','setembro','outubro','novembro','dezembro'
+      ];
+      return `${String(d).padStart(2,'0')} de ${months[m-1]} de ${y}`;
+    }
+
+    function timeBR(value){
+      if(!value) return '—';
+      const [h,m] = value.split(':');
+      return `${h}h${m}`;
+    }
+
+    function textOr(value, fallback='A definir'){
+      return String(value || '').trim() || fallback;
+    }
+
+    function combineDateTime(dateValue, timeValue){
+      if(!dateValue || !timeValue) return null;
+      const dt = new Date(`${dateValue}T${timeValue}:00`);
+      return Number.isNaN(dt.getTime()) ? null : dt;
+    }
+
+    function durationInfo(){
+      const start = combineDateTime($('startDate').value, $('startTime').value);
+      const end = combineDateTime($('endDate').value, $('endTime').value);
+
+      if(!start || !end){
+        return { valid:false, text:'Aguardando período', minutes:0 };
+      }
+
+      const diff = Math.round((end - start) / 60000);
+      if(diff <= 0){
+        return { valid:false, text:'Verifique as datas e horários', minutes:diff };
+      }
+
+      const hours = Math.floor(diff / 60);
+      const minutes = diff % 60;
+      let text = '';
+      if(hours) text += `${hours} ${hours === 1 ? 'hora' : 'horas'}`;
+      if(minutes) text += `${hours ? ' e ' : ''}${minutes} ${minutes === 1 ? 'minuto' : 'minutos'}`;
+
+      return { valid:true, text, minutes:diff };
+    }
+
+    function balanceDueDate(){
+      const eventDate = $('startDate').value;
+      if(!eventDate) return '';
+      const days = Math.max(0, Number($('balanceDaysBefore').value || 0));
+      const date = new Date(`${eventDate}T12:00:00`);
+      date.setDate(date.getDate() - days);
+      const y = date.getFullYear();
+      const m = String(date.getMonth()+1).padStart(2,'0');
+      const d = String(date.getDate()).padStart(2,'0');
+      return `${y}-${m}-${d}`;
+    }
+
+    function providerParty(){
+      const parts = [];
+      parts.push(`<strong>${textOr($('providerName').value,'CONTRATADO')}</strong>`);
+      parts.push(`nome artístico <strong>DJ pec</strong>`);
+      if($('providerCpf').value.trim()) parts.push(`inscrito no CPF sob nº ${$('providerCpf').value.trim()}`);
+      if($('providerAddress').value.trim()) parts.push(`residente e domiciliado em ${$('providerAddress').value.trim()}`);
+      if($('providerPhone').value.trim()) parts.push(`telefone ${$('providerPhone').value.trim()}`);
+      if($('providerEmail').value.trim()) parts.push(`e-mail ${$('providerEmail').value.trim()}`);
+      return parts.join(', ');
+    }
+
+    function clientParty(){
+      const parts = [];
+      parts.push(`<strong>${textOr($('clientName').value,'dados a preencher')}</strong>`);
+      if($('clientDoc').value.trim()) parts.push(`inscrito(a) no CPF/CNPJ sob nº ${$('clientDoc').value.trim()}`);
+      if($('clientRg').value.trim()) parts.push(`portador(a) do RG nº ${$('clientRg').value.trim()}`);
+      if($('clientAddress').value.trim()) parts.push(`residente e domiciliado(a) em ${$('clientAddress').value.trim()}`);
+      if($('clientPhone').value.trim()) parts.push(`telefone ${$('clientPhone').value.trim()}`);
+      if($('clientEmail').value.trim()) parts.push(`e-mail ${$('clientEmail').value.trim()}`);
+      return parts.join(', ');
+    }
+
+    function serviceLabel(value){
+      const labels = {
+        warmup_performance:'Warm-up + Performance',
+        warmu

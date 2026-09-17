@@ -1,0 +1,567 @@
+-after:avoid!important;
+  }
+  .hero{margin-top:14px!important}
+  .section{margin-top:20px!important}
+  .footer{margin-bottom:0!important}
+  *{
+    -webkit-print-color-adjust:exact!important;
+    print-color-adjust:exact!important;
+  }
+}
+
+/* ============================================================
+   PAGINAÇÃO BALANCEADA — SEM DIMINUIR FONTES
+   Mantém a leitura confortável e distribui melhor o conteúdo
+   entre páginas quando o orçamento ultrapassa 1 folha.
+   ============================================================ */
+
+.print-break-before{
+  break-before:page !important;
+  page-break-before:always !important;
+}
+
+@page{
+  size:A4 portrait;
+  margin:10mm 11mm 10mm;
+}
+
+@media print{
+  html,body{
+    display:block !important;
+    width:auto !important;
+    min-width:0 !important;
+    margin:0 !important;
+    padding:0 !important;
+    background:#fff !important;
+  }
+
+  .editor{
+    display:none !important;
+  }
+
+  .stage{
+    padding:0 !important;
+    overflow:visible !important;
+  }
+
+  .sheet{
+    width:auto !important;
+    max-width:none !important;
+    margin:0 !important;
+    background:transparent !important;
+    box-shadow:none !important;
+    border-radius:0 !important;
+    overflow:visible !important;
+  }
+
+  .doc{
+    width:auto !important;
+    padding:0 !important;
+    background:transparent !important;
+  }
+
+  /* IMPORTANTE:
+     não reduzimos a tipografia. Apenas tiramos espaços verticais
+     exagerados que o navegador soma na impressão. */
+  .hero{
+    margin-top:14px !important;
+  }
+
+  .section{
+    margin-top:18px !important;
+  }
+
+  .section-heading{
+    margin-bottom:10px !important;
+    break-after:avoid !important;
+    page-break-after:avoid !important;
+  }
+
+  .footer{
+    margin-top:16px !important;
+    padding-top:11px !important;
+  }
+
+  /* Mantém blocos pequenos íntegros, mas permite que conjuntos grandes
+     atravessem páginas ao invés de deixar um rombo em branco. */
+  .scope-item,
+  .investment,
+  .extra,
+  .info-box{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  .notes,
+  .footer{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  .info-grid{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  #termsSection{
+    break-inside:auto !important;
+    page-break-inside:auto !important;
+  }
+
+  *{
+    -webkit-print-color-adjust:exact !important;
+    print-color-adjust:exact !important;
+  }
+}
+
+
+/* ============================================================
+   V6 — INVESTIMENTO FLEXÍVEL + PÁGINA 2 INTENCIONAL + RODAPÉ
+   ============================================================ */
+
+.hidden-ui{
+  display:none !important;
+}
+
+/* Valor dentro de cada item do escopo */
+.scope-item{
+  position:relative;
+}
+.scope-price{
+  display:flex;
+  align-items:flex-end;
+  justify-content:space-between;
+  gap:14px;
+  margin-top:11px;
+  padding-top:10px;
+  border-top:1px solid var(--line);
+}
+.scope-price-label{
+  color:var(--muted);
+  font-size:7.7px;
+  font-weight:700;
+  letter-spacing:1.1px;
+  text-transform:uppercase;
+}
+.scope-price-value{
+  color:var(--ink);
+  font-family:var(--serif);
+  font-size:18px;
+  line-height:1;
+  white-space:nowrap;
+}
+
+/* Página 2 passa a ter abertura própria */
+.terms-heading{
+  margin-bottom:13px;
+}
+
+/* Rodapé um pouco mais elaborado, mas ainda discreto */
+.footer{
+  position:relative;
+  grid-template-columns:1fr auto;
+  gap:22px;
+  margin-top:24px;
+  padding:15px 17px 14px;
+  background:var(--soft);
+  border-top:0;
+  border-radius:var(--radius-md);
+  overflow:hidden;
+}
+.footer::before{
+  content:"";
+  position:absolute;
+  top:0;
+  left:0;
+  width:72px;
+  height:3px;
+  background:linear-gradient(90deg,var(--accent),var(--accent2));
+}
+.footer-brand{
+  display:flex;
+  align-items:center;
+  gap:12px;
+}
+.footer-mark{
+  color:var(--ink);
+  font-size:24px;
+  font-weight:900;
+  letter-spacing:-2.5px;
+  line-height:1;
+}
+.footer-copy strong{
+  display:block;
+  margin-bottom:2px;
+  color:var(--ink);
+  font-size:9.2px;
+  letter-spacing:.9px;
+  text-transform:uppercase;
+}
+.footer-copy span{
+  color:var(--muted);
+  font-size:9.5px;
+  line-height:1.4;
+}
+.footer-right{
+  color:var(--muted);
+  font-size:9.4px;
+  line-height:1.55;
+  text-align:right;
+}
+
+/* Na tela tudo continua fluido. Na impressão, a seção de condições
+   pode receber a classe abaixo para começar na página 2. */
+.print-page-two{
+  break-before:page !important;
+  page-break-before:always !important;
+}
+
+@media print{
+  /* Mantém os tamanhos de fonte da versão que você aprovou.
+     Ajustamos somente espaçamento e a quebra antes das condições. */
+  .section{
+    margin-top:18px !important;
+  }
+
+  #termsSection{
+    margin-top:0 !important;
+  }
+
+  .terms-heading{
+    margin-bottom:11px !important;
+  }
+
+  .footer{
+    margin-top:16px !important;
+    padding:13px 15px 12px !important;
+  }
+
+  .scope-price,
+  .footer{
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+}
+
+
+/* ============================================================
+   V9 — FOLHA SELECIONÁVEL / FLUXO CONTÍNUO
+   ============================================================ */
+
+:root{
+  --sheet-width:210mm;
+  --sheet-min-height:297mm;
+}
+
+/* Na tela existe uma única folha contínua. Se o conteúdo passar da
+   altura escolhida, o papel cresce visualmente em vez de simular
+   uma quebra no meio do orçamento. */
+.sheet{
+  width:var(--sheet-width) !important;
+  min-height:var(--sheet-min-height);
+  max-width:100%;
+}
+
+/* Não existe mais nenhuma quebra obrigatória antes de pagamento/rider. */
+.print-page-two{
+  break-before:auto !important;
+  page-break-before:auto !important;
+}
+
+#termsSection{
+  margin-top:var(--section-gap);
+}
+
+/* A5 fica naturalmente mais estreito: reorganiza as colunas sem
+   reduzir a tipografia. */
+body[data-paper-narrow="true"] .hero-inner{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .event-card{
+  align-self:auto;
+}
+body[data-paper-narrow="true"] .scope-grid,
+body[data-paper-narrow="true"] .info-grid{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .section-heading{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .section-intro{
+  max-width:none;
+  text-align:left;
+}
+body[data-paper-narrow="true"] .extra{
+  grid-template-columns:1fr;
+}
+body[data-paper-narrow="true"] .extra-media{
+  min-height:210px;
+}
+
+@media print{
+  /* O tamanho da página é injetado dinamicamente pelo JavaScript. */
+  .sheet{
+    width:auto !important;
+    min-height:0 !important;
+    max-width:none !important;
+  }
+
+  .doc{
+    width:auto !important;
+  }
+
+  /* Tudo segue em fluxo normal. O navegador só quebra quando a folha
+     selecionada realmente termina. */
+  #termsSection{
+    margin-top:18px !important;
+    break-before:auto !important;
+    page-break-before:auto !important;
+  }
+
+  .final-page-group{
+    display:block !important;
+    break-before:auto !important;
+    page-break-before:auto !important;
+  }
+
+  /* Rodapé apenas uma vez: na última página. O JS calcula o espaço
+     necessário para levá-lo ao fim da última folha quando possível. */
+  .final-footer{
+    display:grid !important;
+    margin-top:var(--print-footer-gap, 16px) !important;
+    break-inside:avoid !important;
+    page-break-inside:avoid !important;
+  }
+
+  /* A5 em retrato: mantém a leitura com uma coluna. */
+  body[data-paper-narrow="true"] .hero-inner{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .scope-grid,
+  body[data-paper-narrow="true"] .info-grid{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .section-heading{
+    grid-template-columns:1fr !important;
+  }
+
+  body[data-paper-narrow="true"] .section-intro{
+    text-align:left !important;
+    max-width:none !important;
+  }
+
+  body[data-paper-narrow="true"] .extra{
+    grid-template-columns:1fr !important;
+  }
+}
+
+
+/* ============================================================
+   V11 — RODAPÉ CORRIGIDO EM TODAS AS PÁGINAS
+   ============================================================ */
+
+.print-footer{
+  display:none;
+}
+
+@media print{
+
+  /*
+    O rodapé normal do documento fica visível apenas na tela.
+    Na impressão usamos o rodapé abaixo, repetido pelo Chrome.
+  */
+  .footer{
+    display:none !important;
+  }
+
+  /*
+    IMPORTANTE:
+    bottom: 0, sem valores negativos.
+    Isso evita o bug de o Chrome jogar o rodapé para o topo
+    ou sobrepor a área de conteúdo em alguns tamanhos de folha.
+  */
+  .print-footer{
+    display:flex !important;
+    position:fixed !important;
+    left:0 !important;
+    right:0 !important;
+    bottom:0 !important;
+    height:12mm !important;
+    align-items:center !important;
+    justify-content:space-between !important;
+    gap:8mm !important;
+    padding:0 1mm !important;
+    background:var(--paper) !important;
+    border-top:1px solid var(--line) !important;
+    color:var(--muted) !important;
+    z-index:999999 !important;
+    font-size:8.3px !important;
+    line-height:1.2 !important;
+  }
+
+  .print-footer-brand{
+    display:flex !important;
+    align-items:center !important;
+    gap:8px !important;
+    white-space:nowrap !important;
+  }
+
+  .print-footer-brand strong{
+    color:var(--ink) !important;
+    font-size:16px !important;
+    font-weight:900 !important;
+    letter-spacing:-1.2px !important;
+    line-height:1 !important;
+  }
+
+  .print-footer-brand span{
+    color:var(--accent) !important;
+    font-size:7px !important;
+    font-weight:700 !important;
+    letter-spacing:1px !important;
+    text-transform:uppercase !important;
+    line-height:1 !important;
+  }
+
+  .print-footer-contact{
+    display:flex !important;
+    align-items:center !important;
+    justify-content:flex-end !important;
+    gap:6px !important;
+    white-space:nowrap !important;
+    text-align:right !important;
+  }
+
+  .print-footer .contact-link{
+    color:inherit !important;
+    border-bottom:0 !important;
+  }
+
+  .print-footer .sep{
+    opacity:.42 !important;
+  }
+
+  /*
+    Mantém o conteúdo longe do rodapé.
+    A margem inferior real é definida no @page dinâmico.
+  */
+  .doc{
+    padding-bottom:0 !important;
+  }
+}
+
+
+/* ============================================================
+   V13 — PDF MAIS LEGÍVEL EM CELULAR
+   O HTML normal permanece igual. Só a impressão/PDF muda.
+   ============================================================ */
+
+@media print{
+
+  /* GRANDE — padrão recomendado */
+  body[data-pdf-text-size="large"] .hero p{
+    font-size:14.8px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="large"] .event-card strong{
+    font-size:13.6px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="large"] .section-intro{
+    font-size:12.3px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="large"] .scope-item p{
+    font-size:14px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="large"] .scope-meta{
+    font-size:11.5px !important;
+    line-height:1.45 !important;
+  }
+
+  body[data-pdf-text-size="large"] .investment .desc{
+    font-size:13px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra p{
+    font-size:13.4px !important;
+    line-height:1.56 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra-value{
+    font-size:13.6px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="large"] .extra-value strong{
+    font-size:15.5px !important;
+  }
+
+  body[data-pdf-text-size="large"] .info-box p,
+  body[data-pdf-text-size="large"] .info-box li{
+    font-size:13px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="large"] .notes{
+    font-size:12.6px !important;
+    line-height:1.52 !important;
+  }
+
+  body[data-pdf-text-size="large"] .print-footer{
+    font-size:9.6px !important;
+  }
+
+  /* EXTRA GRANDE */
+  body[data-pdf-text-size="xlarge"] .hero p{
+    font-size:15px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .event-card strong{
+    font-size:14px !important;
+    line-height:1.48 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .section-intro{
+    font-size:12.6px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .scope-item p{
+    font-size:14.3px !important;
+    line-height:1.58 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .scope-meta{
+    font-size:11.7px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .investment .desc{
+    font-size:13.3px !important;
+    line-height:1.5 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra p{
+    font-size:13.6px !important;
+    line-height:1.56 !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra-value{
+    font-size:13.8px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .extra-value strong{
+    font-size:16px !important;
+  }
+
+  body[data-pdf-text-size="xlarge"] .info-box p,
+  body[data-pdf-text-size="xlarge"] .info-

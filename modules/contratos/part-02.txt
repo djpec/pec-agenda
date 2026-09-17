@@ -1,0 +1,636 @@
+  .app,.workspace,.document-shell{
+        display:block;
+        padding:0;
+        margin:0;
+        background:#fff;
+        box-shadow:none;
+        max-width:none;
+      }
+      .paper{
+        width:210mm;
+        min-height:297mm;
+        margin:0;
+        box-shadow:none;
+        print-color-adjust:exact;
+        -webkit-print-color-adjust:exact;
+      }
+      .placeholder{
+        color:inherit;
+        background:transparent;
+        padding:0;
+      }
+    }
+  </style>
+<style>
+  /* ===== Modelo V2: paginação proporcional em três páginas A4 ===== */
+  .document-shell{
+    max-width:1020px;
+    padding:26px;
+  }
+
+  .paper{
+    width:auto;
+    min-height:0;
+    margin:0;
+    padding:0;
+    background:transparent;
+    box-shadow:none;
+    display:flex;
+    flex-direction:column;
+    gap:26px;
+    font-size:11.15pt;
+    line-height:1.55;
+  }
+
+  .contract-page{
+    width:210mm;
+    min-height:297mm;
+    margin:0 auto;
+    padding:15mm 17mm 14mm;
+    background:#fff;
+    box-shadow:0 5px 24px rgba(0,0,0,.12);
+    display:flex;
+    flex-direction:column;
+    position:relative;
+  }
+
+  .contract-page .contract-header{
+    padding-bottom:13px;
+    margin-bottom:0;
+  }
+
+  .compact-header{
+    border-bottom-width:2px;
+  }
+
+  .compact-header .contract-logo .pmark{
+    width:36px;
+    height:36px;
+    font-size:23px;
+    border-radius:9px;
+  }
+
+  .compact-header .contract-logo strong{
+    font-size:18px;
+  }
+
+  .compact-header .contract-logo span{
+    font-size:8.2pt;
+  }
+
+  .title{
+    margin:24px 0 8px;
+    font-size:17.5pt;
+    line-height:1.25;
+  }
+
+  .subtitle{
+    margin-bottom:22px;
+    line-height:1.45;
+  }
+
+  .summary-box{
+    margin-bottom:21px;
+  }
+
+  .summary-item{
+    padding:11px 13px;
+    min-height:56px;
+  }
+
+  .summary-label{
+    margin-bottom:5px;
+  }
+
+  .summary-value{
+    line-height:1.32;
+  }
+
+  .parties{
+    margin:19px 0 10px;
+    line-height:1.55;
+  }
+
+  .parties p{
+    margin:0 0 12px;
+  }
+
+  .clause{
+    margin:17px 0;
+    text-align:justify;
+    break-inside:avoid-page;
+    page-break-inside:avoid;
+    orphans:3;
+    widows:3;
+  }
+
+  .clause h3{
+    margin:0 0 8px;
+    font-size:11.25pt;
+    line-height:1.3;
+    letter-spacing:.28px;
+  }
+
+  .clause p{
+    margin:0 0 9px;
+    line-height:1.55;
+  }
+
+  .extras-table{
+    margin-top:10px;
+    font-size:10pt;
+  }
+
+  .extras-table th,
+  .extras-table td{
+    padding:8px 9px;
+    line-height:1.35;
+  }
+
+  .total-box{
+    margin-top:20px;
+    width:300px;
+  }
+
+  .total-row{
+    padding:9px 11px;
+  }
+
+  .signature-intro{
+    margin:24px 0 24px;
+    line-height:1.55;
+  }
+
+  .signature-grid{
+    margin-top:52px;
+    gap:42px;
+  }
+
+  .witnesses{
+    margin-top:48px;
+    gap:42px;
+  }
+
+  .signature{
+    padding-top:10px;
+    min-height:72px;
+  }
+
+  .footer{
+    position:static;
+    left:auto;
+    right:auto;
+    bottom:auto;
+    margin-top:auto;
+    padding-top:8px;
+    font-size:8.3pt;
+  }
+
+  @media (max-width:1200px){
+    .document-shell{
+      padding:20px;
+    }
+  }
+
+  @media print{
+    @page{
+      size:A4;
+      margin:0;
+    }
+
+    html,body{
+      width:210mm;
+      background:#fff;
+    }
+
+    .sidebar,.topbar,.notice{
+      display:none !important;
+    }
+
+    .app,.workspace,.document-shell{
+      display:block;
+      width:210mm;
+      padding:0;
+      margin:0;
+      background:#fff;
+      box-shadow:none;
+      max-width:none;
+    }
+
+    .paper{
+      display:block;
+      width:210mm;
+      margin:0;
+      padding:0;
+      background:#fff;
+      font-size:11.15pt;
+      line-height:1.55;
+    }
+
+    .contract-page{
+      width:210mm;
+      height:297mm;
+      min-height:297mm;
+      margin:0;
+      padding:15mm 17mm 14mm;
+      box-shadow:none;
+      break-after:page;
+      page-break-after:always;
+      overflow:hidden;
+      print-color-adjust:exact;
+      -webkit-print-color-adjust:exact;
+    }
+
+    .contract-page:last-child{
+      break-after:auto;
+      page-break-after:auto;
+    }
+
+    .clause{
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+
+    .placeholder{
+      color:inherit;
+      background:transparent;
+      padding:0;
+    }
+  }
+</style><style>
+  /* ===== Modelo V3 ===== */
+  .field-help{
+    display:block;
+    margin-top:2px;
+    color:#9fa5b0;
+    font-size:10.5px;
+    line-height:1.35;
+  }
+
+  input[readonly]{
+    color:#d7dbe2;
+    background:#171a20;
+    cursor:not-allowed;
+  }
+
+  .extra-card{
+    padding:11px;
+  }
+
+  .extra-main{
+    margin-bottom:8px;
+  }
+
+  .extra-main input,
+  .extra-meta input,
+  .extra-meta select{
+    width:100%;
+    color:#fff;
+    background:#15181e;
+    border:1px solid #373b45;
+    border-radius:8px;
+    padding:9px;
+  }
+
+  .extra-meta{
+    display:grid;
+    grid-template-columns:1.15fr .48fr .78fr 34px;
+    gap:7px;
+    align-items:end;
+  }
+
+  .extras-table th:nth-child(1),
+  .extras-table td:nth-child(1){
+    width:auto;
+    text-align:left;
+  }
+
+  .extras-table th:nth-child(2),
+  .extras-table td:nth-child(2){
+    width:82px;
+    text-align:left;
+  }
+
+  .extras-table th:nth-child(3),
+  .extras-table td:nth-child(3){
+    width:48px;
+    text-align:center;
+  }
+
+  .extras-table th:nth-child(4),
+  .extras-table td:nth-child(4),
+  .extras-table th:nth-child(5),
+  .extras-table td:nth-child(5){
+    width:82px;
+    text-align:right;
+  }
+
+  @media print{
+    .contract-page{
+      height:auto;
+      min-height:297mm;
+      overflow:visible;
+      break-inside:auto;
+      page-break-inside:auto;
+    }
+
+    .extras-table tr,
+    .total-box,
+    .signature-grid,
+    .witnesses{
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+  }
+
+  @media (max-width:420px){
+    .extra-meta{
+      grid-template-columns:1fr 1fr;
+    }
+    .extra-meta .icon-btn{
+      width:100%;
+    }
+  }
+</style><style>
+  /* ===== Equilíbrio final das páginas ===== */
+  .page-one .clause{
+    margin-top:15px;
+    margin-bottom:15px;
+  }
+
+  .page-two .clause{
+    margin-top:14px;
+    margin-bottom:14px;
+  }
+
+  .page-three .clause{
+    margin-top:12px;
+    margin-bottom:12px;
+  }
+
+  .page-three .clause p{
+    line-height:1.48;
+    margin-bottom:7px;
+  }
+
+  .page-three .signature-intro{
+    margin:18px 0 16px;
+  }
+
+  .page-three .signature-grid{
+    margin-top:34px;
+  }
+
+  .page-three .witnesses{
+    margin-top:28px;
+  }
+
+  .page-three .signature{
+    min-height:58px;
+  }
+
+  @media print{
+    .contract-page{
+      min-height:297mm;
+      height:auto;
+      overflow:visible;
+      break-after:page;
+      page-break-after:always;
+    }
+
+    .contract-page:last-child{
+      break-after:auto;
+      page-break-after:auto;
+    }
+  }
+</style><style>
+  /* ===== Fechamento em três páginas A4 ===== */
+  @media print{
+    .contract-page{
+      padding:11mm 16mm 10mm;
+    }
+
+    .page-one .title{
+      margin-top:18px;
+      margin-bottom:6px;
+      font-size:16.8pt;
+    }
+
+    .page-one .subtitle{
+      margin-bottom:17px;
+    }
+
+    .page-one .summary-box{
+      margin-bottom:16px;
+    }
+
+    .page-one .parties{
+      margin-top:14px;
+      margin-bottom:6px;
+    }
+
+    .page-one .parties p{
+      margin-bottom:8px;
+    }
+
+    .page-one .clause{
+      margin-top:11px;
+      margin-bottom:11px;
+    }
+
+    .page-one .clause p{
+      margin-bottom:6px;
+      line-height:1.48;
+    }
+
+    .page-two .clause{
+      margin-top:12px;
+      margin-bottom:12px;
+    }
+
+    .page-two .total-box{
+      margin-top:14px;
+    }
+
+    .page-three .clause{
+      margin-top:10px;
+      margin-bottom:10px;
+    }
+
+    .page-three .signature-intro{
+      margin-top:14px;
+      margin-bottom:12px;
+    }
+
+    .page-three .signature-grid{
+      margin-top:26px;
+    }
+
+    .page-three .witnesses{
+      margin-top:22px;
+    }
+  }
+</style><style>
+  /* ===== Assinaturas tradicionais com espaço ampliado ===== */
+  .page-three{
+    display:flex;
+    flex-direction:column;
+  }
+
+  .signature-zone{
+    margin-top:auto;
+    padding-top:18mm;
+    break-inside:avoid;
+    page-break-inside:avoid;
+  }
+
+  .signature-zone .signature-intro{
+    margin:0 0 7px;
+    line-height:1.5;
+  }
+
+  .signature-method-note{
+    margin:0 0 4mm;
+    color:#717680;
+    font-size:9pt;
+    text-align:center;
+    line-height:1.4;
+  }
+
+  .signature-zone .signature-grid{
+    margin-top:0;
+    gap:12mm;
+  }
+
+  .signature-zone .signature{
+    min-height:auto;
+    padding-top:0;
+    border-top:0;
+  }
+
+  .signature-zone .signature::before{
+    content:"";
+    display:block;
+    height:25mm;
+    margin-bottom:7px;
+    border-bottom:1px solid #1f2227;
+  }
+
+  .signature-zone .signature strong{
+    display:block;
+    line-height:1.25;
+  }
+
+  .signature-zone .signature span{
+    display:block;
+    line-height:1.35;
+  }
+
+  .signature-zone .witnesses{
+    margin-top:12mm;
+    gap:12mm;
+  }
+
+  .signature-zone .witnesses .signature::before{
+    height:18mm;
+  }
+
+  /* Com testemunhas, reduz apenas o necessário para preservar o rodapé. */
+  .page-three.has-witnesses .signature-zone{
+    padding-top:8mm;
+  }
+
+  .page-three.has-witnesses .signature-grid .signature::before{
+    height:18mm;
+  }
+
+  .page-three.has-witnesses .witnesses{
+    margin-top:8mm;
+  }
+
+  .page-three.has-witnesses .witnesses .signature::before{
+    height:13mm;
+  }
+
+  @media print{
+    .page-three{
+      display:flex;
+      flex-direction:column;
+      min-height:297mm;
+    }
+
+    .signature-zone{
+      margin-top:auto;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+
+    .signature-zone .signature-grid,
+    .signature-zone .witnesses{
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+  }
+</style><style>
+  /* ===== Ajuste final da última página ===== */
+  .signature-intro-top{
+    margin:12mm 0 0;
+    line-height:1.52;
+    text-align:justify;
+  }
+
+  .signature-zone{
+    margin-top:auto;
+    padding-top:8mm;
+  }
+
+  .signature-zone .signature-grid{
+    margin-top:0;
+  }
+
+  /* Mantém as duas assinaturas principais bem próximas do rodapé. */
+  .page-three:not(.has-witnesses) .signature-zone{
+    padding-top:16mm;
+  }
+
+  .page-three:not(.has-witnesses) .signature-grid .signature::before{
+    height:27mm;
+  }
+
+  /* Quando há testemunhas, redistribui o espaço automaticamente. */
+  .page-three.has-witnesses .signature-zone{
+    padding-top:5mm;
+  }
+
+  .page-three.has-witnesses .signature-grid .signature::before{
+    height:17mm;
+  }
+
+  .page-three.has-witnesses .witnesses{
+    margin-top:7mm;
+  }
+
+  .page-three.has-witnesses .witnesses .signature::before{
+    height:11mm;
+  }
+
+  @media print{
+    .signature-intro-top{
+      margin-top:9mm;
+    }
+
+    .signature-zone{
+      margin-top:auto;
+      break-inside:avoid;
+      page-break-inside:avoid;
+    }
+  }
+</style>
+<style id="pec-manager-integration-style">
+.pec-manager-panel{margin:0 0 14px;padding:11px;background:rgba(255,255,255,.045);border:1px solid rgba(255,255,255,.09);border-radius:13px}.pec-manager-head{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:9px}.pec-manager-back{display:flex;align-items:center;gap:7px;color:#fff;text-decoration:none;font-size:11px;font-weight:800}.pec-manager-back span{width:23px;height:23px;border-radius:7px;background:#f2c300;color:#111;display:grid;place-items:center;font-weight:950}.pec-manager-head b{font-size:8px;letter-spacing:.08em;color:#9fa6ae}.pec-manager-head b.cloud{color:#6bd49b}.pec-manager-grid{display:grid;grid-template-columns:1fr 1fr;gap:6px}.pec-manager-grid label{grid-column:1/-1;color:#ddd;font-size:10px;font-weight:700;display:grid;gap:5px}.pec-manager-grid select{background:#0e1014;color:#fff;border:1px solid #343842;border-radius:8px;padding:8px}.pec-manager-grid button{border:0;padding:8px 9px;background:#2b2e33;color:#fff;border-radius:8px;font-size:10px;font-weight:800}.pec-manager-grid .pec-manager-save{background:#f2c300;color:#111}.pec-manager-history{display:grid;gap:5px;margin-top:8px;max-height:130px;overflow:auto}.pec-manager-history button{border:1px solid #393d43;background:#111317;color:#fff;border-radius:8px;padding:7px 8px;text-align:left}.pec-manager-history button b{display:block;font-size:10px}.pec-manager-history button span{font-size:8px;color:#999}.pec-manager-empty{font-size:9px;color:#999;padding:4px}
+html[data-pec-ui="light"] .pec-manager-panel{background:#f3f5f7;border-color:#d9dee4}html[data-pec-ui="light"] .pec-manager-back{color:#17191d}html[data-pec-ui="light"] .pec-manager-grid label{color:#30343a}html[data-pec-ui="light"] .pec-manager-grid select{background:#fff;color:#17191d;border-color:#cdd3da}html[data-pec-ui="light"] .pec-manager-grid button{background:#e4e7eb;color:#17191d}html[data-pec-ui="light"] .pec-manager-grid .pec-manager-save{background:#f2c300;color:#111}html[data-pec-ui="light"] .pec-manager-history button{background:#fff;color:#17191d;border-color:#d9dee4}
+@media print{.pec-manager-panel,#pecThemeToggle{display:none!important}}
+</style>
+</head>
+<body>
+<div class="app">

@@ -1,7 +1,5 @@
 /* Screen-only chrome. Do not style .doc, .paper or their print variables. */
-.pm-nav,.pm-tools,.pm-dialog{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
-.pm-nav{display:flex;flex-wrap:wrap;gap:5px;margin-bottom:16px}
-.pm-nav a,.pm-nav button{font-size:11px;font-weight:700;text-decoration:none;border:1px solid #52565c;border-radius:7px;background:#202328;color:#f5f5f5;padding:8px 9px;cursor:pointer}
+.pm-tools,.pm-dialog{font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif}
 .pm-tools{margin-bottom:12px;color:#eee;background:#1b1d20;border:1px solid #43464c;border-radius:10px}
 .pm-tools>summary{padding:12px;font-size:12px;font-weight:800;cursor:pointer}
 .pm-tools-body{display:grid;gap:10px;padding:0 12px 12px}
@@ -41,11 +39,10 @@
  body[data-pm-page] #pecBgLayer,body[data-pm-page]::before{display:none!important}
 
  /* Account links stay usable before cloud data has loaded. */
- .pm-nav :is(a,button){display:inline-flex;align-items:center;justify-content:center;line-height:1.25;touch-action:manipulation}
  body:is([data-pm-page=home],[data-pm-page=agenda]) header .status{display:inline-flex;align-items:center;justify-content:center;min-height:44px;padding:10px 12px;font-size:10px;letter-spacing:.02em;text-decoration:none;cursor:pointer;touch-action:manipulation}
  body:is([data-pm-page=home],[data-pm-page=agenda]) .brand>.mark{flex:0 0 auto}
  body:is([data-pm-page=home],[data-pm-page=agenda]) .brand>div:last-child{min-width:0}
- :is(.pm-nav,.pm-tools,.pm-dialog,.editor,.sidebar) :is(a,button,input,select,textarea,summary):focus-visible,
+ :is(.pm-header,.pm-tools,.pm-dialog,.editor,.sidebar) :is(a,button,input,select,textarea,summary):focus-visible,
  body:is([data-pm-page=home],[data-pm-page=agenda]) :is(a,button,input,select,textarea):focus-visible{outline:2px solid #ba951f;outline-offset:3px}
  body[data-pm-page=agenda] #accountModal{z-index:100}
  body[data-pm-page=agenda] #accountModal .sheet{scroll-padding-block:20px}
@@ -57,7 +54,7 @@
  /* Shared controls and document editors; document pages keep their own palette. */
  :is(.pm-tools,.pm-dialog,.editor,.sidebar){color-scheme:dark}
  html[data-pm-theme=light] :is(.pm-tools,.pm-dialog,.editor,.sidebar){color-scheme:light}
- html[data-pm-theme=light] :is(.pm-nav a,.pm-nav button,.pm-tools,.pm-dialog){background:#fff;color:#202733;border-color:#ccd4de}
+ html[data-pm-theme=light] :is(.pm-tools,.pm-dialog){background:#fff;color:#202733;border-color:#ccd4de}
  html[data-pm-theme=light] :is(.pm-tools,.pm-dialog) :is(input,select,textarea,button),
  html[data-pm-theme=light] .pm-actions>a{background:#f3f5f8;color:#202733;border-color:#c5ced9}
  html[data-pm-theme=light] :is(.pm-tools,.pm-dialog) :is(input,textarea)::placeholder{color:#687382;opacity:1}
@@ -135,7 +132,6 @@
  html[data-pm-theme=light] body[data-pm-page=agenda] :is(.caldot.done,.legend .g){background:#176840}
 }
 @media screen and (max-width:650px){
- .pm-nav :is(a,button){min-height:44px;padding:10px}
  :is(.pm-tools,.pm-dialog) :is(button,.pm-actions>a){min-height:44px;display:inline-flex;align-items:center;justify-content:center}
  .pm-tools .pm-history button{display:block;text-align:left}
  :is(.pm-tools,.pm-dialog,.editor,.sidebar) :is(input:not([type=checkbox]):not([type=radio]):not([type=range]),select,textarea){font-size:16px}
@@ -146,4 +142,63 @@
  body[data-pm-page=agenda] :is(.close,.mini,.auth-buttons button){min-height:44px}
  body[data-pm-page=agenda] .close{width:44px}
 }
-@media print{#pmBackdrop,.pm-nav,.pm-tools,.pm-dialog{display:none!important}}
+/* The same full-width header sits above every module, outside document editors. */
+@media screen{
+ body[data-pm-page]{padding-top:0}
+ body[data-pm-page=quote]{grid-template-rows:auto 1fr}
+ body:is([data-pm-page=home],[data-pm-page=agenda])>.app>header{display:none}
+ .pm-header{
+  --pm-head-bg:rgba(21,23,27,.96);--pm-head-text:#f5f6f8;--pm-head-muted:#a0a7b3;
+  --pm-head-line:#343940;--pm-head-nav:#101215;--pm-head-hover:#292e35;--pm-head-good:#7ed5a2;
+  display:block;position:relative;z-index:30;grid-column:1/-1;align-self:start;
+  width:100%;min-width:0;margin:0;padding:env(safe-area-inset-top) 0 0;border-bottom:1px solid var(--pm-head-line);
+  background:var(--pm-head-bg);color:var(--pm-head-text);box-shadow:0 6px 24px rgba(0,0,0,.12);
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-stretch:normal;
+  backdrop-filter:blur(18px);-webkit-backdrop-filter:blur(18px);
+ }
+ .pm-header::after{content:"";position:absolute;inset:auto 0 -1px;height:1px;background:linear-gradient(90deg,transparent,rgba(242,201,76,.4) 35%,transparent 80%);pointer-events:none}
+ .pm-header-inner{width:100%;max-width:1360px;margin:0 auto;padding:18px 28px;display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:28px}
+ .pm-header .pm-brand{display:inline-flex;align-items:center;gap:12px;min-width:0;text-decoration:none;color:var(--pm-head-text);border-radius:14px}
+ .pm-brand-logo{display:grid;place-items:center;flex:0 0 auto;width:46px;height:46px;border-radius:14px;background:#f2c94c;color:#111318;box-shadow:inset 0 1px 0 rgba(255,255,255,.38),0 4px 14px rgba(242,201,76,.1);font-family:Arial,Helvetica,sans-serif;font-size:22px;font-weight:900;letter-spacing:-2.5px;line-height:1;padding-right:2px}
+ .pm-brand-copy{display:grid;gap:4px;white-space:nowrap}
+ .pm-brand-copy b{font-size:21px;line-height:1.1;letter-spacing:-.6px;font-weight:800}
+ .pm-brand-copy b span{font-weight:550}
+ .pm-brand-copy small{color:var(--pm-head-muted);font-size:10px;line-height:1.2;letter-spacing:.25px}
+ .pm-header .pm-nav{display:flex;align-items:center;justify-content:center;justify-self:center;min-width:0;margin:0;padding:5px;gap:4px;border:1px solid var(--pm-head-line);border-radius:15px;background:var(--pm-head-nav)}
+ .pm-header .pm-nav a{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:10px 12px;border:0;border-radius:10px;background:transparent;color:var(--pm-head-muted);font-size:12px;font-weight:650;line-height:1.2;white-space:nowrap;text-decoration:none;touch-action:manipulation;transition:background .15s,color .15s}
+ .pm-header .pm-nav a:hover{background:var(--pm-head-hover);color:var(--pm-head-text)}
+ .pm-header .pm-nav a[aria-current=page]{background:#f2c94c;color:#16191e;box-shadow:0 2px 8px rgba(0,0,0,.1);font-weight:750}
+ .pm-header .pm-icon{display:block;flex:0 0 auto;width:18px;height:18px}
+ .pm-header-actions{display:flex;align-items:center;justify-content:flex-end;gap:8px}
+ .pm-header .pm-header-action{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:10px 12px;border:1px solid var(--pm-head-line);border-radius:12px;background:transparent;color:var(--pm-head-text);font-family:inherit;font-stretch:normal;font-size:11px;font-weight:650;line-height:1.2;text-decoration:none;text-align:left;white-space:nowrap;cursor:pointer;touch-action:manipulation;transition:background .15s,border-color .15s}
+ .pm-header .pm-header-action:hover{background:var(--pm-head-hover);border-color:#697381}
+ .pm-account-icon{position:relative;display:block}
+ .pm-header .pm-account-icon .pm-icon{width:21px;height:21px}
+ .pm-connection-dot{position:absolute;right:-2px;bottom:0;width:7px;height:7px;border:2px solid var(--pm-head-bg);box-sizing:content-box;border-radius:50%;background:#969eaa}
+ .pm-account-copy{display:grid;gap:3px}
+ .pm-account-copy>span{font-size:11px;font-weight:700}
+ .pm-account-copy small{color:var(--pm-head-muted);font-size:9px;font-weight:500;line-height:1.2}
+ .pm-account[data-connection=connected] .pm-connection-dot{background:var(--pm-head-good)}
+ .pm-account[data-connection=connected] .pm-account-copy small{color:var(--pm-head-good)}
+ .pm-account[data-connection=offline] .pm-connection-dot{background:#f2c94c}
+ html[data-pm-theme=light] .pm-header{--pm-head-bg:rgba(250,251,253,.98);--pm-head-text:#263344;--pm-head-muted:#58677a;--pm-head-line:#d6dee8;--pm-head-nav:#eaf0f6;--pm-head-hover:#e1e8f0;--pm-head-good:#227649;box-shadow:0 5px 22px rgba(32,48,68,.05)}
+}
+@media screen and (max-width:1050px){
+ .pm-header-inner{grid-template-columns:minmax(0,1fr) auto;gap:14px 20px;padding:16px 22px}
+ .pm-header .pm-nav{grid-column:1/-1;grid-row:2;justify-self:stretch;display:grid;grid-template-columns:repeat(4,minmax(0,1fr))}
+ .pm-header-actions{grid-column:2;grid-row:1}
+}
+@media screen and (max-width:600px){
+ .pm-header-inner{gap:13px 10px;padding:14px max(12px,env(safe-area-inset-right)) 12px max(12px,env(safe-area-inset-left))}
+ .pm-header .pm-brand{gap:10px}
+ .pm-brand-logo{width:40px;height:40px;border-radius:12px;font-size:20px}
+ .pm-brand-copy b{font-size:18px;letter-spacing:-.5px}
+ .pm-brand-copy small{font-size:9px;letter-spacing:0}
+ .pm-header .pm-header-action{width:44px;height:44px;min-height:44px;padding:0;border-radius:12px}
+ .pm-header .pm-action-label,.pm-header .pm-account-copy{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+ .pm-header .pm-nav{padding:4px;gap:3px;border-radius:14px}
+ .pm-header .pm-nav a{flex-direction:column;gap:5px;min-height:53px;padding:8px 2px;border-radius:10px;font-size:10px}
+ .pm-header .pm-nav .pm-icon{width:17px;height:17px}
+}
+@media (prefers-reduced-motion:reduce){.pm-header :is(a,button){transition:none!important}}
+@media print{#pmBackdrop,.pm-header,.pm-nav,.pm-tools,.pm-dialog{display:none!important}}

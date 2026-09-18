@@ -66,12 +66,36 @@
     try{const img=new Image();img.src=url;await img.decode();const scale=Math.min(1,1600/Math.max(img.width,img.height)),canvas=document.createElement('canvas');canvas.width=Math.max(1,Math.round(img.width*scale));canvas.height=Math.max(1,Math.round(img.height*scale));canvas.getContext('2d').drawImage(img,0,0,canvas.width,canvas.height);await setPreferences({background_image:canvas.toDataURL('image/jpeg',.8)})}
     catch{status('Não foi possível abrir essa imagem.')}finally{URL.revokeObjectURL(url)}
   }
+  function updateHeaderAccount(){
+    const link=document.querySelector('#pmAccountLink'),label=document.querySelector('#pmConnection');
+    if(!link||!label)return;
+    const state=!navigator.onLine?'offline':user?'connected':'local';
+    const text=state==='offline'?'Sem conexão':state==='connected'?'Conta conectada':'Entrar na nuvem';
+    link.dataset.connection=state;label.textContent=text;
+    link.setAttribute('aria-label','Conta e nuvem · '+text);link.title='Conta e nuvem · '+text;
+  }
   function shell(){
     document.body.dataset.pmPage=document.querySelector('.editor')?'quote':document.querySelector('.sidebar')?'contract':location.pathname.endsWith('agenda.html')?'agenda':'home';
     const backdrop=document.createElement('div');backdrop.id='pmBackdrop';backdrop.setAttribute('aria-hidden','true');document.body.prepend(backdrop);
-    const bar=document.createElement('nav');bar.className='pm-nav';bar.setAttribute('aria-label','pec Manager');
-    bar.innerHTML='<a href="./">Início</a><a href="./agenda.html">Agenda</a><a href="./orcamentos.html">Orçamentos</a><a href="./contratos.html">Contratos</a><button type="button" id="pmAppearance">Aparência</button><a href="./agenda.html?account=1">Conta &amp; nuvem</a>';
-    (document.querySelector('.editor,.sidebar')||document.querySelector('body > .app'))?.prepend(bar);
+    const icons={
+      home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
+      agenda:'<rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 3v4m10-4v4M3 11h18m-14 4h3m4 0h3m-10 3h3"/>',
+      quote:'<path d="M14 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V9Zm0 0v6h6M8 13h8m-8 4h5"/>',
+      contract:'<path d="M12 3H6a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-7m-9 3 1-4 7-7a2.1 2.1 0 0 1 3 3l-7 7-4 1Zm6-9 3 3M8 17h5"/>',
+      appearance:'<path d="M3 6h4m4 0h10M3 12h10m4 0h4M3 18h4m4 0h10"/><circle cx="9" cy="6" r="2"/><circle cx="15" cy="12" r="2"/><circle cx="9" cy="18" r="2"/>',
+      cloud:'<path d="M6 19a5 5 0 0 1-1-9.9A7 7 0 0 1 18.5 8a5.5 5.5 0 0 1-.5 11Z"/>'
+    };
+    const icon=name=>`<svg class="pm-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" focusable="false">${icons[name]}</svg>`;
+    const pages=[['home','./','Início'],['agenda','./agenda.html','Agenda'],['quote','./orcamentos.html','Orçamentos'],['contract','./contratos.html','Contratos']];
+    const header=document.createElement('header');header.id='pmHeader';header.className='pm-header';
+    header.innerHTML=`<div class="pm-header-inner"><a class="pm-brand" href="./" aria-label="pec Manager · Início"><span class="pm-brand-logo" aria-hidden="true">pec</span><span class="pm-brand-copy"><b>pec <span>Manager</span></b><small>Sua central de eventos</small></span></a><nav class="pm-nav" aria-label="Navegação principal">${pages.map(([page,href,label])=>`<a href="${href}" data-pm-route="${page}"${page===document.body.dataset.pmPage?' aria-current="page"':''}>${icon(page)}<span>${label}</span></a>`).join('')}</nav><div class="pm-header-actions"><button class="pm-header-action pm-appearance" type="button" id="pmAppearance" aria-label="Aparência" aria-controls="pmAppearanceDialog" aria-haspopup="dialog" title="Aparência">${icon('appearance')}<span class="pm-action-label">Aparência</span></button><a class="pm-header-action pm-account" id="pmAccountLink" href="./agenda.html?account=1"><span class="pm-account-icon">${icon('cloud')}<i class="pm-connection-dot" aria-hidden="true"></i></span><span class="pm-account-copy"><span>Conta &amp; nuvem</span><small id="pmConnection">Entrar na nuvem</small></span></a></div></div>`;
+    document.body.prepend(header);
+    document.querySelector('#pmAccountLink').addEventListener('click',event=>{
+      if(document.body.dataset.pmPage==='agenda'&&typeof window.openAccount==='function'){event.preventDefault();window.openAccount()}
+    });
+    updateHeaderAccount();
+    addEventListener('pm:account',updateHeaderAccount);
+    addEventListener('online',updateHeaderAccount);addEventListener('offline',updateHeaderAccount);
     const dialog=document.createElement('dialog');dialog.id='pmAppearanceDialog';dialog.className='pm-dialog';
     dialog.innerHTML='<form method="dialog"><div class="pm-dialog-head"><h2>Aparência</h2><button aria-label="Fechar" value="close">×</button></div></form><div class="pm-dialog-body"><label>Tema<select id="pmTheme"><option value="auto">Automático</option><option value="light">Claro</option><option value="dark">Escuro</option></select></label><label>Imagem de fundo<input id="pmBackgroundFile" type="file" accept="image/*"></label><div class="pm-actions"><button type="button" id="pmRemoveBackground">Remover fundo</button></div><label>Intensidade da sobreposição<input id="pmDarkness" type="range" min="0" max="100" step="1"></label><label>Desfoque<input id="pmBlur" type="range" min="0" max="30" step="1"></label><p id="pmAppearanceState" role="status">A aparência é compartilhada entre os módulos e dispositivos da sua conta.</p><a href="./agenda.html?account=1">Minha conta</a></div>';
     document.body.append(dialog);document.querySelector('#pmAppearance').onclick=()=>dialog.showModal();

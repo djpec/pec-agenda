@@ -1,0 +1,92 @@
+/* pec Manager v16 — interface only; document styling is independent. */
+@media screen {
+ body[data-pm-page]{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-stretch:normal}
+ .pm-header{box-shadow:none!important}
+ .pm-header::after{display:none}
+ .pm-brand-logo{border-radius:10px;box-shadow:none}
+ .pm-header .pm-nav{border:0;background:transparent;padding:0}
+ .pm-header .pm-nav a{border-radius:8px;font-size:13px}
+ .pm-header .pm-nav a[aria-current=page]{box-shadow:none}
+ .pm-header .pm-header-action{border-radius:8px}
+ body:is([data-pm-page=home],[data-pm-page=agenda])>.app{width:min(1160px,100%);padding:40px 36px 60px}
+ body:is([data-pm-page=home],[data-pm-page=agenda]) .hero{border-radius:14px;box-shadow:none!important;padding:32px;border:1px solid var(--line)}
+ body[data-pm-page=home] .hero{position:relative;border-top:4px solid #f2c94c!important}
+ body[data-pm-page=home] .hero h1{font-size:clamp(26px,3vw,40px);letter-spacing:-1.4px;max-width:650px;line-height:1.12;margin:16px 0 12px}
+ body[data-pm-page=home] .hero>p{font-size:14px;line-height:1.6}
+ body[data-pm-page=home] .next{margin-top:28px;border-radius:10px;padding:18px 20px}
+ body[data-pm-page=home] .next-event b{font-size:17px}
+ body[data-pm-page=home] .next-event span{font-size:13px;margin-top:6px}
+ body[data-pm-page=home] .modules{gap:16px}
+ body[data-pm-page=home] .module{padding:24px;min-height:230px;border-radius:12px;box-shadow:none!important;transition:transform .16s,border-color .16s}
+ body[data-pm-page=home] .module:hover{border-color:#b6922c;transform:translateY(-3px)}
+ body[data-pm-page=home] .module h3{font-size:20px;letter-spacing:-.5px;margin-bottom:10px}
+ body[data-pm-page=home] .module p{font-size:13px;line-height:1.65}
+ body[data-pm-page=home] .module footer{border-top:1px solid var(--line);padding-top:15px;margin-top:22px;font-size:12px}
+ body[data-pm-page=home] .module-icon{border-radius:10px;margin-bottom:24px}
+ body[data-pm-page=home] .section-title{margin:32px 0 16px}
+ body[data-pm-page=home] .section-title h2{font-size:19px}
+ body[data-pm-page=home] .section-title span{font-size:11px}
+ body[data-pm-page=home] .quick{gap:12px}
+ body[data-pm-page=home] .quick a{border-radius:8px;font-size:13px;min-height:46px}
+ body[data-pm-page=home] .sync{font-size:12px;margin-top:32px}
+ body[data-pm-page=agenda] :is(.event,.swipe,.calendar,.sync-card){border-radius:10px;box-shadow:none}
+ body[data-pm-page=agenda] .viewbar{gap:8px}
+ body[data-pm-page=agenda] .viewbtn{border-radius:8px;min-height:44px}
+ body[data-pm-page=agenda] .fab{right:28px;border-radius:12px;box-shadow:0 6px 22px #0002}
+ body[data-pm-page=contract] .sidebar,body[data-pm-page=quote] .editor{font-family:Inter,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;font-stretch:normal;padding:24px 20px}
+ :is(.sidebar,.editor) :is(details,.section,.pm-tools){border-radius:10px;box-shadow:none}
+ :is(.sidebar,.editor) summary{font-size:13px;padding:16px;font-weight:650;letter-spacing:0}
+ :is(.sidebar,.editor) :is(input,select,textarea){border-radius:7px;font-size:13px;min-height:42px;line-height:1.5}
+ :is(.sidebar,.editor) :is(input[type=checkbox],input[type=range]){min-height:0}
+ :is(.sidebar,.editor) :is(label,.field label){font-size:12px;letter-spacing:0;text-transform:none;line-height:1.5}
+ :is(.sidebar,.editor) :is(.field-help,.note){font-size:12px;line-height:1.6}
+ :is(.sidebar,.editor) button,.pm-actions>a{min-height:38px;border-radius:7px;font-size:12px}
+ :is(.sidebar,.editor) .brand h1{font-size:23px;letter-spacing:-.7px}
+ :is(.sidebar,.editor) .brand p{font-size:12px}
+ .pm-tools{border-radius:10px}
+ .pm-tools-body{gap:12px;padding:0 14px 14px}
+ .pm-actions{gap:7px}
+ .pm-history{max-height:180px}
+ .workspace{min-width:0}
+ body[data-pm-page=contract] .workspace>.topbar{padding:0 0 20px}
+ body[data-pm-page=contract] .workspace>.topbar h2{font-size:22px;letter-spacing:-.5px}
+ body[data-pm-page=contract] .document-shell{border-radius:10px;box-shadow:none!important;overflow:auto}
+ html[data-pm-theme=dark] body[data-pm-page=contract] .workspace>.topbar{color:#f4f5f8}
+ html[data-pm-theme=dark] body[data-pm-page=contract] .workspace>.topbar p{color:#adb7c5}
+ html[data-pm-theme=dark] body[data-pm-page=contract] .document-shell{background:#20252d}
+}
+@media screen and (min-width:1100px){
+ body[data-pm-page]{padding-left:216px}
+ #pmHeader{position:fixed;left:0;top:0;bottom:0;width:216px;border-bottom:0;border-right:1px solid var(--pm-head-line);height:100dvh}
+ .pm-header-inner{display:flex;flex-direction:column;align-items:stretch;height:100%;padding:30px 18px;gap:36px}
+ .pm-header .pm-brand{gap:9px}
+ .pm-brand-logo{width:40px;height:40px;font-size:20px}
+ .pm-brand-copy b{font-size:18px}
+ .pm-brand-copy small{font-size:9px}
+ .pm-header .pm-nav{display:flex;flex-direction:column;align-items:stretch;gap:8px;justify-content:start}
+ .pm-header .pm-nav::before{content:'ESPAÇO DE TRABALHO';font-size:9px;letter-spacing:1.2px;font-weight:700;color:var(--pm-head-muted);padding:0 12px 10px}
+ .pm-header .pm-nav a{justify-content:flex-start;gap:12px;min-height:46px;padding:12px}
+ .pm-header-actions{margin-top:auto;flex-direction:column;align-items:stretch;gap:12px;border-top:1px solid var(--pm-head-line);padding-top:20px}
+ .pm-header .pm-header-action{justify-content:flex-start;min-height:46px}
+ body[data-pm-page=contract]>.app{grid-template-columns:340px minmax(0,1fr)}
+ body[data-pm-page=quote]{grid-template-columns:340px minmax(0,1fr);grid-template-rows:1fr}
+ body[data-pm-page=contract] .workspace{padding:28px 20px}
+ body[data-pm-page=contract] .document-shell{padding:16px}
+ body[data-pm-page=quote] .stage{padding:24px}
+}
+@media screen and (max-width:650px){
+ body:is([data-pm-page=home],[data-pm-page=agenda])>.app{padding:20px 14px 80px}
+ body:is([data-pm-page=home],[data-pm-page=agenda]) .hero{padding:24px 20px;border-radius:12px}
+ body[data-pm-page=home] .hero h1{font-size:29px;letter-spacing:-1px}
+ body[data-pm-page=home] .next{padding:15px;margin-top:24px}
+ body[data-pm-page=home] .module{min-height:150px;padding:20px;column-gap:16px}
+ body[data-pm-page=home] .module-icon{margin:0}
+ body[data-pm-page=home] .module footer{margin-top:14px;padding-top:10px}
+ body[data-pm-page=home] .section-title span{display:none}
+ body[data-pm-page=home] .quick{gap:8px}
+ body[data-pm-page=home] .sync{font-size:10px}
+ :is(.sidebar,.editor) :is(input,select,textarea){font-size:16px}
+ body[data-pm-page=contract] .workspace{padding:20px 12px}
+ body[data-pm-page=contract] .document-shell{padding:10px}
+}
+@media(prefers-reduced-motion:reduce){body[data-pm-page=home] .module{transition:none;transform:none!important}}

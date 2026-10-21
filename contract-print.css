@@ -1,0 +1,23 @@
+/* Allow long inventories and clauses to continue without clipping or false page totals. */
+.paper .equipment-inventory{white-space:pre-wrap;overflow-wrap:anywhere;border-left:3px solid #c59b23;padding:10px 14px;background:#faf7ed}
+.paper .page-security .clause p{margin:0 0 12px;line-height:1.55}
+.paper .page-security .contract-header{margin-bottom:20px}
+.paper .clause p,.paper .parties p{overflow-wrap:anywhere}
+@media print{
+ @page{size:A4;margin:16mm 17mm}
+ html,body,body[data-pm-page=contract]{width:auto!important;margin:0!important;padding:0!important;background:#fff!important}
+ body[data-pm-page=contract] :is(.app,.workspace,.document-shell,.paper){width:100%!important;max-width:none!important;margin:0!important;padding:0!important;display:block!important;overflow:visible!important;background:#fff!important;box-shadow:none!important}
+ .paper .contract-page{display:block!important;width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;margin:0!important;overflow:visible!important;box-shadow:none!important;break-after:page;page-break-after:always}
+ .paper .contract-page:last-child{break-after:auto;page-break-after:auto}
+ .paper,.paper .clause p,.paper .clause li,.paper .parties,.paper .signature-intro{font-size:12pt!important;line-height:1.5!important}
+ .paper .clause{break-inside:auto!important;page-break-inside:auto!important;margin:14px 0!important}
+ .paper .clause h3{break-after:avoid-page;font-size:12pt!important}
+ .paper .clause p{orphans:3;widows:3}
+ .paper .extras-table{font-size:10pt;table-layout:fixed;width:100%}
+ .paper .extras-table td{overflow-wrap:anywhere}
+ .paper thead{display:table-header-group}
+ .paper tr{break-inside:avoid}
+ .paper .signature-zone{margin-top:28px!important;break-inside:avoid;page-break-inside:avoid}
+ .paper .footer{position:static!important;margin-top:20px!important;break-inside:avoid;font-size:8pt}
+ .paper .hidden{display:none!important}
+}

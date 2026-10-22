@@ -1,106 +1,12 @@
 <!doctype html>
 <html lang="pt-BR">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<meta name="theme-color" content="#0b0c0e">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="pec Manager">
-<link rel="manifest" href="./manifest.webmanifest">
-<link rel="icon" href="./icon.svg" type="image/svg+xml">
-<link rel="apple-touch-icon" href="./icon.svg">
-<title>pec Manager</title>
-<style>
-:root{--bg:#0b0c0e;--card:#15171a;--card2:#1c1f23;--line:#292d32;--text:#f6f7f8;--muted:#959ca6;--accent:#f2c94c;--safe:#63d391}
-*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}html,body{margin:0;min-height:100%;background:var(--bg);color:var(--text);font-family:-apple-system,BlinkMacSystemFont,"SF Pro Display","Segoe UI",sans-serif}body{padding:env(safe-area-inset-top) 0 calc(32px + env(safe-area-inset-bottom));overflow-x:hidden}body:after{content:"";position:fixed;width:360px;height:360px;right:-150px;top:-120px;border-radius:50%;background:#f2c94c;filter:blur(120px);opacity:.07;z-index:-1}.app{width:min(820px,100%);margin:0 auto;padding:18px 16px 34px}header{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:22px}.brand{display:flex;align-items:center;gap:11px;min-width:0}.mark{width:44px;height:44px;border-radius:14px;background:var(--accent);color:#111;display:grid;place-items:center;font-weight:950;font-size:19px;letter-spacing:-2px}.brand b{font-size:20px;display:block}.brand small{color:var(--muted);font-size:11px}.status{font-size:9px;font-weight:900;letter-spacing:.08em;padding:7px 9px;border-radius:999px;background:#24272b;color:#aeb4bc;white-space:nowrap}.status.ok{background:#17231c;color:var(--safe)}.hero{border:1px solid var(--line);background:linear-gradient(145deg,rgba(29,31,35,.94),rgba(15,17,19,.94));border-radius:28px;padding:24px;box-shadow:0 18px 50px #0005;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}.eyebrow{color:var(--accent);font-size:11px;font-weight:900;letter-spacing:.13em;text-transform:uppercase}.hero h1{font-size:31px;line-height:1.05;letter-spacing:-1px;margin:10px 0 7px}.hero p{margin:0;color:var(--muted);font-size:13px;line-height:1.5}.next{margin-top:18px;background:rgba(13,15,17,.90);border:1px solid var(--line);border-radius:17px;padding:13px 14px;display:flex;justify-content:space-between;align-items:center;gap:12px}.next-main{min-width:0;flex:1}.next-main>small{display:block;color:var(--muted);font-size:10px;text-transform:uppercase;letter-spacing:.08em;font-weight:850;margin-bottom:5px}.next-events{display:grid}.next-event{padding:2px 0 4px;min-width:0}.next-event+.next-event{border-top:1px solid #25292e;margin-top:7px;padding-top:9px}.next-event b{font-size:14px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.next-event span{display:block;color:var(--muted);font-size:11px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.count{flex:0 0 auto;color:var(--accent);font-weight:900;font-size:11px;background:#17191d;border:1px solid var(--line);padding:8px 10px;border-radius:999px}.section-title{display:flex;align-items:end;justify-content:space-between;margin:26px 2px 12px}.section-title h2{font-size:19px;margin:0;letter-spacing:-.4px}.section-title span{font-size:10px;color:var(--muted)}.modules{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px}.module{display:flex;flex-direction:column;min-height:178px;text-decoration:none;color:var(--text);background:rgba(21,23,26,.92);border:1px solid var(--line);border-radius:22px;padding:17px;transition:.15s transform,.15s border-color;backdrop-filter:blur(5px);-webkit-backdrop-filter:blur(5px)}.module:active{transform:scale(.99)}.module:hover{border-color:#3b4047}.module-icon{width:42px;height:42px;border-radius:14px;background:var(--card2);display:grid;place-items:center;font-size:20px;margin-bottom:18px}.module.agenda .module-icon{background:#2b2918;color:var(--accent)}.module.quote .module-icon{background:#1f2a26;color:#86dab0}.module.contract .module-icon{background:#231f2b;color:#cbb1ff}.module h3{margin:0 0 5px;font-size:16px}.module p{margin:0;color:var(--muted);font-size:11px;line-height:1.45;flex:1}.module footer{display:flex;align-items:center;justify-content:space-between;margin-top:14px;color:#d8dbe0;font-size:11px;font-weight:800}.module footer i{font-style:normal;font-size:17px}.quick{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}.quick a{text-decoration:none;text-align:center;border:1px solid var(--line);background:rgba(21,23,26,.92);color:var(--text);padding:12px 10px;border-radius:14px;font-size:11px;font-weight:850;backdrop-filter:blur(5px)}.quick a.primary{background:var(--accent);border-color:var(--accent);color:#111}.sync{margin-top:22px;border-top:1px solid var(--line);padding-top:15px;display:flex;align-items:center;justify-content:space-between;gap:10px;color:var(--muted);font-size:10px}.sync strong{color:var(--text)}
-@media(max-width:650px){.app{padding:14px 12px 26px}.hero{padding:19px;border-radius:23px}.hero h1{font-size:26px}.modules{grid-template-columns:1fr}.module{min-height:142px;display:grid;grid-template-columns:46px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:12px}.module-icon{grid-row:1/4;margin:0}.module h3{align-self:end}.module p{grid-column:2}.module footer{grid-column:2}.quick{grid-template-columns:1fr 1fr}.quick a:first-child{grid-column:1/-1}.next{align-items:flex-start}.count{font-size:10px}.next-event span{white-space:normal}}
-</style>
-<link rel="stylesheet" href="./manager-ui.css?v=17">
-<link rel="stylesheet" href="./manager-pro.css?v=19">
-</head>
-<body>
-<div class="app">
-<header><div class="brand"><div class="mark">pec</div><div><b>pec Manager</b><small>eventos, propostas & contratos</small></div></div><a id="status" class="status" href="./agenda.html?account=1" aria-label="Abrir conta e nuvem">Entrar na nuvem</a></header>
-<div class="bs-page-heading pm-overview-heading"><div><span class="bs-eyebrow">SUA CENTRAL DE EVENTOS</span><h1>Visão geral<span class="pm-title-dot">.</span></h1><p>Mais clareza para planejar. Mais tempo para criar.</p></div><a class="bs-primary" href="./agenda.html?new=1">+ Criar evento</a></div>
-<section class="pm-metrics" aria-label="Resumo da agenda">
-  <a href="./agenda.html"><span class="pm-metric-label">Na sua agenda <span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></span><strong id="pmUpcomingCount">—</strong><small>eventos pela frente</small></a>
-  <a href="./agenda.html"><span class="pm-metric-label">Este mês <span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></span><strong id="pmMonthCount">—</strong><small>eventos programados</small></a>
-  <a href="./agenda.html"><span class="pm-metric-label">Já aconteceram <span aria-hidden="true">✓</span></span><strong id="pmCompletedCount">—</strong><small>eventos concluídos</small></a>
-</section>
-<section class="next pm-spotlight" aria-label="Próximo evento">
-  <div class="pm-spotlight-date" aria-hidden="true"><span id="pmNextMonth">SUA AGENDA</span><strong id="pmNextDay">—</strong><small id="pmNextWeekday">próximo evento</small></div>
-  <div class="next-main"><small id="nextLabel">Próximo evento</small><div id="nextEvents" class="next-events"><div class="next-event"><b>Carregando agenda…</b></div></div><a class="pm-text-link" href="./agenda.html">Ver na agenda <span aria-hidden="true">→</span></a></div>
-  <div id="nextCount" class="count">—</div>
-</section>
-<div class="pm-dashboard-grid">
-<section class="pm-lineup-panel"><div class="pm-panel-heading"><div><span class="bs-eyebrow">CADA DATA, UM NOVO PALCO</span><h2>Na sequência</h2></div><a class="pm-text-link" href="./agenda.html">Ver todos <svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div><div id="bsLineup" class="bs-lineup"></div></section>
-<section class="pm-work-panel"><div class="pm-panel-heading"><div><span class="bs-eyebrow">DO PRIMEIRO CONTATO AO SHOW</span><h2>Seu espaço de trabalho</h2></div></div>
-<div class="modules">
-<a class="module agenda" href="./agenda.html"><div class="module-icon" aria-hidden="true">▦</div><div><h3>Agenda</h3><p>Seu calendário de shows e eventos.</p><footer><span id="agendaSummary">Abrir agenda</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
-<a class="module quote" href="./orcamentos.html"><div class="module-icon" aria-hidden="true">R$</div><div><h3>Orçamentos</h3><p>Propostas que abrem possibilidades.</p><footer><span id="quoteSummary">Abrir propostas</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
-<a class="module contract" href="./contratos.html"><div class="module-icon" aria-hidden="true">✎</div><div><h3>Contratos</h3><p>Cada detalhe, bem combinado.</p><footer><span id="contractSummary">Abrir contratos</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
-</div></section></div>
-<div class="sync"><span id="syncText"><strong>pec Manager</strong> • carregando dados</span><span id="eventCount">—</span></div>
-</div>
-<script src="./vendor/supabase-2.116.0.js"></script>
-<script src="./manager-shared.js?v=17"></script>
-
-<script>
-const SUPABASE_URL='https://qmhyeotvbktdilrudwys.supabase.co',SUPABASE_KEY='sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT';const sb=window.PM.client;
-let lastRows=[],lastCloud=false;
-function fromLocal(){try{return JSON.parse(localStorage.getItem('pec-agenda-v1'))||[]}catch{return[]}}
-function eventMoment(e){const[y,m,d]=String(e.date).split('-').map(Number);let h=21,min=0;if((e.time_type||e.timeType)==='time'){const raw=e.time_value||e.time||'21:00';[h,min]=String(raw).slice(0,5).split(':').map(Number)}const dt=new Date(y,m-1,d,h,min,0);if((e.time_type||e.timeType)==='time'&&h<12)dt.setDate(dt.getDate()+1);return dt}
-function timeText(e){const tt=e.time_type||e.timeType;if(tt==='tbd')return'A confirmar';if(tt==='allnight')return'Noite toda';return String(e.time_value||e.time||'').slice(0,5)||'—'}
-function fmtDate(s){const[y,m,d]=String(s).split('-');return`${d}/${m}`}
-function sortTime(e){const tt=e.time_type||e.timeType;if(tt==='time'){const[h,m]=String(e.time_value||e.time||'00:00').slice(0,5).split(':').map(Number);return(h<12?h+24:h)*60+m}if(tt==='allnight')return 22*60;return 21*60}
-function esc(s=''){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function renderEvents(rows,cloud){
-  lastRows=Array.isArray(rows)?rows:[];lastCloud=cloud;
-  const now=new Date();
-  const active=lastRows.filter(e=>e.completed!==true).map(e=>({e,dt:eventMoment(e)})).filter(x=>x.dt>=now).sort((a,b)=>a.dt-b.dt);
-  document.querySelector('#pmUpcomingCount').textContent=active.length;
-  document.querySelector('#pmMonthCount').textContent=lastRows.filter(e=>String(e.date).slice(0,7)===PM.today().slice(0,7)&&e.completed!==true).length;
-  document.querySelector('#pmCompletedCount').textContent=lastRows.filter(e=>e.completed===true).length;
-  const x=active[0];
-  const nextDate=x?new Date(x.e.date+'T12:00:00'):null;
-  document.querySelector('#pmNextMonth').textContent=nextDate?nextDate.toLocaleDateString('pt-BR',{month:'long'}):'SUA AGENDA';
-  document.querySelector('#pmNextDay').textContent=nextDate?String(nextDate.getDate()).padStart(2,'0'):'—';
-  document.querySelector('#pmNextWeekday').textContent=nextDate?nextDate.toLocaleDateString('pt-BR',{weekday:'long'}):'novas possibilidades';
-  document.querySelector('#bsLineup').innerHTML=active.slice(0,5).map(({e})=>`<a href="./agenda.html"><span class="bs-date">${esc(String(e.date).slice(8,10))}<small>${new Date(e.date+'T12:00:00').toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase()}</small></span><span><b>${esc(e.title)}</b><small>${esc(e.place||'Local a definir')}</small></span><span>${esc(timeText(e))} <svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>`).join('')||'<div class="pm-lineup-empty"><span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span><h3>Espaço para o próximo show.</h3><p>Adicione uma data e organize os próximos passos por aqui.</p><a class="pm-text-link" href="./agenda.html?new=1">Criar meu primeiro evento →</a></div>';
-
-  document.querySelector('#agendaSummary').textContent=`${active.length} próximo${active.length===1?'':'s'} evento${active.length===1?'':'s'}`;
-  document.querySelector('#eventCount').textContent=`${lastRows.length} eventos`;
-  const list=document.querySelector('#nextEvents'),label=document.querySelector('#nextLabel');
-  if(x){
-    const day=x.e.date;
-    const sameDay=lastRows.filter(e=>e.completed!==true&&e.date===day).sort((a,b)=>sortTime(a)-sortTime(b));
-    label.textContent=sameDay.length>1?'Próximos eventos':'Próximo evento';
-    list.innerHTML=sameDay.map(e=>`<div class="next-event"><b>${esc(e.title)}</b><span>${fmtDate(e.date)} • ${esc(timeText(e))}${e.place?' • '+esc(e.place):''}</span></div>`).join('');
-    const ms=x.dt-now,days=Math.floor(ms/86400000),hours=Math.floor((ms%86400000)/3600000);
-    document.querySelector('#nextCount').textContent=days>0?`${days}d ${hours}h`:`${Math.max(0,hours)}h`;
-  }else{
-    label.textContent='Próximo evento';
-    list.innerHTML='<div class="next-event"><b>Sua próxima data começa aqui</b><span>Adicione um evento para ver os detalhes e a contagem regressiva</span></div>';
-    document.querySelector('#nextCount').textContent='✓';
-  }
-  document.querySelector('#status').textContent=cloud?'NUVEM ✓':(PM.user?'Minha conta':'Entrar na nuvem');
-  document.querySelector('#status').classList.toggle('ok',cloud);
-  document.querySelector('#syncText').innerHTML=cloud?'<strong>Nuvem conectada</strong> • dados sincronizados':'<strong>Modo local</strong> • dados deste aparelho';
-}
-async function init(){
-  renderEvents(fromLocal(),false);
-  if(!sb||!navigator.onLine)return;
-  try{
-    const{data}=await sb.auth.getSession();if(!data?.session)return;
-    const[{data:events,error:e1},{data:quotes,error:e2},{data:contracts,error:e3}]=await Promise.all([sb.from('events').select('*').order('date',{ascending:true}),sb.from('quotes').select('id,status'),sb.from('contracts').select('id,status')]);
-    if(!e1&&Array.isArray(events))renderEvents(events,true);
-    if(!e2)document.querySelector('#quoteSummary').textContent=`${quotes.length} orçamento${quotes.length===1?'':'s'} salvo${quotes.length===1?'':'s'}`;
-    if(!e3)document.querySelector('#contractSummary').textContent=`${contracts.length} contrato${contracts.length===1?'':'s'} salvo${contracts.length===1?'':'s'}`;
-  }catch(_){ }
-}
-PM.ready.then(init);addEventListener('pm:refresh',init);addEventListener('pm:account',init);setInterval(()=>{if(lastRows.length)renderEvents(lastRows,lastCloud)},60000);if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
-</script>
-<script src="./backstage.js?v=19"></script>
-</body>
-</html>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#252b2a"><meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
+<link rel="preload" href="./vendor/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
+<link rel="stylesheet" href="./ui/workspace.css?v=20">
+<title>Seu painel · pec Manager</title></head>
+<body><main id="workspace" class="ws-main"><noscript>Ative o JavaScript para abrir seu painel de eventos.</noscript></main>
+<script src="./vendor/supabase-2.116.0.js"></script><script src="./manager-shared.js?v=20"></script>
+<script type="module" src="./ui/home.js?v=20"></script></body></html>

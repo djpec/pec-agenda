@@ -15,7 +15,7 @@
   const dbPromise=new Promise((resolve,reject)=>{const r=indexedDB.open('pec-manager-v12',1);r.onupgradeneeded=()=>r.result.createObjectStore('items');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
   const db=async(action,key,value)=>{const connection=await dbPromise;return new Promise((resolve,reject)=>{const tx=connection.transaction('items',action==='get'?'readonly':'readwrite'),s=tx.objectStore('items');const r=action==='get'?s.get(key):action==='put'?s.put(value,key):s.delete(key);tx.oncomplete=()=>resolve(r.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})};
   let user=null;
-  const defaults={theme:'dark',background_image:null,background_darkness:88,background_blur:0};
+  const defaults={theme:'light',background_image:null,background_darkness:88,background_blur:0};
   let prefs={...defaults,...read('pec-manager-preferences-v1',{})};
   const oldTheme=localStorage.getItem('pec-manager-ui-theme')||localStorage.getItem('pec-manager-theme');
   if(oldTheme&&!read('pec-manager-pref-migrated'))prefs.theme=oldTheme==='system'?'auto':oldTheme;

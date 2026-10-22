@@ -1,5 +1,5 @@
-const CACHE='pec-manager-v19';
-const CORE=['./','./index.html','./agenda.html','./orcamentos.html','./contratos.html','./manifest.webmanifest','./icon.svg','./mobile-fix.css','./enhancements-v7.css','./enhancements-v7.js','./cloud-fix.js','./manager-shared.js','./manager-document.js','./manager-agenda.js','./manager-ui.css','./manager-pro.css','./backstage.js','./contract-print.css','./quote-cloud.js','./contract-cloud.js','./vendor/supabase-2.116.0.js','./vendor/fonts/manrope-latin.woff2'];
+const CACHE='pec-manager-v20';
+const CORE=['./', './index.html', './agenda.html', './orcamentos.html', './contratos.html', './manifest.webmanifest', './icon.svg', './manager-shared.js', './manager-document.js', './cloud-fix.js', './quote-cloud.js', './contract-cloud.js', './contract-print.css', './vendor/supabase-2.116.0.js', './vendor/fonts/manrope-latin.woff2', './ui/workspace.css', './ui/core.js', './ui/shell.js', './ui/home.js', './ui/agenda.js', './ui/agenda-data.js', './ui/documents.js'];
 self.addEventListener('install',event=>{event.waitUntil(caches.open(CACHE).then(cache=>cache.addAll(CORE)).then(()=>self.skipWaiting()))});
 self.addEventListener('activate',event=>{event.waitUntil(caches.keys().then(keys=>Promise.all(keys.filter(k=>k.startsWith('pec-')&&k!==CACHE).map(k=>caches.delete(k)))).then(()=>self.clients.claim()))});
 self.addEventListener('fetch',event=>{

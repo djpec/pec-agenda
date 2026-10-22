@@ -27,26 +27,42 @@ As tabelas existentes são `events`, `quotes`, `contracts` e `user_preferences`.
 
 Os documentos completos e rascunhos usam IndexedDB, separados por conta. Os registros no Supabase usam o JSON `payload` existente; `_manager` contém status, versão remota e vínculos entre documentos. Os formatos antigos de histórico são adaptados ao abrir.
 
+## Interface e arquitetura
+
+A interface atual é implementada em `ui/`, com componentes e estilos próprios. O painel e a agenda não carregam `manager-ui.css`, `manager-pro.css` ou `backstage.js`.
+
+- `core.js`: ícones SVG, calendário, datas e componentes compartilhados.
+- `shell.js`: navegação, temas, cor de destaque e mensagens de confirmação.
+- `home.js`: painel com eventos reais, busca, calendário interativo e distribuição mensal.
+- `agenda.js`: calendário mensal com eventos nas células, lista, busca entre meses, filtros por status, detalhes por dia, conclusão/reabertura e duplicação.
+- `agenda-data.js`: persistência compatível com os dados anteriores, formulário de evento, autenticação e backup; `cloud-fix.js` mantém a proteção da fila offline.
+- `documents.js`: biblioteca com busca e filtros de status, edição por etapas e prévia. Os adaptadores `quote-cloud.js` e `contract-cloud.js` continuam responsáveis pelos documentos e conversões.
+- `workspace.css`: design independente, temas claro/escuro, layouts responsivos e integração de impressão.
+
+A navegação é lateral e compacta no computador e fica na parte inferior no celular. A edição de eventos abre num painel lateral com seções de identificação, data/horário e observações. A fonte Manrope é local, com licença em `vendor/fonts/`, e funciona offline. Contas novas começam no tema claro; preferências já salvas continuam válidas. A preferência de cor da nova interface é guardada separadamente das versões anteriores.
+
+O formulário começa vazio em instalações novas: não são inseridos eventos demonstrativos. Eventos já salvos, identificadores, datas da noite, conclusão, documentos e vínculos continuam usando os formatos existentes.
+
 ## Verificação
 
-Instale `playwright@1.62.1` para executar os testes. Sirva o projeto, por exemplo, com `python3 -m http.server 8765` e rode em outro terminal:
+Não há build. Sirva o checkout por HTTP:
 
 ```sh
-PEC_TEST_URL=http://127.0.0.1:8765/ node tests/integration.cjs
+python3 -m http.server 8765 --bind 127.0.0.1
 ```
 
-Se necessário, `PEC_BROWSER` aponta para o executável Chromium. `PEC_QA_DIR` define o diretório de imagens e resultados de teste. O teste usa o SDK real com todas as chamadas ao Supabase interceptadas e dados fictícios, sem gravar dados de teste na conta real.
-
-Verificações realizadas: integridade dos HTMLs; persistência de imagens e status; valores por item; conversão com madrugada, duração e extras; vínculo único com a agenda; sincronização de tema e remoção de fundo entre dois navegadores; fila offline; proteção contra sobrescrita concorrente; Início e diálogo da Agenda. PDFs originais e integrados foram comparados por texto, dimensões e pixels em A4 e Carta paisagem (orçamentos), além de A4 (contrato). A paginação de origem é preservada, inclusive eventuais transbordamentos do modelo original.
-
-### Interface Studio
-
-O painel inicial exibe contagens calculadas a partir dos eventos carregados: próximos eventos ainda não concluídos, eventos não concluídos do mês atual e eventos concluídos. Os temas claro/escuro e as cores personalizadas continuam disponíveis em Configurações. A fonte Manrope é servida localmente em `vendor/fonts/`, com licença SIL OFL incluída, e integra o cache offline.
-
-Para verificar o painel, a navegação inferior no celular, os formulários e as etapas dos editores, com chamadas à nuvem interceptadas:
+A suíte atual usa Node.js, `playwright@1.62.1`, Chromium e `pdftotext` (Poppler) para conferir o conteúdo da primeira página do PDF. As dependências de teste podem ser instaladas fora do checkout:
 
 ```sh
-PEC_TEST_URL=http://127.0.0.1:8765/ node tests/studio-ui.cjs
+npm install --prefix /tmp/pec-tools --cache /tmp/pec-npm-cache --no-package-lock playwright@1.62.1
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace.cjs
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-offline.cjs
 ```
 
-O teste utiliza as mesmas opções `PEC_BROWSER` e a instalação de Playwright descritas acima e não grava na conta real.
+`PEC_BROWSER` seleciona o executável Chromium. `PEC_QA_DIR` define a pasta dos PDFs e imagens de teste. As chamadas à nuvem na suíte funcional são interceptadas, usam o SDK real e dados fictícios, e não gravam na conta real.
+
+A suíte funcional cobre criação, edição, conclusão/reabertura, duplicação, exclusão, busca entre meses sem distinção de acentos, navegação do calendário pelo teclado, exportação e rejeição de backup inválido, fila offline, login pelo teclado no celular, biblioteca de documentos, imagens, valores por item, extras, conversão com madrugada, vínculo único com a agenda, proteção contra sobrescrita concorrente e PDF com conteúdo na primeira página. Também verifica as quatro telas e os editores em 1440, 390 e 320 px, nos temas claro e escuro. A suíte offline confirma que as quatro telas, os módulos e a fonte estão no precache, que o cache antigo é removido e que é possível criar eventos e salvar documentos sem internet.
+
+A integridade dos modelos atuais é verificada contra `workspace-models.json`, registrado a partir do conteúdo anterior à reconstrução da interface.
+
+Os testes `integration.cjs`, `auth-mobile.cjs` e `studio-ui.cjs` registram interfaces anteriores e permanecem no repositório como histórico. Os hashes em `originals.json` já divergiam dos documentos presentes no checkout inicial; não foram alterados para fazer os testes passarem. As alterações da interface atual nos HTMLs de orçamento e contrato ficam nos links de integração; os modelos de documento permanecem intactos.

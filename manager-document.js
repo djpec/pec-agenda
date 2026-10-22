@@ -16,7 +16,7 @@
     const statuses=type==='quote'?{draft:'Rascunho',sent:'Enviado',approved:'Aprovado',declined:'Recusado'}:{draft:'Rascunho',sent:'Enviado',signed:'Assinado',cancelled:'Cancelado'};
     panel.innerHTML=`<summary>pec Manager · ${type==='quote'?'Orçamentos':'Contratos'}</summary><div class="pm-tools-body"><p id="pmDocumentState" class="pm-state" role="status">Carregando…</p><label>Status<select id="pmDocumentStatus">${Object.entries(statuses).map(([k,v])=>`<option value="${k}">${v}</option>`).join('')}</select></label><div class="pm-actions"><button class="pm-primary" id="pmSave" type="button">Salvar no histórico</button><button id="pmNew" type="button">Novo</button><button id="pmCopy" type="button">Salvar cópia</button></div><div class="pm-actions">${type==='quote'?'<button id="pmConvert" type="button">Gerar contrato</button>':''}<button id="pmAgenda" type="button">Adicionar à agenda</button><a href="./agenda.html?account=1">Minha conta</a></div><label>Histórico<input id="pmHistorySearch" type="search" placeholder="Buscar cliente, data ou número"></label><div id="pmHistory" class="pm-history"></div><button id="pmHistoryMore" type="button" hidden>Carregar mais</button></div>`;
     const editor=document.querySelector(adapter.container),first=editor.querySelector('details');first?editor.insertBefore(panel,first):editor.append(panel);
-    const $=id=>panel.querySelector('#'+id);
+    const $=id=>document.getElementById(id);
     const state=(message,error=false)=>{$('pmDocumentState').textContent=message;$('pmDocumentState').classList.toggle('pm-error',error)};
     function snapshot(){return {...P.clone(adapter.get()),_manager:P.clone(meta)}}
     async function stash(){await P.db('put',draftKey(),{payload:snapshot(),unsaved,version});}
@@ -31,10 +31,12 @@
       finally{restoring=false}
     }
     async function writeRows(){await P.db('put',cacheKey(),rows);renderHistory()}
+    let historyStatus='all';
     function renderHistory(){
       const q=$('pmHistorySearch').value.toLocaleLowerCase('pt-BR');
-      const shown=rows.filter(r=>[r.client_name,r.event_date,r.contract_number,r.payload?.client].join(' ').toLocaleLowerCase('pt-BR').includes(q)).sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at)));
-      $('pmHistory').innerHTML=shown.map(r=>`<button type="button" data-record="${P.esc(r.id)}" aria-current="${r.id===meta.id}"><b>${P.esc(r.client_name||'Sem cliente')}</b><small>${P.esc(r.event_date?.split('-').reverse().join('/')||'Sem data')} · ${P.esc(statuses[r.status]||r.status)}${r.total_value!=null?' · '+P.currency(r.total_value):''}${r._pending?' · pendente':''}</small></button>`).join('')||'<p class="pm-empty">Nenhum registro encontrado.</p>';
+      const shown=rows.filter(r=>(historyStatus==='all'||r.status===historyStatus)&&[r.client_name,r.event_date,r.contract_number,r.payload?.client].join(' ').toLocaleLowerCase('pt-BR').includes(q)).sort((a,b)=>String(b.updated_at).localeCompare(String(a.updated_at)));
+      $('pmHistory').innerHTML=shown.map(r=>`<button type="button" class="ws-document-row" data-record="${P.esc(r.id)}" aria-current="${r.id===meta.id}"><span class="ws-document-client"><span class="ws-document-avatar">${P.esc(String(r.client_name||'SC').split(/\s+/).slice(0,2).map(s=>s[0]).join('').toUpperCase())}</span><span><b>${P.esc(r.client_name||'Cliente a definir')}</b><small>${P.esc(r.contract_number||r.id.slice(0,12))}${r._pending?' · Envio pendente':''}</small></span></span><span class="ws-document-date">${P.esc(r.event_date?.split('-').reverse().join('/')||'Data a definir')}</span><span class="ws-document-money">${r.total_value!=null?P.currency(r.total_value):'A definir'}</span><span class="ws-status" data-status="${P.esc(r.status)}">${P.esc(statuses[r.status]||r.status)}</span><svg class="ws-document-arrow" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></button>`).join('')||'<div class="pm-empty">Nenhum documento encontrado. Crie um novo ou ajuste a busca e o status.</div>';
+      P.notify('pm:history-changed',{table,total:rows.length,shown:shown.length});
       $('pmHistory').querySelectorAll('[data-record]').forEach(b=>b.onclick=()=>loadRow(b.dataset.record));
     }
     let historyLimit=100;
@@ -88,13 +90,14 @@
       finally{busy=false}
     }
     async function newDocument(){
+      api.openRequested=true;
       if(unsaved&&!confirm('Criar um novo documento? As alterações que não estão no histórico serão descartadas.'))return;
       apply(adapter.defaults());meta={status:'draft'};$('pmDocumentStatus').value='draft';await stash();renderHistory();state('Novo '+label+' · ainda não salvo.');
       const u=new URL(location.href);u.search='';historyReplace(u);P.notify('pm:document-open');
     }
     function historyReplace(url){window.history.replaceState(null,'',url)}
-    const api=P.document={adapter,get meta(){return meta},get dirty(){return unsaved},snapshot,changed,stash,save,loadRow,state,
-      async use(payload,newMeta={}){apply({...payload,_manager:newMeta});unsaved=true;await stash();state('Dados importados · revise e salve no histórico.');},
+    const api=P.document={adapter,get meta(){return meta},get dirty(){return unsaved},snapshot,changed,stash,save,loadRow,state,get records(){return rows.map(r=>({id:r.id,status:r.status}))},filter(status){historyStatus=status;renderHistory()},
+      async use(payload,newMeta={}){this.openRequested=true;apply({...payload,_manager:newMeta});unsaved=true;await stash();state('Dados importados · revise e salve no histórico.');},
       async link(patch){meta={...meta,...patch};await stash();},
       async refresh(){await flush();await history()}
     };

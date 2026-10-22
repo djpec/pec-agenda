@@ -17,22 +17,30 @@
 @media(max-width:650px){.app{padding:14px 12px 26px}.hero{padding:19px;border-radius:23px}.hero h1{font-size:26px}.modules{grid-template-columns:1fr}.module{min-height:142px;display:grid;grid-template-columns:46px minmax(0,1fr);grid-template-rows:auto auto 1fr;column-gap:12px}.module-icon{grid-row:1/4;margin:0}.module h3{align-self:end}.module p{grid-column:2}.module footer{grid-column:2}.quick{grid-template-columns:1fr 1fr}.quick a:first-child{grid-column:1/-1}.next{align-items:flex-start}.count{font-size:10px}.next-event span{white-space:normal}}
 </style>
 <link rel="stylesheet" href="./manager-ui.css?v=17">
-<link rel="stylesheet" href="./manager-pro.css?v=18">
+<link rel="stylesheet" href="./manager-pro.css?v=19">
 </head>
 <body>
 <div class="app">
 <header><div class="brand"><div class="mark">pec</div><div><b>pec Manager</b><small>eventos, propostas & contratos</small></div></div><a id="status" class="status" href="./agenda.html?account=1" aria-label="Abrir conta e nuvem">Entrar na nuvem</a></header>
-<div class="bs-page-heading"><div><h1>Fala, pec.</h1><p>Seu backstage está pronto.</p></div><a class="bs-primary" href="./agenda.html?new=1">+ Novo evento</a></div>
-<div class="bs-hero-grid"><section class="bs-hero"><small>● O SHOW COMEÇA AQUI</small><h2>Menos caos.<br>Mais palco.</h2><p>Sua agenda, seus clientes.<br>Tudo no mesmo ritmo.</p></section><section class="next"><div class="next-main"><small id="nextLabel">Próximo evento</small><div id="nextEvents" class="next-events"><div class="next-event"><b>Carregando agenda…</b></div></div></div><div id="nextCount" class="count">—</div></section></div>
-<div class="section-title"><h2>Seu espaço de trabalho</h2><span>Da primeira proposta ao último bis</span></div>
-<section class="modules">
-<a class="module agenda" href="./agenda.html"><div class="module-icon">▦</div><h3>Agenda</h3><p>Shows, calendário, histórico, conclusão de eventos e sincronização na nuvem.</p><footer><span id="agendaSummary">Abrir agenda</span><i>›</i></footer></a>
-<a class="module quote" href="./orcamentos.html"><div class="module-icon">R$</div><h3>Orçamentos</h3><p>Monte propostas personalizadas e salve tudo online.</p><footer><span id="quoteSummary">Gerador de propostas</span><i>›</i></footer></a>
-<a class="module contract" href="./contratos.html"><div class="module-icon">✎</div><h3>Contratos</h3><p>Gere contratos profissionais e mantenha um histórico por cliente.</p><footer><span id="contractSummary">Gerador de contratos</span><i>›</i></footer></a>
+<div class="bs-page-heading pm-overview-heading"><div><span class="bs-eyebrow">SUA CENTRAL DE EVENTOS</span><h1>Visão geral<span class="pm-title-dot">.</span></h1><p>Mais clareza para planejar. Mais tempo para criar.</p></div><a class="bs-primary" href="./agenda.html?new=1">+ Criar evento</a></div>
+<section class="pm-metrics" aria-label="Resumo da agenda">
+  <a href="./agenda.html"><span class="pm-metric-label">Na sua agenda <span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></span><strong id="pmUpcomingCount">—</strong><small>eventos pela frente</small></a>
+  <a href="./agenda.html"><span class="pm-metric-label">Este mês <span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></span><strong id="pmMonthCount">—</strong><small>eventos programados</small></a>
+  <a href="./agenda.html"><span class="pm-metric-label">Já aconteceram <span aria-hidden="true">✓</span></span><strong id="pmCompletedCount">—</strong><small>eventos concluídos</small></a>
 </section>
-<div class="section-title"><h2>Seu próximo line-up</h2><a href="./agenda.html" style="color:inherit;font-size:12px">Abrir agenda ↗</a></div><div id="bsLineup" class="bs-lineup"></div>
-<div class="section-title"><h2>Acesso rápido</h2></div>
-<section class="quick"><a class="primary" href="./agenda.html?new=1">+ Novo show</a><a href="./orcamentos.html?new=1">Novo orçamento</a><a href="./contratos.html?new=1">Novo contrato</a></section>
+<section class="next pm-spotlight" aria-label="Próximo evento">
+  <div class="pm-spotlight-date" aria-hidden="true"><span id="pmNextMonth">SUA AGENDA</span><strong id="pmNextDay">—</strong><small id="pmNextWeekday">próximo evento</small></div>
+  <div class="next-main"><small id="nextLabel">Próximo evento</small><div id="nextEvents" class="next-events"><div class="next-event"><b>Carregando agenda…</b></div></div><a class="pm-text-link" href="./agenda.html">Ver na agenda <span aria-hidden="true">→</span></a></div>
+  <div id="nextCount" class="count">—</div>
+</section>
+<div class="pm-dashboard-grid">
+<section class="pm-lineup-panel"><div class="pm-panel-heading"><div><span class="bs-eyebrow">CADA DATA, UM NOVO PALCO</span><h2>Na sequência</h2></div><a class="pm-text-link" href="./agenda.html">Ver todos <svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></a></div><div id="bsLineup" class="bs-lineup"></div></section>
+<section class="pm-work-panel"><div class="pm-panel-heading"><div><span class="bs-eyebrow">DO PRIMEIRO CONTATO AO SHOW</span><h2>Seu espaço de trabalho</h2></div></div>
+<div class="modules">
+<a class="module agenda" href="./agenda.html"><div class="module-icon" aria-hidden="true">▦</div><div><h3>Agenda</h3><p>Seu calendário de shows e eventos.</p><footer><span id="agendaSummary">Abrir agenda</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+<a class="module quote" href="./orcamentos.html"><div class="module-icon" aria-hidden="true">R$</div><div><h3>Orçamentos</h3><p>Propostas que abrem possibilidades.</p><footer><span id="quoteSummary">Abrir propostas</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+<a class="module contract" href="./contratos.html"><div class="module-icon" aria-hidden="true">✎</div><div><h3>Contratos</h3><p>Cada detalhe, bem combinado.</p><footer><span id="contractSummary">Abrir contratos</span></footer></div><span class="pm-module-arrow" aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>
+</div></section></div>
 <div class="sync"><span id="syncText"><strong>pec Manager</strong> • carregando dados</span><span id="eventCount">—</span></div>
 </div>
 <script src="./vendor/supabase-2.116.0.js"></script>
@@ -51,8 +59,15 @@ function renderEvents(rows,cloud){
   lastRows=Array.isArray(rows)?rows:[];lastCloud=cloud;
   const now=new Date();
   const active=lastRows.filter(e=>e.completed!==true).map(e=>({e,dt:eventMoment(e)})).filter(x=>x.dt>=now).sort((a,b)=>a.dt-b.dt);
+  document.querySelector('#pmUpcomingCount').textContent=active.length;
+  document.querySelector('#pmMonthCount').textContent=lastRows.filter(e=>String(e.date).slice(0,7)===PM.today().slice(0,7)&&e.completed!==true).length;
+  document.querySelector('#pmCompletedCount').textContent=lastRows.filter(e=>e.completed===true).length;
   const x=active[0];
-  document.querySelector('#bsLineup').innerHTML=active.slice(0,5).map(({e})=>`<a href="./agenda.html"><span class="bs-date">${esc(String(e.date).slice(8,10))}<small>${new Date(e.date+'T12:00:00').toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase()}</small></span><span><b>${esc(e.title)}</b><small>${esc(e.place||'Local a definir')}</small></span><span>${esc(timeText(e))} ↗</span></a>`).join('')||'<p>Sua próxima noite começa aqui. Adicione um evento à agenda.</p>';
+  const nextDate=x?new Date(x.e.date+'T12:00:00'):null;
+  document.querySelector('#pmNextMonth').textContent=nextDate?nextDate.toLocaleDateString('pt-BR',{month:'long'}):'SUA AGENDA';
+  document.querySelector('#pmNextDay').textContent=nextDate?String(nextDate.getDate()).padStart(2,'0'):'—';
+  document.querySelector('#pmNextWeekday').textContent=nextDate?nextDate.toLocaleDateString('pt-BR',{weekday:'long'}):'novas possibilidades';
+  document.querySelector('#bsLineup').innerHTML=active.slice(0,5).map(({e})=>`<a href="./agenda.html"><span class="bs-date">${esc(String(e.date).slice(8,10))}<small>${new Date(e.date+'T12:00:00').toLocaleDateString('pt-BR',{month:'short'}).replace('.','').toUpperCase()}</small></span><span><b>${esc(e.title)}</b><small>${esc(e.place||'Local a definir')}</small></span><span>${esc(timeText(e))} <svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span></a>`).join('')||'<div class="pm-lineup-empty"><span aria-hidden="true"><svg class="pm-small-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14m-6-6 6 6-6 6"/></svg></span><h3>Espaço para o próximo show.</h3><p>Adicione uma data e organize os próximos passos por aqui.</p><a class="pm-text-link" href="./agenda.html?new=1">Criar meu primeiro evento →</a></div>';
 
   document.querySelector('#agendaSummary').textContent=`${active.length} próximo${active.length===1?'':'s'} evento${active.length===1?'':'s'}`;
   document.querySelector('#eventCount').textContent=`${lastRows.length} eventos`;
@@ -66,7 +81,7 @@ function renderEvents(rows,cloud){
     document.querySelector('#nextCount').textContent=days>0?`${days}d ${hours}h`:`${Math.max(0,hours)}h`;
   }else{
     label.textContent='Próximo evento';
-    list.innerHTML='<div class="next-event"><b>Nenhum próximo evento</b><span>Agenda em dia</span></div>';
+    list.innerHTML='<div class="next-event"><b>Sua próxima data começa aqui</b><span>Adicione um evento para ver os detalhes e a contagem regressiva</span></div>';
     document.querySelector('#nextCount').textContent='✓';
   }
   document.querySelector('#status').textContent=cloud?'NUVEM ✓':(PM.user?'Minha conta':'Entrar na nuvem');
@@ -86,6 +101,6 @@ async function init(){
 }
 PM.ready.then(init);addEventListener('pm:refresh',init);addEventListener('pm:account',init);setInterval(()=>{if(lastRows.length)renderEvents(lastRows,lastCloud)},60000);if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
 </script>
-<script src="./backstage.js?v=17"></script>
+<script src="./backstage.js?v=19"></script>
 </body>
 </html>

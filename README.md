@@ -38,3 +38,15 @@ PEC_TEST_URL=http://127.0.0.1:8765/ node tests/integration.cjs
 Se necessário, `PEC_BROWSER` aponta para o executável Chromium. `PEC_QA_DIR` define o diretório de imagens e resultados de teste. O teste usa o SDK real com todas as chamadas ao Supabase interceptadas e dados fictícios, sem gravar dados de teste na conta real.
 
 Verificações realizadas: integridade dos HTMLs; persistência de imagens e status; valores por item; conversão com madrugada, duração e extras; vínculo único com a agenda; sincronização de tema e remoção de fundo entre dois navegadores; fila offline; proteção contra sobrescrita concorrente; Início e diálogo da Agenda. PDFs originais e integrados foram comparados por texto, dimensões e pixels em A4 e Carta paisagem (orçamentos), além de A4 (contrato). A paginação de origem é preservada, inclusive eventuais transbordamentos do modelo original.
+
+### Interface Studio
+
+O painel inicial exibe contagens calculadas a partir dos eventos carregados: próximos eventos ainda não concluídos, eventos não concluídos do mês atual e eventos concluídos. Os temas claro/escuro e as cores personalizadas continuam disponíveis em Configurações. A fonte Manrope é servida localmente em `vendor/fonts/`, com licença SIL OFL incluída, e integra o cache offline.
+
+Para verificar o painel, a navegação inferior no celular, os formulários e as etapas dos editores, com chamadas à nuvem interceptadas:
+
+```sh
+PEC_TEST_URL=http://127.0.0.1:8765/ node tests/studio-ui.cjs
+```
+
+O teste utiliza as mesmas opções `PEC_BROWSER` e a instalação de Playwright descritas acima e não grava na conta real.

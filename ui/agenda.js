@@ -1,5 +1,5 @@
 import {$,icon,esc,dateKey,parseDate,formatDate,monthKey,timeLabel,moment,calendar,monthControls,eventRow,empty,fold} from './core.js';
-import {toast,installDialogFocus} from './shell.js';
+import {toast,installDialogFocus} from './shell.js?v=22';
 const store=window.AgendaStore,main=$('#workspace'),params=new URLSearchParams(location.search);
 let selected=/^\d{4}-\d{2}-\d{2}$/.test(params.get('date')||'')?params.get('date'):dateKey(new Date()),month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1),view=localStorage.getItem('pec-workspace-view')||'calendar',query='',filter='active';
 const requested=store.events.find(e=>e.id===params.get('event'));if(requested){selected=requested.date;month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1)}

@@ -16,5 +16,11 @@ accent(PM.read('pec-workspace-accent','#4358db'));colors.onclick=e=>{const butto
 addEventListener('storage',e=>{if(e.key==='pec-workspace-accent')accent(PM.read(e.key,'#4358db'))});
 const themeButton=document.createElement('button');themeButton.type='button';themeButton.className='ws-theme-toggle';themeButton.title='Alternar tema claro e escuro';themeButton.setAttribute('aria-label','Alternar tema claro e escuro');themeButton.innerHTML='<span aria-hidden="true">◐</span>';
 themeButton.onclick=()=>PM.setPreferences({theme:document.documentElement.dataset.pmTheme==='dark'?'light':'dark'});$('.ws-topbar-actions',top).prepend(themeButton);
+// Keep the account control in the header flow on phones; absolute positioning
+// overlapped neighboring controls and the iOS standalone status bar.
+const mobileHeader=matchMedia('(max-width:600px)');
+function placeAccount(){(mobileHeader.matches?$('.ws-topbar-actions',top):$('.ws-rail-bottom',rail)).append(account)}
+placeAccount();mobileHeader.addEventListener('change',placeAccount);
+
 export function toast(message){let el=$('#wsToast');if(!el){el=document.createElement('div');el.id='wsToast';el.className='ws-toast';el.setAttribute('role','status');document.body.append(el)}el.textContent=message;el.classList.add('is-visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('is-visible'),4000)}
 export function installDialogFocus(dialog){let trigger;dialog.addEventListener('close',()=>{document.body.classList.remove('ws-dialog-open');if(trigger?.isConnected)trigger.focus()});const original=dialog.showModal.bind(dialog);dialog.showModal=()=>{trigger=document.activeElement;original();document.body.classList.add('ws-dialog-open')};dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}})}

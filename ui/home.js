@@ -1,5 +1,5 @@
 import {$,icon,esc,dateKey,parseDate,formatDate,monthKey,upcoming,timeLabel,moment,calendar,monthControls,eventRow,empty,fold} from './core.js';
-import './shell.js';
+import './shell.js?v=22';
 let rows=[],cloud=false,month=new Date(new Date().getFullYear(),new Date().getMonth(),1),selected=dateKey(new Date()),query='',refreshing=false;
 const main=$('#workspace');
 main.innerHTML=`<section class="ws-heading"><div><div class="ws-eyebrow">SUA CENTRAL DE EVENTOS</div><h1>Seu dia,<br>em <em>sintonia.</em></h1><p>Datas no lugar. Propostas em movimento. Espaço para o próximo show.</p></div><div class="ws-heading-actions"><a class="ws-button is-secondary" href="./orcamentos.html?new=1">${icon('quote')}Nova proposta</a><a class="ws-button" href="./agenda.html?new=1">${icon('plus')}Criar evento</a></div></section>

@@ -5,10 +5,10 @@
 <meta name="theme-color" content="#252b2a"><meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon.svg" type="image/svg+xml">
 <link rel="preload" href="./vendor/fonts/manrope-latin.woff2" as="font" type="font/woff2" crossorigin>
-<link rel="stylesheet" href="./ui/workspace.css?v=22">
+<link rel="stylesheet" href="./ui/workspace.css?v=23">
 <title>Agenda · pec Manager</title></head>
 <body><main id="workspace" class="ws-main"><noscript>Ative o JavaScript para abrir sua agenda.</noscript></main>
-<dialog id="modal" class="ws-drawer" aria-labelledby="formTitle"><section class="sheet">
+<dialog id="modal" class="ws-drawer ws-launch-dialog" aria-labelledby="formTitle"><section class="sheet">
 <div class="ws-drawer-heading"><div><small>PLANEJE UMA BOA NOITE</small><h2 id="formTitle">Novo evento</h2></div><button type="button" class="ws-icon-button" id="closeBtn" aria-label="Fechar formulário">×</button></div>
 <form id="eventForm"><input type="hidden" id="eventId">
 <div class="ws-form-body"><section class="ws-form-section"><h3>01 / O encontro</h3><label class="ws-field" for="title">Nome do evento<input id="title" required maxlength="180" placeholder="Ex.: Casamento da Ana e do Lucas" autocomplete="off"></label><label class="ws-field" for="place">Local ou endereço<input id="place" placeholder="Onde a noite vai acontecer?" maxlength="500"></label></section>
@@ -39,4 +39,4 @@
 </dialog>
 <script src="./vendor/supabase-2.116.0.js"></script><script src="./manager-shared.js?v=20"></script>
 <script src="./ui/agenda-data.js?v=20"></script>
-<script type="module" src="./ui/agenda.js?v=22"></script></body></html>
+<script type="module" src="./ui/agenda.js?v=23"></script></body></html>

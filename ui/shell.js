@@ -23,4 +23,27 @@ function placeAccount(){(mobileHeader.matches?$('.ws-topbar-actions',top):$('.ws
 placeAccount();mobileHeader.addEventListener('change',placeAccount);
 
 export function toast(message){let el=$('#wsToast');if(!el){el=document.createElement('div');el.id='wsToast';el.className='ws-toast';el.setAttribute('role','status');document.body.append(el)}el.textContent=message;el.classList.add('is-visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('is-visible'),4000)}
-export function installDialogFocus(dialog){let trigger;dialog.addEventListener('close',()=>{document.body.classList.remove('ws-dialog-open');if(trigger?.isConnected)trigger.focus()});const original=dialog.showModal.bind(dialog);dialog.showModal=()=>{trigger=document.activeElement;original();document.body.classList.add('ws-dialog-open')};dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}})}
+const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
+const motionKey='pec-workspace-motion';
+const ambient=document.createElement('div');ambient.className='ws-ambient';ambient.setAttribute('aria-hidden','true');ambient.innerHTML='<i></i><i></i><i></i>';$('#pmBackdrop').after(ambient);
+const motionSettings=document.createElement('section');motionSettings.className='ws-motion-setting';motionSettings.innerHTML='<label class="pm-check"><input id="wsMotionToggle" type="checkbox">Efeitos de movimento</label><p id="wsMotionNote"></p>';
+appearanceBody.append(motionSettings);
+function motionActive(){return PM.read(motionKey,true)!==false&&!reducedMotion.matches}
+function applyMotion(){document.documentElement.dataset.wsMotion=motionActive()?'on':'off';$('#wsMotionToggle').checked=PM.read(motionKey,true)!==false;$('#wsMotionNote').textContent=reducedMotion.matches?'O aparelho está configurado para reduzir movimentos.':'Transições suaves e luzes no fundo. A preferência fica salva neste navegador.'}
+$('#wsMotionToggle').onchange=e=>{PM.write(motionKey,e.target.checked);applyMotion()};reducedMotion.addEventListener('change',applyMotion);addEventListener('storage',e=>{if(e.key===motionKey)applyMotion()});applyMotion();
+function routeTransition(event){const transition=event.viewTransition;if(!transition)return;transition.ready.catch(()=>{});transition.finished.catch(()=>{});if(!motionActive())transition.skipTransition()}
+addEventListener('pageswap',routeTransition);addEventListener('pagereveal',routeTransition);
+export function installDialogFocus(dialog){
+ if(dialog.dataset.wsDialogReady)return;dialog.dataset.wsDialogReady='true';let trigger,closing;
+ const originalShow=dialog.showModal.bind(dialog),originalClose=dialog.close.bind(dialog);
+ dialog.addEventListener('close',()=>{closing?.cancel();closing=null;delete dialog.dataset.wsClosing;if(!document.querySelector('dialog[open]'))document.body.classList.remove('ws-dialog-open');if(trigger?.isConnected)trigger.focus({preventScroll:true})});
+ dialog.showModal=()=>{if(closing){closing.cancel();closing=null;delete dialog.dataset.wsClosing}if(dialog.open)return;trigger=document.activeElement;originalShow();document.body.classList.add('ws-dialog-open')};
+ dialog.close=value=>{
+  if(!dialog.open||!motionActive()||typeof dialog.animate!=='function'){originalClose(value);return}if(closing)return;
+  dialog.dataset.wsClosing='true';const animation=dialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.985)'}],{duration:150,easing:'ease-in',fill:'forwards'});closing=animation;
+  animation.finished.then(()=>{if(closing!==animation)return;closing=null;delete dialog.dataset.wsClosing;originalClose(value);animation.cancel()}).catch(()=>{});
+ };
+ dialog.addEventListener('cancel',event=>{event.preventDefault();dialog.close()});
+ dialog.addEventListener('click',e=>{if(e.target===dialog){const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()}});
+}
+installDialogFocus($('#pmAppearanceDialog'));

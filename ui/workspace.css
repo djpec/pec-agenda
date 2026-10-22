@@ -118,3 +118,73 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
  .ws-editor-header{padding-top:calc(17px + var(--ws-safe-top))}
 }
 @media screen and (max-width:390px){.ws-wordmark i,.ws-wordmark small{display:none}}
+
+/* Floating launch window and motion: no route interception or artificial delays. */
+@view-transition{navigation:auto}
+@media screen{
+ .ws-ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:paint}
+ .ws-ambient>i{position:absolute;display:block;width:580px;max-width:105vw;aspect-ratio:1;border-radius:50%;opacity:.8;background:radial-gradient(ellipse,color-mix(in srgb,var(--ws-accent) 13%,transparent),transparent 68%);will-change:transform}
+ .ws-ambient>i:nth-child(1){left:10%;top:-180px}
+ .ws-ambient>i:nth-child(2){right:-170px;top:30%;background:radial-gradient(ellipse,#ed8b5c16,transparent 68%)}
+ .ws-ambient>i:nth-child(3){left:15%;bottom:-300px;background:radial-gradient(ellipse,#66bca81a,transparent 68%)}
+ html[data-pm-theme=dark] .ws-ambient>i{opacity:.6}
+ #modal.ws-launch-dialog{inset:var(--ws-safe-top) var(--ws-safe-right) var(--ws-safe-bottom) var(--ws-safe-left);margin:auto;width:min(740px,calc(100vw - var(--ws-safe-left) - var(--ws-safe-right) - 40px));height:fit-content;max-width:none;max-height:min(88dvh,calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 32px));border:1px solid var(--ws-line);border-radius:22px;box-shadow:0 32px 100px #0a111a40;overflow:auto}
+ #modal.ws-launch-dialog::backdrop{background:#0d131e82;backdrop-filter:blur(12px) saturate(.85);-webkit-backdrop-filter:blur(12px) saturate(.85)}
+ .ws-launch-dialog .ws-drawer-heading{position:sticky;top:0;z-index:3;background:var(--ws-panel);padding:24px 28px}
+ .ws-launch-dialog .ws-drawer-heading .ws-icon-button{width:44px;height:44px;min-width:44px;min-height:44px}
+ .ws-launch-dialog .ws-form-body{grid-template-columns:repeat(2,minmax(0,1fr));gap:26px}
+ .ws-launch-dialog .ws-form-section:last-child{grid-column:1/-1}
+ .ws-launch-dialog .ws-field textarea{min-height:88px}
+ .ws-launch-dialog .ws-form-footer{padding:18px 28px}
+ .ws-editor-dialog::backdrop,.pm-dialog::backdrop{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
+ html[data-ws-motion=on] .ws-ambient>i{animation:ws-ambient-drift 24s ease-in-out infinite alternate}
+ html[data-ws-motion=on] .ws-ambient>i:nth-child(2){animation-duration:30s;animation-delay:-12s;animation-direction:alternate-reverse}
+ html[data-ws-motion=on] .ws-ambient>i:nth-child(3){animation-duration:28s;animation-delay:-8s}
+ html[data-ws-motion=on] :is(.ws-launch-dialog,.ws-editor-dialog,.pm-dialog,.ws-drawer)[open]{animation:ws-window-in .3s cubic-bezier(.2,.75,.25,1) both}
+ html[data-ws-motion=on] dialog[open]::backdrop{animation:ws-backdrop-in .25s ease-out both}
+ html[data-ws-motion=on] dialog[data-ws-closing]::backdrop{animation:ws-backdrop-out .15s ease-in both}
+ html[data-ws-motion=on] .ws-heading{animation:ws-content-in .45s cubic-bezier(.2,.75,.25,1) both}
+ html[data-ws-motion=on] .ws-stats{animation:ws-content-in .5s .04s cubic-bezier(.2,.75,.25,1) both}
+ html[data-ws-motion=on] .ws-dashboard-top>*{animation:ws-content-in .5s .09s cubic-bezier(.2,.75,.25,1) both}
+ html[data-ws-motion=on] .ws-dashboard-top>*:nth-child(2){animation-delay:.14s}
+ html[data-ws-motion=on] .ws-dashboard-bottom>*{animation:ws-content-in .5s .17s cubic-bezier(.2,.75,.25,1) both}
+ html[data-ws-motion=on] .ws-dashboard-bottom>*:nth-child(2){animation-delay:.22s}
+ html[data-ws-motion=on] :is(.ws-calendar-grid,.ws-day-panel-events,.ws-document-history){animation:ws-soft-reveal .22s ease-out both}
+ html[data-ws-motion=on] :is(.ws-button,.ws-icon-button,.ws-theme-toggle,.ws-nav a,.ws-quick-card){transition:background-color .18s,border-color .18s,color .18s,box-shadow .18s,transform .18s}
+ html[data-ws-motion=on] :is(.ws-button,.ws-icon-button,.ws-theme-toggle):active{transform:scale(.96)}
+ html[data-ws-motion=on] .ws-event-row{transition:background-color .18s,color .18s}
+ html[data-ws-motion=on] .ws-event-row:hover{background:color-mix(in srgb,var(--ws-accent) 3%,transparent)}
+ html[data-ws-motion=on] #workspace{view-transition-name:ws-content}
+ html[data-ws-motion=on] .ws-rail{view-transition-name:ws-navigation}
+ html[data-ws-motion=on] .ws-topbar{view-transition-name:ws-header}
+ html[data-ws-motion=off] .ws-ambient{display:none}
+ html[data-ws-motion=off] *,html[data-ws-motion=off] *::before,html[data-ws-motion=off] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
+ ::view-transition-old(ws-content){animation:ws-route-out .13s ease-in both}
+ ::view-transition-new(ws-content){animation:ws-route-in .25s cubic-bezier(.2,.75,.25,1) both}
+ ::view-transition-old(ws-navigation),::view-transition-new(ws-navigation),::view-transition-old(ws-header),::view-transition-new(ws-header),::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
+ html[data-ws-motion=off]::view-transition-group(*),html[data-ws-motion=off]::view-transition-old(*),html[data-ws-motion=off]::view-transition-new(*){animation:none!important}
+}
+@media screen and (hover:hover) and (pointer:fine){html[data-ws-motion=on] .ws-quick-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px #1721190a}html[data-ws-motion=on] .ws-button:hover{transform:translateY(-1px)}}
+@media screen and (max-width:600px){
+ #modal.ws-launch-dialog{width:calc(100vw - var(--ws-safe-left) - var(--ws-safe-right) - 24px);max-height:calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px);border-radius:18px}
+ .ws-launch-dialog .ws-drawer-heading{padding:19px 20px}
+ .ws-launch-dialog .ws-drawer-heading h2{font-size:24px}
+ .ws-launch-dialog .ws-form-body{grid-template-columns:minmax(0,1fr);padding:22px 20px;gap:24px}
+ .ws-launch-dialog .ws-form-footer{padding:15px 20px}
+ .ws-launch-dialog .ws-form-footer .ws-button{min-height:44px}
+ .ws-ambient>i{width:420px}
+}
+@keyframes ws-window-in{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
+@keyframes ws-content-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ws-soft-reveal{from{opacity:.5}to{opacity:1}}
+@keyframes ws-backdrop-in{from{opacity:0}to{opacity:1}}
+@keyframes ws-backdrop-out{from{opacity:1}to{opacity:0}}
+@keyframes ws-route-out{to{opacity:0;transform:translateY(-5px)}}
+@keyframes ws-route-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ws-ambient-drift{from{transform:translate3d(-35px,-15px,0) scale(.92)}to{transform:translate3d(45px,45px,0) scale(1.08)}}
+@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+@media print{.ws-ambient{display:none!important}}
+@media screen{.ws-launch-dialog .ws-form-footer>div{margin-left:auto}}
+/* On phones the navigation itself is fixed; naming its zero-size rail for
+   transitions would trap the menu below the main content's stacking context. */
+@media screen and (max-width:600px){html[data-ws-motion=on] .ws-rail{view-transition-name:none}html[data-ws-motion=on] .ws-nav{view-transition-name:ws-navigation}}

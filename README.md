@@ -59,6 +59,7 @@ NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-offline.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/document-contrast.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/mobile-header.cjs
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-motion.cjs
 ```
 
 `PEC_BROWSER` seleciona o executável Chromium. `PEC_QA_DIR` define a pasta dos PDFs e imagens de teste. As chamadas à nuvem na suíte funcional são interceptadas, usam o SDK real e dados fictícios, e não gravam na conta real.
@@ -72,3 +73,5 @@ Os testes `integration.cjs`, `auth-mobile.cjs` e `studio-ui.cjs` registram inter
 A verificação `document-contrast.cjs` garante texto escuro nas folhas de contrato e orçamento, independentemente do tema da interface, mantendo as cores próprias do documento e os destaques claros sobre fundos escuros. Confere prévia e impressão em computador e celular.
 
 O cabeçalho reserva as áreas seguras do iOS em modo instalado, mantém os controles móveis no fluxo normal e oferece alvos de toque de 44 px. `mobile-header.cjs` verifica toques nas configurações, tema e conta em 320, 390 e 430 px, com e sem uma barra de status nativa simulada, nas quatro telas. O service worker revalida os arquivos online e busca uma cópia atualizada durante a instalação do cache de uma nova versão.
+
+Os lançamentos abrem em uma janela centralizada, com fundo desfocado e animações de abertura e fechamento. O painel tem entradas suaves, realces nos controles e luzes ambientes animadas por transformações CSS. As transições nativas entre documentos são progressivas: navegadores sem suporte continuam com navegação normal e animações de entrada. Em Configurações, **Efeitos de movimento** desliga os efeitos e guarda a preferência neste navegador. A preferência de movimento reduzido do aparelho sempre prevalece. A suíte `workspace-motion.cjs` verifica geometria da janela, desfoque, bloqueio do fundo, foco, fechamento, gravação, navegação e redução de movimento.

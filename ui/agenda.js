@@ -1,5 +1,5 @@
 import {$,icon,esc,dateKey,parseDate,formatDate,monthKey,timeLabel,moment,calendar,monthControls,eventRow,empty,fold} from './core.js';
-import {toast,installDialogFocus} from './shell.js?v=22';
+import {toast,installDialogFocus} from './shell.js?v=23';
 const store=window.AgendaStore,main=$('#workspace'),params=new URLSearchParams(location.search);
 let selected=/^\d{4}-\d{2}-\d{2}$/.test(params.get('date')||'')?params.get('date'):dateKey(new Date()),month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1),view=localStorage.getItem('pec-workspace-view')||'calendar',query='',filter='active';
 const requested=store.events.find(e=>e.id===params.get('event'));if(requested){selected=requested.date;month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1)}
@@ -9,6 +9,7 @@ main.innerHTML=`<section class="ws-heading"><div><div class="ws-eyebrow">CADA DA
 <div id="agendaWorkspace"></div>
 <section class="ws-agenda-tools"><div><h3>Seu trabalho, sempre com você.</h3><p id="syncText">Agenda local e sincronização com sua conta.</p><span class="ws-hidden" id="syncDot"></span><span class="ws-hidden" id="syncState" role="status"></span></div><div class="ws-backup-actions"><button class="ws-button is-quiet" id="exportBtn" type="button">${icon('download')}Exportar</button><button class="ws-button is-quiet" id="importBtn" type="button">${icon('upload')}Importar</button><button class="ws-button is-secondary" id="agendaSync" type="button">${icon('cloud')}Sincronizar</button><input id="importFile" type="file" accept="application/json,.json" hidden></div></section>
 <footer class="ws-footer"><span id="agendaResultSummary" aria-live="polite"></span><button class="ws-text-link" id="status" type="button" style="border:0;background:transparent;padding:0">Entrar na nuvem</button></footer>`;
+$('#closeBtn').innerHTML=icon('close');
 store.mount();
 await import('../cloud-fix.js');
 store.startAuth();

@@ -11,6 +11,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
   await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   for(const file of ['index.html','agenda.html','orcamentos.html','contratos.html']){
    await page.goto(BASE+file);await page.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');
+   assert(await page.locator('.ws-nav a').first().evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),'Bottom navigation must remain above page content');
    const selectors=['.ws-theme-toggle','#pmAppearance','#pmAccountLink'];const boxes=[];
    for(const selector of selectors){const box=await page.locator(selector).boundingBox();assert(box.y>=inset,`${file}: ${selector} under native status bar`);assert(box.width>=44&&box.height>=44,`${selector}: touch target too small`);assert(box.x>=0&&box.x+box.width<=width,`${selector}: outside screen`);boxes.push(box);
     assert(await page.locator(selector).evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),`${selector}: blocked by another element`);
@@ -24,7 +25,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
    }
   }
   // Returning to the desktop layout must preserve the same account link and listeners.
-  await page.setViewportSize({width:1440,height:1000});assert.equal(await page.locator('.ws-rail-bottom #pmAccountLink').count(),1);await page.setViewportSize({width,height:900});assert.equal(await page.locator('.ws-topbar-actions #pmAccountLink').count(),1);
+  await page.setViewportSize({width:1440,height:1000});await page.locator('.ws-rail-bottom #pmAccountLink').waitFor({state:'attached'});assert.equal(await page.locator('.ws-rail-bottom #pmAccountLink').count(),1);await page.setViewportSize({width,height:900});await page.locator('.ws-topbar-actions #pmAccountLink').waitFor({state:'attached'});assert.equal(await page.locator('.ws-topbar-actions #pmAccountLink').count(),1);
   assert.deepEqual(errors,[]);console.log(`PASS: four pages, ${width}px, safe top ${inset}px: settings/theme/account touch controls accessible`);await context.close();
  }
 }finally{await browser.close()}})().catch(e=>{console.error(e);process.exitCode=1});

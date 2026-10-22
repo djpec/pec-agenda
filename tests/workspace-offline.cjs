@@ -3,9 +3,9 @@ const{chromium}=require('playwright');const assert=require('node:assert/strict')
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.PEC_BROWSER,args:['--no-sandbox','--disable-dev-shm-usage']});try{
  const context=await browser.newContext({viewport:{width:390,height:900}}),page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
- await page.goto(BASE+'manifest.webmanifest');await page.evaluate(()=>caches.open('pec-manager-v19'));
+ await page.goto(BASE+'manifest.webmanifest');await page.evaluate(()=>caches.open('pec-manager-v20'));
  await page.goto(BASE);await page.evaluate(()=>navigator.serviceWorker.ready);await page.waitForFunction(()=>navigator.serviceWorker.controller);
- const keys=await page.evaluate(()=>caches.keys());assert(keys.includes('pec-manager-v20'));assert(!keys.includes('pec-manager-v19'));
+ const keys=await page.evaluate(()=>caches.keys());assert(keys.includes('pec-manager-v21'));assert(!keys.includes('pec-manager-v20'));
  await context.setOffline(true);
  for(const file of ['agenda.html','orcamentos.html','contratos.html','index.html']){
   await page.goto(BASE+file);await page.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');

@@ -95,3 +95,6 @@ body[data-pm-page]{padding:0 0 calc(78px + env(safe-area-inset-bottom))!importan
 @media screen{.ws-editor-controls #pmSave,.ws-editor-controls #pmNew{display:none!important}.ws-editor-controls #pmDocumentState{display:none}.ws-editor-controls>label{font-size:10px}.ws-editor-controls .pm-actions>a{font-size:9px}.ws-document-tablehead{border:1px solid var(--ws-line);border-bottom:0;border-radius:12px 12px 0 0}.ws-document-tablehead+.ws-document-history{border-top-left-radius:0;border-top-right-radius:0}html[data-pm-theme=dark] .ws-calendar-event{color:#aebcff}html[data-pm-theme=dark] .ws-day-event>small{color:#aebcff}}
 @media screen{body.ws-dialog-open{overflow:hidden}.ws-month-controls h3{text-transform:none}.ws-month-controls h3::first-letter{text-transform:uppercase}}
 @media print{body[data-pm-page=contract]>.app{display:none!important;min-height:0!important}}
+/* Documents keep their own ink even when the surrounding editor uses a dark theme. */
+body[data-pm-page=contract] .paper{color:var(--text,#17191d);color-scheme:light}
+body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}

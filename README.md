@@ -57,6 +57,7 @@ A suíte atual usa Node.js, `playwright@1.62.1`, Chromium e `pdftotext` (Poppler
 npm install --prefix /tmp/pec-tools --cache /tmp/pec-npm-cache --no-package-lock playwright@1.62.1
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-offline.cjs
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/document-contrast.cjs
 ```
 
 `PEC_BROWSER` seleciona o executável Chromium. `PEC_QA_DIR` define a pasta dos PDFs e imagens de teste. As chamadas à nuvem na suíte funcional são interceptadas, usam o SDK real e dados fictícios, e não gravam na conta real.
@@ -66,3 +67,5 @@ A suíte funcional cobre criação, edição, conclusão/reabertura, duplicaçã
 A integridade dos modelos atuais é verificada contra `workspace-models.json`, registrado a partir do conteúdo anterior à reconstrução da interface.
 
 Os testes `integration.cjs`, `auth-mobile.cjs` e `studio-ui.cjs` registram interfaces anteriores e permanecem no repositório como histórico. Os hashes em `originals.json` já divergiam dos documentos presentes no checkout inicial; não foram alterados para fazer os testes passarem. As alterações da interface atual nos HTMLs de orçamento e contrato ficam nos links de integração; os modelos de documento permanecem intactos.
+
+A verificação `document-contrast.cjs` garante texto escuro nas folhas de contrato e orçamento, independentemente do tema da interface, mantendo as cores próprias do documento e os destaques claros sobre fundos escuros. Confere prévia e impressão em computador e celular.

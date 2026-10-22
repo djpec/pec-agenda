@@ -120,14 +120,8 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
 @media screen and (max-width:390px){.ws-wordmark i,.ws-wordmark small{display:none}}
 
 /* Floating launch window and motion: no route interception or artificial delays. */
-@view-transition{navigation:auto}
+@view-transition{navigation:none}
 @media screen{
- .ws-ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:paint}
- .ws-ambient>i{position:absolute;display:block;width:580px;max-width:105vw;aspect-ratio:1;border-radius:50%;opacity:.8;background:radial-gradient(ellipse,color-mix(in srgb,var(--ws-accent) 13%,transparent),transparent 68%);will-change:transform}
- .ws-ambient>i:nth-child(1){left:10%;top:-180px}
- .ws-ambient>i:nth-child(2){right:-170px;top:30%;background:radial-gradient(ellipse,#ed8b5c16,transparent 68%)}
- .ws-ambient>i:nth-child(3){left:15%;bottom:-300px;background:radial-gradient(ellipse,#66bca81a,transparent 68%)}
- html[data-pm-theme=dark] .ws-ambient>i{opacity:.6}
  #modal.ws-launch-dialog{inset:var(--ws-safe-top) var(--ws-safe-right) var(--ws-safe-bottom) var(--ws-safe-left);margin:auto;width:min(740px,calc(100vw - var(--ws-safe-left) - var(--ws-safe-right) - 40px));height:fit-content;max-width:none;max-height:min(88dvh,calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 32px));border:1px solid var(--ws-line);border-radius:22px;box-shadow:0 32px 100px #0a111a40;overflow:auto}
  #modal.ws-launch-dialog::backdrop{background:#0d131e82;backdrop-filter:blur(12px) saturate(.85);-webkit-backdrop-filter:blur(12px) saturate(.85)}
  .ws-launch-dialog .ws-drawer-heading{position:sticky;top:0;z-index:3;background:var(--ws-panel);padding:24px 28px}
@@ -137,9 +131,6 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
  .ws-launch-dialog .ws-field textarea{min-height:88px}
  .ws-launch-dialog .ws-form-footer{padding:18px 28px}
  .ws-editor-dialog::backdrop,.pm-dialog::backdrop{backdrop-filter:blur(10px);-webkit-backdrop-filter:blur(10px)}
- html[data-ws-motion=on] .ws-ambient>i{animation:ws-ambient-drift 24s ease-in-out infinite alternate}
- html[data-ws-motion=on] .ws-ambient>i:nth-child(2){animation-duration:30s;animation-delay:-12s;animation-direction:alternate-reverse}
- html[data-ws-motion=on] .ws-ambient>i:nth-child(3){animation-duration:28s;animation-delay:-8s}
  html[data-ws-motion=on] :is(.ws-launch-dialog,.ws-editor-dialog,.pm-dialog,.ws-drawer)[open]{animation:ws-window-in .3s cubic-bezier(.2,.75,.25,1) both}
  html[data-ws-motion=on] dialog[open]::backdrop{animation:ws-backdrop-in .25s ease-out both}
  html[data-ws-motion=on] dialog[data-ws-closing]::backdrop{animation:ws-backdrop-out .15s ease-in both}
@@ -154,15 +145,8 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
  html[data-ws-motion=on] :is(.ws-button,.ws-icon-button,.ws-theme-toggle):active{transform:scale(.96)}
  html[data-ws-motion=on] .ws-event-row{transition:background-color .18s,color .18s}
  html[data-ws-motion=on] .ws-event-row:hover{background:color-mix(in srgb,var(--ws-accent) 3%,transparent)}
- html[data-ws-motion=on] #workspace{view-transition-name:ws-content}
- html[data-ws-motion=on] .ws-rail{view-transition-name:ws-navigation}
- html[data-ws-motion=on] .ws-topbar{view-transition-name:ws-header}
  html[data-ws-motion=off] .ws-ambient{display:none}
  html[data-ws-motion=off] *,html[data-ws-motion=off] *::before,html[data-ws-motion=off] *::after{animation:none!important;transition:none!important;scroll-behavior:auto!important}
- ::view-transition-old(ws-content){animation:ws-route-out .13s ease-in both}
- ::view-transition-new(ws-content){animation:ws-route-in .25s cubic-bezier(.2,.75,.25,1) both}
- ::view-transition-old(ws-navigation),::view-transition-new(ws-navigation),::view-transition-old(ws-header),::view-transition-new(ws-header),::view-transition-old(root),::view-transition-new(root){animation:none;mix-blend-mode:normal}
- html[data-ws-motion=off]::view-transition-group(*),html[data-ws-motion=off]::view-transition-old(*),html[data-ws-motion=off]::view-transition-new(*){animation:none!important}
 }
 @media screen and (hover:hover) and (pointer:fine){html[data-ws-motion=on] .ws-quick-card:hover{transform:translateY(-3px);box-shadow:0 10px 22px #1721190a}html[data-ws-motion=on] .ws-button:hover{transform:translateY(-1px)}}
 @media screen and (max-width:600px){
@@ -172,19 +156,68 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
  .ws-launch-dialog .ws-form-body{grid-template-columns:minmax(0,1fr);padding:22px 20px;gap:24px}
  .ws-launch-dialog .ws-form-footer{padding:15px 20px}
  .ws-launch-dialog .ws-form-footer .ws-button{min-height:44px}
- .ws-ambient>i{width:420px}
 }
-@keyframes ws-window-in{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes ws-content-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:translateY(0)}}
+@keyframes ws-window-in{from{opacity:0;transform:translateY(18px) scale(.97)}to{opacity:1;transform:none}}
+@keyframes ws-content-in{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
 @keyframes ws-soft-reveal{from{opacity:.5}to{opacity:1}}
 @keyframes ws-backdrop-in{from{opacity:0}to{opacity:1}}
 @keyframes ws-backdrop-out{from{opacity:1}to{opacity:0}}
 @keyframes ws-route-out{to{opacity:0;transform:translateY(-5px)}}
-@keyframes ws-route-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:translateY(0)}}
-@keyframes ws-ambient-drift{from{transform:translate3d(-35px,-15px,0) scale(.92)}to{transform:translate3d(45px,45px,0) scale(1.08)}}
-@media(prefers-reduced-motion:reduce){@view-transition{navigation:none}::view-transition-group(*),::view-transition-old(*),::view-transition-new(*){animation:none!important}}
+@keyframes ws-route-in{from{opacity:0;transform:translateY(9px)}to{opacity:1;transform:none}}
 @media print{.ws-ambient{display:none!important}}
 @media screen{.ws-launch-dialog .ws-form-footer>div{margin-left:auto}}
 /* On phones the navigation itself is fixed; naming its zero-size rail for
    transitions would trap the menu below the main content's stacking context. */
-@media screen and (max-width:600px){html[data-ws-motion=on] .ws-rail{view-transition-name:none}html[data-ws-motion=on] .ws-nav{view-transition-name:ws-navigation}}
+
+/* The page is locked while a native window is open. Only its form body scrolls. */
+@media screen{
+ body.ws-dialog-open{position:fixed;top:var(--ws-scroll-y,0px);left:0;right:0;width:100%;overflow:hidden;overscroll-behavior:none}
+ .ws-ambient{position:fixed;inset:0;z-index:-1;overflow:hidden;pointer-events:none;contain:paint;--ws-light-opacity:.62}
+ html[data-pm-theme=dark] .ws-ambient{--ws-light-opacity:.9}
+ .ws-aurora{position:absolute;inset:-10%;opacity:var(--ws-light-opacity)}
+ .ws-aurora>i{position:absolute;width:min(70vmax,900px);height:min(70vmax,900px);max-width:none;border-radius:50%;will-change:transform;background:radial-gradient(ellipse,color-mix(in srgb,var(--ws-accent) 48%,transparent),transparent 67%)}
+ .ws-aurora>i:nth-child(1){left:-25%;top:-40%}
+ .ws-aurora>i:nth-child(2){right:-28%;top:2%;background:radial-gradient(ellipse,#de62954d,transparent 66%)}
+ .ws-aurora>i:nth-child(3){left:-18%;bottom:-45%;background:radial-gradient(ellipse,#2cd9ac55,transparent 65%)}
+ .ws-light-ribbon{position:absolute;inset:auto;top:12%;left:-25%;width:150%;height:420px;opacity:.45;background:linear-gradient(115deg,transparent 25%,color-mix(in srgb,var(--ws-accent) 22%,transparent) 38%,#a88cff22 47%,transparent 60%);transform:rotate(-18deg);will-change:transform}
+ .ws-orbit{position:absolute;right:-130px;top:18%;width:430px;height:430px;border:1px solid color-mix(in srgb,var(--ws-accent) 28%,transparent);border-radius:50%;opacity:.6;will-change:transform}
+ .ws-orbit>i{position:absolute;inset:28px;border:1px dashed color-mix(in srgb,var(--ws-accent) 38%,transparent);border-radius:50%}
+ .ws-orbit>i:nth-child(2){inset:75px;border-style:solid}.ws-orbit>i:nth-child(3){inset:130px;border-style:dotted}
+ .ws-orbit::after{content:'';position:absolute;top:42px;left:61px;width:9px;height:9px;border-radius:50%;background:var(--ws-accent);box-shadow:0 0 20px color-mix(in srgb,var(--ws-accent) 70%,transparent)}
+ .ws-particles{position:absolute;inset:0;opacity:.7}
+ .ws-particles>i{position:absolute;left:var(--x);top:var(--y);width:var(--size);height:var(--size);border-radius:50%;background:var(--ws-accent);box-shadow:0 0 12px color-mix(in srgb,var(--ws-accent) 60%,transparent);opacity:.5}
+ .ws-particles>i:nth-child(3n){background:#d7798e}.ws-particles>i:nth-child(3n+1){background:#31ab90}
+ .ws-background-equalizer{position:absolute;right:40px;top:220px;display:flex;align-items:flex-end;gap:5px;width:188px;height:54px;opacity:.3}
+ .ws-background-equalizer>i{flex:1;height:var(--bar);border-radius:3px;background:var(--ws-accent);transform-origin:bottom;will-change:transform}
+ html[data-ws-motion=on] .ws-aurora>i{animation:ws-aurora-flow 11s ease-in-out infinite alternate}
+ html[data-ws-motion=on] .ws-aurora>i:nth-child(2){animation-duration:14s;animation-delay:-7s;animation-direction:alternate-reverse}
+ html[data-ws-motion=on] .ws-aurora>i:nth-child(3){animation-duration:12s;animation-delay:-4s}
+ html[data-ws-motion=on] .ws-light-ribbon{animation:ws-ribbon-flow 12s ease-in-out infinite alternate}
+ html[data-ws-motion=on] .ws-orbit{animation:ws-orbit-spin 34s linear infinite}
+ html[data-ws-motion=on] .ws-particles>i{animation:ws-particle-rise var(--duration) var(--delay) ease-in-out infinite alternate}
+ html[data-ws-motion=on] .ws-background-equalizer>i{animation:ws-equalizer-pulse var(--duration) var(--delay) ease-in-out infinite alternate}
+}
+@media screen and (max-width:600px){
+ #modal.ws-launch-dialog{inset:calc(var(--ws-safe-top) + 12px) calc(var(--ws-safe-right) + 12px) auto calc(var(--ws-safe-left) + 12px);margin:0;width:auto;height:min(calc(100svh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px),calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px));max-height:none;overflow:hidden;overscroll-behavior:none;transform:none!important}
+ #modal.ws-launch-dialog[open]{display:flex;flex-direction:column}
+ #modal.ws-launch-dialog>.sheet{display:flex;flex-direction:column;width:100%;height:100%;min-height:0;overflow:hidden}
+ #modal.ws-launch-dialog #eventForm{display:flex;flex-direction:column;flex:1;min-height:0;overflow:hidden}
+ #modal.ws-launch-dialog .ws-drawer-heading{position:static;flex-shrink:0}
+ #modal.ws-launch-dialog .ws-form-body{flex:1;min-height:0;min-width:0;overflow-y:auto;overflow-x:hidden;overscroll-behavior:none;touch-action:pan-y;-webkit-overflow-scrolling:touch;scrollbar-gutter:stable}
+ #modal.ws-launch-dialog .ws-form-footer{position:static;flex-shrink:0}
+ #modal.ws-launch-dialog .ws-field,#modal.ws-launch-dialog :is(input,select,textarea){min-width:0;max-width:100%}
+ html[data-ws-motion=on] :is(.ws-launch-dialog,.ws-editor-dialog,.pm-dialog,.ws-drawer)[open]{animation-name:ws-mobile-window-in}
+ .ws-background-equalizer{right:20px;top:calc(var(--ws-safe-top) + 180px);width:115px;height:45px;gap:4px;opacity:.35}
+ .ws-orbit{right:-190px;top:24%;width:330px;height:330px}
+ .ws-aurora>i{width:min(110vw,480px);height:min(110vw,480px)}
+ .ws-aurora>i:nth-child(1){left:-20%;top:-4%}.ws-aurora>i:nth-child(2){right:-25%;top:30%}.ws-aurora>i:nth-child(3){left:-25%;bottom:-6%}
+ .ws-light-ribbon{height:320px;top:20%}
+}
+@keyframes ws-mobile-window-in{from{opacity:0}to{opacity:1}}
+@keyframes ws-aurora-flow{from{transform:translate3d(-8%,-3%,0) scale(.9)}to{transform:translate3d(13%,12%,0) scale(1.15)}}
+@keyframes ws-ribbon-flow{from{transform:translate3d(-6%,-3%,0) rotate(-24deg)}to{transform:translate3d(10%,8%,0) rotate(10deg)}}
+@keyframes ws-orbit-spin{to{transform:rotate(360deg)}}
+@keyframes ws-particle-rise{from{transform:translate3d(-10px,22px,0);opacity:.18}to{transform:translate3d(18px,-42px,0);opacity:.85}}
+@keyframes ws-equalizer-pulse{from{transform:scaleY(.22)}to{transform:scaleY(1)}}
+
+@media screen{body.ws-dialog-open .ws-ambient *{animation-play-state:paused!important}}

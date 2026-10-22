@@ -1,5 +1,5 @@
 import {$,icon,esc,empty} from './core.js';
-import {installDialogFocus,toast} from './shell.js?v=23';
+import {installDialogFocus,toast} from './shell.js?v=24';
 const P=window.PM,type=document.body.dataset.pmPage,name=type==='quote'?'proposta':'contrato',isQuote=type==='quote',requested=!!location.search;
 async function setup(){
  await P.ready;

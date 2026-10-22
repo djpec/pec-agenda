@@ -1,0 +1,11 @@
+/* Small render-blocking guard: document data can initialize without painting the old layout. */
+html[data-ws-boot]:not([data-ws-boot=ready]){background:#f5f4f0!important}
+html[data-ws-boot]:not([data-ws-boot=ready])[data-pm-theme=dark]{background:#161918!important}
+@media screen{
+ html[data-ws-boot]:not([data-ws-boot=ready]) body{visibility:hidden!important}
+ html[data-ws-boot=pending]::before{content:'p.';position:fixed;inset:0;display:grid;place-items:center;font:bold 48px Georgia,serif;letter-spacing:-5px;color:#252b2a;pointer-events:none}
+ html[data-ws-boot=pending][data-pm-theme=dark]::before{color:#f2f2df}
+ .ws-boot-error{visibility:visible;position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;background:#f5f4f0;color:#252b2a;font:14px/1.7 system-ui,sans-serif;z-index:100}
+ html[data-pm-theme=dark] .ws-boot-error{background:#161918;color:#f2f2df}
+ .ws-boot-error button{font:inherit;padding:12px 20px;border:0;border-radius:8px;background:var(--ws-accent,#4358db);color:white;cursor:pointer}
+}

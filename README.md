@@ -60,6 +60,7 @@ NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/document-contrast.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/mobile-header.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-motion.cjs
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-stability.cjs
 ```
 
 `PEC_BROWSER` seleciona o executável Chromium. `PEC_QA_DIR` define a pasta dos PDFs e imagens de teste. As chamadas à nuvem na suíte funcional são interceptadas, usam o SDK real e dados fictícios, e não gravam na conta real.
@@ -68,10 +69,12 @@ A suíte funcional cobre criação, edição, conclusão/reabertura, duplicaçã
 
 A integridade dos modelos atuais é verificada contra `workspace-models.json`, registrado a partir do conteúdo anterior à reconstrução da interface.
 
-Os testes `integration.cjs`, `auth-mobile.cjs` e `studio-ui.cjs` registram interfaces anteriores e permanecem no repositório como histórico. Os hashes em `originals.json` já divergiam dos documentos presentes no checkout inicial; não foram alterados para fazer os testes passarem. As alterações da interface atual nos HTMLs de orçamento e contrato ficam nos links de integração; os modelos de documento permanecem intactos.
+Os testes `integration.cjs`, `auth-mobile.cjs` e `studio-ui.cjs` registram interfaces anteriores e permanecem no repositório como histórico. Os hashes em `originals.json` já divergiam dos documentos presentes no checkout inicial; não foram alterados para fazer os testes passarem. As alterações da interface atual nos HTMLs de orçamento e contrato ficam nos links de integração e no bloco de inicialização do cabeçalho, excluído da comparação; os modelos de documento permanecem intactos.
 
 A verificação `document-contrast.cjs` garante texto escuro nas folhas de contrato e orçamento, independentemente do tema da interface, mantendo as cores próprias do documento e os destaques claros sobre fundos escuros. Confere prévia e impressão em computador e celular.
 
 O cabeçalho reserva as áreas seguras do iOS em modo instalado, mantém os controles móveis no fluxo normal e oferece alvos de toque de 44 px. `mobile-header.cjs` verifica toques nas configurações, tema e conta em 320, 390 e 430 px, com e sem uma barra de status nativa simulada, nas quatro telas. O service worker revalida os arquivos online e busca uma cópia atualizada durante a instalação do cache de uma nova versão.
 
-Os lançamentos abrem em uma janela centralizada, com fundo desfocado e animações de abertura e fechamento. O painel tem entradas suaves, realces nos controles e luzes ambientes animadas por transformações CSS. As transições nativas entre documentos são progressivas: navegadores sem suporte continuam com navegação normal e animações de entrada. Em Configurações, **Efeitos de movimento** desliga os efeitos e guarda a preferência neste navegador. A preferência de movimento reduzido do aparelho sempre prevalece. A suíte `workspace-motion.cjs` verifica geometria da janela, desfoque, bloqueio do fundo, foco, fechamento, gravação, navegação e redução de movimento.
+Os lançamentos abrem em uma janela com fundo desfocado. No celular, cabeçalho e rodapé ficam fixos e somente os campos rolam; a página recupera sua posição ao fechar. O painel tem entradas suaves, aurora, luzes de palco, partículas e equalizador animados por CSS. Os efeitos do fundo pausam durante a edição. O bloco de inicialização restaura o tema e impede que os editores antigos apareçam antes da interface atual. A navegação usa animações de entrada sem capturar imagens da tela anterior. Em Configurações, **Efeitos de movimento** desliga os efeitos e guarda a preferência neste navegador. A preferência de movimento reduzido do aparelho sempre prevalece. A suíte `workspace-motion.cjs` verifica geometria da janela, desfoque, bloqueio do fundo, foco, fechamento, gravação, navegação e redução de movimento.
+
+A suíte `workspace-stability.cjs` verifica arrastes reais por toque, estabilidade da janela e dos botões, restauração da rolagem, movimento do fundo e carregamento lento dos editores sem exposição do layout antigo.

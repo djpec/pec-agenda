@@ -25,22 +25,23 @@ placeAccount();mobileHeader.addEventListener('change',placeAccount);
 export function toast(message){let el=$('#wsToast');if(!el){el=document.createElement('div');el.id='wsToast';el.className='ws-toast';el.setAttribute('role','status');document.body.append(el)}el.textContent=message;el.classList.add('is-visible');clearTimeout(toast.timer);toast.timer=setTimeout(()=>el.classList.remove('is-visible'),4000)}
 const reducedMotion=matchMedia('(prefers-reduced-motion: reduce)');
 const motionKey='pec-workspace-motion';
-const ambient=document.createElement('div');ambient.className='ws-ambient';ambient.setAttribute('aria-hidden','true');ambient.innerHTML='<i></i><i></i><i></i>';$('#pmBackdrop').after(ambient);
+const ambient=document.createElement('div');ambient.className='ws-ambient';ambient.setAttribute('aria-hidden','true');ambient.innerHTML=`<div class="ws-aurora"><i></i><i></i><i></i></div><div class="ws-light-ribbon"></div><div class="ws-orbit"><i></i><i></i><i></i></div><div class="ws-particles">${Array.from({length:16},(_,i)=>`<i style="--x:${(i*37+9)%100}%;--y:${(i*23+12)%100}%;--delay:-${i*.7}s;--duration:${5+i%5}s;--size:${3+i%3}px"></i>`).join('')}</div><div class="ws-background-equalizer">${Array.from({length:24},(_,i)=>`<i style="--delay:-${i*.13}s;--duration:${1.2+(i%5)*.23}s;--bar:${20+(i*31)%80}%"></i>`).join('')}</div>`;$('#pmBackdrop').after(ambient);
 const motionSettings=document.createElement('section');motionSettings.className='ws-motion-setting';motionSettings.innerHTML='<label class="pm-check"><input id="wsMotionToggle" type="checkbox">Efeitos de movimento</label><p id="wsMotionNote"></p>';
 appearanceBody.append(motionSettings);
 function motionActive(){return PM.read(motionKey,true)!==false&&!reducedMotion.matches}
-function applyMotion(){document.documentElement.dataset.wsMotion=motionActive()?'on':'off';$('#wsMotionToggle').checked=PM.read(motionKey,true)!==false;$('#wsMotionNote').textContent=reducedMotion.matches?'O aparelho está configurado para reduzir movimentos.':'Transições suaves e luzes no fundo. A preferência fica salva neste navegador.'}
+function applyMotion(){document.documentElement.dataset.wsMotion=motionActive()?'on':'off';$('#wsMotionToggle').checked=PM.read(motionKey,true)!==false;$('#wsMotionNote').textContent=reducedMotion.matches?'O aparelho está configurado para reduzir movimentos.':'Luzes de palco, aurora e partículas em movimento. A preferência fica salva neste navegador.'}
 $('#wsMotionToggle').onchange=e=>{PM.write(motionKey,e.target.checked);applyMotion()};reducedMotion.addEventListener('change',applyMotion);addEventListener('storage',e=>{if(e.key===motionKey)applyMotion()});applyMotion();
-function routeTransition(event){const transition=event.viewTransition;if(!transition)return;transition.ready.catch(()=>{});transition.finished.catch(()=>{});if(!motionActive())transition.skipTransition()}
-addEventListener('pageswap',routeTransition);addEventListener('pagereveal',routeTransition);
+let savedScroll=null;
+function lockPage(){if(savedScroll!==null)return;savedScroll=window.scrollY;document.body.style.setProperty('--ws-scroll-y',`${-savedScroll}px`);document.body.classList.add('ws-dialog-open')}
+function unlockPage(){if(document.querySelector('dialog[open]')||savedScroll===null)return;const top=savedScroll;savedScroll=null;document.body.classList.remove('ws-dialog-open');document.body.style.removeProperty('--ws-scroll-y');window.scrollTo({top,behavior:'instant'})}
 export function installDialogFocus(dialog){
  if(dialog.dataset.wsDialogReady)return;dialog.dataset.wsDialogReady='true';let trigger,closing;
  const originalShow=dialog.showModal.bind(dialog),originalClose=dialog.close.bind(dialog);
- dialog.addEventListener('close',()=>{closing?.cancel();closing=null;delete dialog.dataset.wsClosing;if(!document.querySelector('dialog[open]'))document.body.classList.remove('ws-dialog-open');if(trigger?.isConnected)trigger.focus({preventScroll:true})});
- dialog.showModal=()=>{if(closing){closing.cancel();closing=null;delete dialog.dataset.wsClosing}if(dialog.open)return;trigger=document.activeElement;originalShow();document.body.classList.add('ws-dialog-open')};
+ dialog.addEventListener('close',()=>{closing?.cancel();closing=null;delete dialog.dataset.wsClosing;unlockPage();if(trigger?.isConnected)trigger.focus({preventScroll:true})});
+ dialog.showModal=()=>{if(closing){closing.cancel();closing=null;delete dialog.dataset.wsClosing}if(dialog.open)return;trigger=document.activeElement;lockPage();try{originalShow()}catch(error){unlockPage();throw error}};
  dialog.close=value=>{
   if(!dialog.open||!motionActive()||typeof dialog.animate!=='function'){originalClose(value);return}if(closing)return;
-  dialog.dataset.wsClosing='true';const animation=dialog.animate([{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.985)'}],{duration:150,easing:'ease-in',fill:'forwards'});closing=animation;
+  dialog.dataset.wsClosing='true';const animation=dialog.animate(mobileHeader.matches?[{opacity:1},{opacity:0}]:[{opacity:1,transform:'translateY(0) scale(1)'},{opacity:0,transform:'translateY(10px) scale(.985)'}],{duration:150,easing:'ease-in',fill:'forwards'});closing=animation;
   animation.finished.then(()=>{if(closing!==animation)return;closing=null;delete dialog.dataset.wsClosing;originalClose(value);animation.cancel()}).catch(()=>{});
  };
  dialog.addEventListener('cancel',event=>{event.preventDefault();dialog.close()});

@@ -53,7 +53,7 @@ async function createEvent(page,title,time='23:00',date=night){
  await page.locator('#addBtn').click();await page.locator('#title').fill(title);await page.locator('#date').fill(date);await page.locator('#timeType').selectOption('time');await page.locator('#time').fill(time);await page.locator('#place').fill('São Paulo');await page.locator('#notes').fill('Montagem e repertório');await page.locator('#eventForm [type=submit]').click();await page.waitForFunction(()=>!document.querySelector('#modal').open);
 }
 (async()=>{
- for(const[file,spec]of Object.entries(JSON.parse(fs.readFileSync(path.join(__dirname,'workspace-models.json'))))){const source=fs.readFileSync(path.join(__dirname,'..',file),'utf8').split('<!-- pec Manager integration:')[0];assert.equal(crypto.createHash('sha256').update(source).digest('hex'),spec.sha256,`${file}: document model integrity`)}
+ for(const[file,spec]of Object.entries(JSON.parse(fs.readFileSync(path.join(__dirname,'workspace-models.json'))))){const source=fs.readFileSync(path.join(__dirname,'..',file),'utf8').replace(/<!-- pec Manager boot:[\s\S]*?<!-- \/pec Manager boot -->\n?/g,'').split('<!-- pec Manager integration:')[0];assert.equal(crypto.createHash('sha256').update(source).digest('hex'),spec.sha256,`${file}: document model integrity`)}
  const browser=await chromium.launch({headless:true,executablePath:process.env.PEC_BROWSER,args:['--no-sandbox','--disable-dev-shm-usage']});
  try{
   // CRUD, overnight order, global search, keyboard and backups in an isolated local account.

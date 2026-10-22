@@ -109,7 +109,7 @@
   async function accountChanged(session){
     const previous=user?.id||null,next=session?.user?.id||null;user=session?.user||null;
     if(previous!==next){const stored=read(prefKey());if(stored)prefs={...defaults,...stored};else if(previous)prefs={...defaults};dirty=read(pendingKey(),{});applyPreferences();PM.notify('pm:account',{user})}
-    await syncPreferences();resolveReady();
+    resolveReady();await syncPreferences();
   }
   shell();(async()=>{try{await accountChanged(await PM.session())}catch{resolveReady()}})();
   client?.auth.onAuthStateChange((event,session)=>{setTimeout(()=>accountChanged(session),0)});

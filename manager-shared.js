@@ -15,7 +15,7 @@
   const dbPromise=new Promise((resolve,reject)=>{const r=indexedDB.open('pec-manager-v12',1);r.onupgradeneeded=()=>r.result.createObjectStore('items');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
   const db=async(action,key,value)=>{const connection=await dbPromise;return new Promise((resolve,reject)=>{const tx=connection.transaction('items',action==='get'?'readonly':'readwrite'),s=tx.objectStore('items');const r=action==='get'?s.get(key):action==='put'?s.put(value,key):s.delete(key);tx.oncomplete=()=>resolve(r.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})};
   let user=null;
-  const defaults={theme:'auto',background_image:null,background_darkness:88,background_blur:0};
+  const defaults={theme:'dark',background_image:null,background_darkness:88,background_blur:0};
   let prefs={...defaults,...read('pec-manager-preferences-v1',{})};
   const oldTheme=localStorage.getItem('pec-manager-ui-theme')||localStorage.getItem('pec-manager-theme');
   if(oldTheme&&!read('pec-manager-pref-migrated'))prefs.theme=oldTheme==='system'?'auto':oldTheme;
@@ -23,7 +23,7 @@
   let dirty=read('pec-manager-prefs-pending:local',{}),prefBusy=false;
   const PM=window.PM={client,read,write,clone,esc,today,shiftDate,parseTime,money,currency,db,
     get user(){return user},get scope(){return user?.id||'local'},get preferences(){return clone(prefs)},
-    uid:prefix=>`${prefix}-${crypto.randomUUID()}`,
+    uid:prefix=>`${prefix}-${typeof crypto.randomUUID==='function'?crypto.randomUUID():Array.from(crypto.getRandomValues(new Uint8Array(16)),b=>b.toString(16).padStart(2,'0')).join('')}`,
     notify:(name,detail)=>dispatchEvent(new CustomEvent(name,{detail})),
     async session(){const r=await client?.auth.getSession();return r?.data?.session||null}
   };

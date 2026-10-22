@@ -53,7 +53,7 @@
       let row=rows.find(r=>r.id===id);if(!row)return;
       try{
         if(P.user&&navigator.onLine&&!row._pending){const{data,error}=await P.client.from(table).select('*').eq('id',id).eq('user_id',P.scope).single();if(error)throw error;row=data;rows=rows.map(r=>r.id===id?row:r);await writeRows()}
-        if(!row.payload)throw new Error();apply(adapter.normalize?adapter.normalize(row.payload):row.payload,row);await stash();renderHistory();state(row._pending?'Registro local · aguardando sincronização.':'Registro carregado.');
+        if(!row.payload)throw new Error();apply(adapter.normalize?adapter.normalize(row.payload):row.payload,row);await stash();renderHistory();state(row._pending?'Registro local · aguardando sincronização.':'Registro carregado.');P.notify('pm:document-open');
       }catch{state('Não foi possível abrir este registro. Confira a conexão.',true)}
     }
     async function push(row){
@@ -90,7 +90,7 @@
     async function newDocument(){
       if(unsaved&&!confirm('Criar um novo documento? As alterações que não estão no histórico serão descartadas.'))return;
       apply(adapter.defaults());meta={status:'draft'};$('pmDocumentStatus').value='draft';await stash();renderHistory();state('Novo '+label+' · ainda não salvo.');
-      const u=new URL(location.href);u.search='';historyReplace(u);
+      const u=new URL(location.href);u.search='';historyReplace(u);P.notify('pm:document-open');
     }
     function historyReplace(url){window.history.replaceState(null,'',url)}
     const api=P.document={adapter,get meta(){return meta},get dirty(){return unsaved},snapshot,changed,stash,save,loadRow,state,

@@ -1,15 +1,15 @@
 import {$,icon,esc,empty} from './core.js';
-import {installDialogFocus,toast} from './shell.js?v=25';
+import {installDialogFocus,toast} from './shell.js?v=26';
 const P=window.PM,type=document.body.dataset.pmPage,name=type==='quote'?'proposta':'contrato',isQuote=type==='quote',requested=!!location.search;
 async function setup(){
  await P.ready;
  if(document.documentElement.dataset.pmReady!=='true')await new Promise(resolve=>{const o=new MutationObserver(()=>{if(document.documentElement.dataset.pmReady==='true'){o.disconnect();resolve()}});o.observe(document.documentElement,{attributes:true,attributeFilter:['data-pm-ready']})});
  const editor=$(isQuote?'.editor':'.sidebar'),preview=$(isQuote?'.stage':'.workspace'),panel=$('#pmDocumentTools');
  // Apply the brand without altering document fields, clauses or saved data.
- for(const mark of document.querySelectorAll('.pmark,.brand-mark .logo')){mark.classList.add('ws-brand-document-mark');mark.innerHTML='<img src="./assets/brand/pec-logo.png" alt="pec" width="100" height="34">'}
+ for(const mark of document.querySelectorAll('.pmark,.brand-mark .logo')){mark.classList.add('ws-brand-document-mark');mark.innerHTML='<img src="./assets/brand/pec-logo-badge.svg" alt="pec" width="100" height="34">'}
  if(isQuote){
   const brand=document.querySelector('.doc .brand');
-  const wordmark=()=>{const image=document.createElement('img');image.src='./assets/brand/pec-logo.png';image.alt='pec';image.width=92;image.height=32;image.className='ws-quote-wordmark';return image};
+  const wordmark=()=>{const image=document.createElement('img');image.src='./assets/brand/pec-logo-badge.svg';image.alt='pec';image.width=92;image.height=32;image.className='ws-quote-wordmark';return image};
   if(brand){for(const node of [...brand.childNodes])if(node.nodeType===Node.TEXT_NODE)node.remove();brand.prepend(wordmark())}
   for(const mark of document.querySelectorAll('.doc .footer-mark,.doc .print-footer-brand strong'))mark.replaceChildren(wordmark());
  }

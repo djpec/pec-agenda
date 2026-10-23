@@ -226,14 +226,16 @@ body[data-pm-page=quote] .doc{color:var(--ink,#171717);color-scheme:light}
 .ws-monogram{padding:0;letter-spacing:0;line-height:0}
 .ws-monogram img{display:block;width:72px;height:28px;object-fit:contain}
 .ws-wordmark{align-items:center;min-width:0}
-.ws-wordmark img{display:block;width:96px;height:36px;object-fit:contain;filter:brightness(0)}
+.ws-wordmark img{display:block;width:96px;height:36px;object-fit:contain;filter:none}
 html[data-pm-theme=dark] .ws-wordmark img{filter:none}
 .paper .contract-logo .ws-brand-document-mark,.ws-brand-document-mark{width:100px;height:36px;border-radius:0;background:transparent;letter-spacing:0;font-size:0;flex-shrink:0}
-.ws-brand-document-mark img{display:block;width:100%;height:100%;object-fit:contain;filter:brightness(0)}
+.ws-brand-document-mark img{display:block;width:100%;height:100%;object-fit:contain;filter:none}
 .paper .contract-logo:has(.ws-brand-document-mark) strong{display:none}
 @media screen and (max-width:600px){.ws-wordmark img{width:68px;height:28px}.ws-wordmark{gap:4px}.ws-wordmark>span{font-size:9px}}
-@media print{.ws-brand-document-mark img{filter:brightness(0)!important}}
+@media print{.ws-brand-document-mark img{filter:none!important}}
 
-.ws-quote-wordmark{display:inline-block;width:92px;height:32px;object-fit:contain;vertical-align:middle;filter:brightness(0)}
+.ws-quote-wordmark{display:inline-block;width:92px;height:32px;object-fit:contain;vertical-align:middle;filter:none}
 .doc .footer-mark .ws-quote-wordmark,.doc .print-footer-brand .ws-quote-wordmark{width:64px;height:24px}
-@media print{.ws-quote-wordmark{filter:brightness(0)!important}}
+@media print{.ws-quote-wordmark{filter:none!important}}
+
+html:not([data-pm-theme=dark]) .ws-wordmark img{background:#121716;border-radius:6px;padding:3px;box-sizing:border-box}

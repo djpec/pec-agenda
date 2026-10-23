@@ -79,11 +79,9 @@ Os lançamentos abrem em uma janela com fundo desfocado. No celular, cabeçalho 
 
 A suíte `workspace-stability.cjs` verifica arrastes reais por toque, estabilidade da janela e dos botões, restauração da rolagem, movimento do fundo e carregamento lento dos editores sem exposição do layout antigo.
 
-A identidade visual usa `assets/brand/pec-logo.png` no cabeçalho, no carregamento e nos documentos, com versões pretas para leitura e impressão em fundo branco. Os ícones PNG de 192/512 px e a variante maskable estão no manifesto; todas as páginas também declaram favicon e apple-touch-icon de 180 px. Atalhos antigos no iPhone podem precisar ser recriados para atualizar o ícone.
+A identidade visual mantém a logo branca no cabeçalho, carregamento, documentos e ícones. No tema claro e nos documentos, fundos escuros garantem o contraste. Os ícones PNG de 192/512 px e a variante maskable estão no manifesto; todas as páginas também declaram favicon e apple-touch-icon de 180 px. Não há introdução em vídeo: o painel abre diretamente.
 
-A abertura é um trecho silencioso de 3,8 segundos do vídeo enviado, comprimido em H.264 para aproximadamente 800 KB (960 × 540, 24 fps). Aparece somente na visita comum ao painel, uma vez por sessão da aba, e pode ser pulada. Não carrega com movimento reduzido, efeitos desativados, aparelho offline ou links com parâmetros. Falhas de mídia, reprodução negada ou carregamento superior a 1,4 segundo liberam o painel. O vídeo é opcional, não integra o precache e não passa pelo cache de respostas do service worker.
-
-Validação da marca e da abertura:
+Validação da marca, da abertura direta e dos ícones:
 
 ```bash
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-brand.cjs

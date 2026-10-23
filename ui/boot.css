@@ -3,21 +3,8 @@ html[data-ws-boot]:not([data-ws-boot=ready]){background:#f5f4f0!important}
 html[data-ws-boot]:not([data-ws-boot=ready])[data-pm-theme=dark]{background:#161918!important}
 @media screen{
  html[data-ws-boot]:not([data-ws-boot=ready]) body{visibility:hidden!important}
- html[data-ws-boot=pending]::before{content:'';position:fixed;inset:0;background:url('../assets/brand/pec-logo.png') center / 140px auto no-repeat;filter:brightness(0);pointer-events:none}
- html[data-ws-boot=pending][data-pm-theme=dark]::before{filter:none}
+ html[data-ws-boot=pending]::before{content:'';position:fixed;top:50%;left:50%;width:168px;height:68px;transform:translate(-50%,-50%);border-radius:12px;background:#121716 url('../assets/brand/pec-logo-white.svg') center / 140px auto no-repeat;pointer-events:none}
  .ws-boot-error{visibility:visible;position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;text-align:center;background:#f5f4f0;color:#252b2a;font:14px/1.7 system-ui,sans-serif;z-index:100}
  html[data-pm-theme=dark] .ws-boot-error{background:#161918;color:#f2f2df}
  .ws-boot-error button{font:inherit;padding:12px 20px;border:0;border-radius:8px;background:var(--ws-accent,#4358db);color:white;cursor:pointer}
 }
-
-@media screen{
- html.ws-intro-active{overflow:hidden}
- #wsBrandIntro{position:fixed;inset:0;width:100%;height:100%;max-width:none;max-height:none;margin:0;padding:0;border:0;border-radius:0;overflow:hidden;background:#121716;color:#fff;box-sizing:border-box}
- #wsBrandIntro::backdrop{background:#121716}
- #wsBrandIntro video{display:block;width:100%;height:100%;object-fit:contain}
- .ws-intro-caption{position:absolute;inset:auto 0 0;display:flex;align-items:center;justify-content:space-between;gap:16px;padding:24px max(24px,env(safe-area-inset-right)) max(24px,env(safe-area-inset-bottom)) max(24px,env(safe-area-inset-left));background:linear-gradient(transparent,#121716d9);font:11px/1.5 system-ui,sans-serif;letter-spacing:2px}
- .ws-intro-caption button{flex-shrink:0;min-height:44px;padding:10px 18px;border:1px solid #ffffff65;border-radius:24px;background:#121716d9;color:#fff;font:14px system-ui,sans-serif;cursor:pointer;letter-spacing:0}
- .ws-intro-caption button:focus-visible{outline:3px solid #f5c900;outline-offset:4px}
- @media(max-width:600px){.ws-intro-caption{align-items:flex-start;flex-direction:column}.ws-intro-caption button{align-self:flex-end}}
-}
-@media print{#wsBrandIntro{display:none!important}}

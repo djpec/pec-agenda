@@ -14,6 +14,7 @@ const token=`${b64({alg:'HS256',typ:'JWT'})}.${b64({sub:uid,aud:'authenticated',
 const session={access_token:token,refresh_token:'fixture',token_type:'bearer',expires_in:7200,expires_at:Math.floor(Date.now()/1000)+7200,user:{id:uid,email:'qa@example.invalid',aud:'authenticated',role:'authenticated',app_metadata:{},user_metadata:{}}};
 async function setup(browser){
  const ctx=await browser.newContext({viewport:{width:1440,height:1000},serviceWorkers:'block'});
+ await ctx.addInitScript(()=>{if(/^https?:$/.test(location.protocol))sessionStorage.setItem('pec-brand-intro-v1','seen')});
  await ctx.addInitScript(s=>{if(location.protocol==='http:')localStorage.setItem('sb-qmhyeotvbktdilrudwys-auth-token',JSON.stringify(s))},session);
  await ctx.route('https://qmhyeotvbktdilrudwys.supabase.co/**',async route=>{
   const req=route.request(),url=new URL(req.url()),table=url.pathname.split('/').pop(),method=req.method();
@@ -45,6 +46,7 @@ const now=new Date(),night=dateKey(new Date(now.getFullYear(),now.getMonth(),Mat
 const completed=[];
 async function localContext(browser,width=1440,theme='light'){
  const c=await browser.newContext({viewport:{width,height:1000},serviceWorkers:'block'});
+ await c.addInitScript(()=>{if(/^https?:$/.test(location.protocol))sessionStorage.setItem('pec-brand-intro-v1','seen')});
  await c.addInitScript(theme=>{if(!localStorage.getItem('workspace-test-initialized')){localStorage.setItem('workspace-test-initialized','1');localStorage.setItem('pec-agenda-v1','[]');localStorage.setItem('pec-manager-preferences-v1',JSON.stringify({theme}));localStorage.setItem('pec-manager-pref-migrated','true')}},theme);
  await c.route('https://qmhyeotvbktdilrudwys.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));
  return c;

@@ -8,6 +8,23 @@
   "theme_color": "#0b0c0e",
   "description": "Agenda, orçamentos e contratos do pec.",
   "icons": [
-    {"src":"./icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {
+      "src": "./assets/brand/icon-192.png?v=25",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/brand/icon-512.png?v=25",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "./assets/brand/icon-maskable-512.png?v=25",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
   ]
 }

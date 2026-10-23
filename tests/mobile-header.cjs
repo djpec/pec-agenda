@@ -4,6 +4,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.PEC_BROWSER,args:['--no-sandbox','--disable-dev-shm-usage']});try{
  for(const width of [320,390,430])for(const inset of [0,59]){
   const context=await browser.newContext({viewport:{width,height:900},hasTouch:true,isMobile:true,serviceWorkers:'block',locale:'pt-BR'});
+  await context.addInitScript(()=>{if(/^https?:$/.test(location.protocol))sessionStorage.setItem('pec-brand-intro-v1','seen')});
   await context.addInitScript(inset=>document.addEventListener('DOMContentLoaded',()=>{
    document.documentElement.style.setProperty('--ws-safe-top',inset+'px');document.documentElement.style.setProperty('--ws-safe-bottom',inset?'34px':'0px');
    const native=document.createElement('div');native.id='testNativeStatusBar';native.style.cssText=`position:fixed;top:0;left:0;right:0;height:${inset}px;z-index:2147483647;pointer-events:auto;background:#444;`;document.body.append(native);

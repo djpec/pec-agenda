@@ -89,8 +89,8 @@ NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL
 
 ## Página de divulgação
 
-`conheca.html` é a página pública de apresentação do pec Manager, independente do painel inicial. Mostra o plano previsto de R$ 29,90/mês e informa que as assinaturas estão em preparação. Os contatos abrem uma mensagem no WhatsApp comercial já publicado no sistema (final 7615); sem JavaScript, os links usam o e-mail comercial existente. Não há cobrança nem captura automática de dados nesta página.
+`conheca.html` é a página pública de apresentação do Agenda do Artista, independente do painel inicial. Mostra o plano previsto de R$ 29,90/mês e informa que as assinaturas estão em preparação. Os contatos abrem uma mensagem no WhatsApp comercial já publicado no sistema (final 7615); sem JavaScript, os links usam o e-mail comercial existente. Não há cobrança nem captura automática de dados nesta página.
 
-Os arquivos ficam em `marketing/`. As capturas mostram a interface real com eventos e locais fictícios; o celular é uma representação ilustrativa. A página inclui navegação móvel, comparação entre agenda e painel, ampliação das imagens, FAQ, preferência por movimento reduzido e imagem para compartilhamento.
+Os arquivos ficam em `marketing/`. As capturas mostram a interface real com eventos e locais fictícios; as capturas do painel e da agenda no celular também são reais, com dados fictícios e ampliação ao tocar. A página inclui navegação móvel, comparação entre agenda e painel, ampliação das imagens, FAQ, preferência por movimento reduzido e imagem para compartilhamento.
 
 Verificação: `NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8769/ node tests/marketing.cjs`.

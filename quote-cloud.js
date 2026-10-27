@@ -1,9 +1,10 @@
 (() => {
   'use strict';
   const P=window.PM;
-  const adapter={type:'quote',container:'.editor',get:()=>data,
-    defaults:()=>({...clone(DEFAULT),client:'',eventDate:'',venue:'',city:'',time:'A definir',issueDate:P.today()}),
-    apply:p=>{data={...clone(DEFAULT),...p,scope:(p.scope||DEFAULT.scope).map(normalizeScope),extras:(p.extras||DEFAULT.extras).map(normalizeExtra)};fillFixed();renderScopeEditor();renderExtrasEditor();renderAll()},
+  let brand=null;const identity=()=>P.business?.configured&&(!P.business.access?.owner||P.business.hasProfile)?{name:P.business.profile.display_name||P.business.profile.legal_name||'Seu negócio',logo:P.business.profile.logo_data}:null;
+  const adapter={type:'quote',container:'.editor',get:()=>({...data,_business:brand}),
+    defaults:()=>({...clone(DEFAULT),_business:identity(),...((P.business?.configured&&(!P.business.access?.owner||P.business.hasProfile))?{email:P.business.profile.email,phone:P.business.profile.phone,site:P.business.profile.website,instagram:P.business.profile.instagram}:{}),client:'',eventDate:'',venue:'',city:'',time:'A definir',issueDate:P.today()}),
+    apply:p=>{brand=p._business||identity();P.notify('pm:document-brand',brand);data={...clone(DEFAULT),...p,scope:(p.scope||DEFAULT.scope).map(normalizeScope),extras:(p.extras||DEFAULT.extras).map(normalizeExtra)};fillFixed();renderScopeEditor();renderExtrasEditor();renderAll()},
     normalize:p=>p.scope?p:{...clone(DEFAULT),...p,eventDate:p.date||p.eventDate||'',issueDate:p.issue||p.issueDate||P.today(),total:p.base!=null?P.currency(p.base):p.total||'',intro:p.message||p.intro||'',scope:p.items||clone(DEFAULT.scope)},
     info:p=>({client_name:p.client||'',event_date:p.eventDate||null,total_value:p.investmentMode==='perItem'?(p.scope||[]).reduce((sum,s)=>sum+(P.money(s.value)||0),0):P.money(p.total)}),
     event:p=>({title:`${{casamento:'Casamento',xv:'Festa de XV',geral:'Evento'}[p.theme]||'Evento'}${p.client?' — '+p.client:''}`,date:p.eventDate||'',time:P.parseTime(p.time),timeType:/noite\s+toda/i.test(p.time+' '+p.duration)?'allnight':P.parseTime(p.time)?'time':'tbd',place:[p.venue,p.city].filter(Boolean).join(', '),notes:[`Cliente: ${p.client||'—'}`,p.musicStyle,(p.scope||[]).map(s=>[s.title,s.duration,s.time].filter(Boolean).join(' · ')).join('\n')].filter(Boolean).join('\n')})

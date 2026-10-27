@@ -5,9 +5,9 @@ const SUPABASE_KEY='sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT';
 const sb=window.PM.client;
 
 const DEFAULT_EVENTS=[];
-let events=load(),selectedMonth=null,currentView=localStorage.getItem(VIEW_KEY)||'list',selectedCalendarDay=null,currentUser=null,syncBusy=false;
-function load(){try{const saved=localStorage.getItem(KEY);if(saved!==null)return (JSON.parse(saved)||[]).map(e=>({...e,completed:!!e.completed}));const seeded=DEFAULT_EVENTS.map(e=>({...e,completed:false,completedAt:null}));localStorage.setItem(KEY,JSON.stringify(seeded));return seeded}catch{return DEFAULT_EVENTS.map(e=>({...e,completed:false,completedAt:null}))}}
-function save(){localStorage.setItem(KEY,JSON.stringify(events))}
+let currentUser=null,events=load(),selectedMonth=null,currentView=localStorage.getItem(VIEW_KEY)||'list',selectedCalendarDay=null,syncBusy=false;
+function load(){return PM.agendaRead('events',currentUser?.id||'local').map(e=>({...e,completed:!!e.completed}))}
+function save(){PM.agendaWrite('events',events,currentUser?.id||'local')}
 function esc(s=''){return String(s).replace(/[&<>'"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;',"'":'&#39;','"':'&quot;'}[c]))}
 function monthKey(date){return date.slice(0,7)}
 function monthLabel(key){const [y,m]=key.split('-').map(Number);return new Intl.DateTimeFormat('pt-BR',{month:'long',year:'numeric'}).format(new Date(y,m-1,1)).replace(/^./,x=>x.toUpperCase())}
@@ -26,19 +26,23 @@ function openForm(e=null){document.querySelector('#formTitle').textContent=e?'Ed
 function closeForm(){document.querySelector('#modal').classList.remove('open');document.querySelector('#modal').setAttribute('aria-hidden','true');document.querySelector('#modal').close()}
 function toggleTime(){document.querySelector('#timeField').style.display=document.querySelector('#timeType').value==='time'?'flex':'none';document.querySelector('#time').required=document.querySelector('#timeType').value==='time'}
 
-function pending(){try{return JSON.parse(localStorage.getItem(PENDING_KEY))||[]}catch{return[]}}
-function setPending(q){localStorage.setItem(PENDING_KEY,JSON.stringify(q))}
+function pending(account=currentUser?.id||'local'){return PM.agendaRead('pending',account)}
+function setPending(q,account=currentUser?.id||'local'){PM.agendaWrite('pending',q,account)}
 function queueOp(op){const q=pending().filter(x=>!(x.id===op.id));q.push(op);setPending(q);updateCloudUI()}
-function toRow(e){return{id:e.id,user_id:currentUser.id,title:e.title,date:e.date,time_type:e.timeType,time_value:e.timeType==='time'&&e.time?`${e.time}:00`:null,place:e.place||null,notes:e.notes||null,completed:!!e.completed,completed_at:e.completedAt||null,updated_at:new Date().toISOString()}}
+function toRow(e,account=currentUser.id){return{id:e.id,user_id:account,title:e.title,date:e.date,time_type:e.timeType,time_value:e.timeType==='time'&&e.time?`${e.time}:00`:null,place:e.place||null,notes:e.notes||null,completed:!!e.completed,completed_at:e.completedAt||null,updated_at:new Date().toISOString()}}
 function fromRow(r){return{id:r.id,title:r.title,date:r.date,timeType:r.time_type,time:r.time_value?String(r.time_value).slice(0,5):'',place:r.place||'',notes:r.notes||'',completed:!!r.completed,completedAt:r.completed_at||null}}
 async function persistEvent(e){save();if(!currentUser){render();return}if(!navigator.onLine||!sb){queueOp({type:'upsert',id:e.id,event:e});render();return}let error;try{({error}=await sb.from('events').upsert(toRow(e),{onConflict:'id'}))}catch(cause){error=cause}if(error){queueOp({type:'upsert',id:e.id,event:e});setSyncMessage('Alteração guardada localmente; sincroniza depois.')}else setSyncMessage('Sincronizado na nuvem ✓');render()}
-async function persistDelete(id){save();if(!currentUser){render();return}if(!navigator.onLine||!sb){queueOp({type:'delete',id});render();return}let error;try{({error}=await sb.from('events').delete().eq('id',id))}catch(cause){error=cause}if(error)queueOp({type:'delete',id});else setSyncMessage('Exclusão sincronizada ✓');render()}
-async function flushPending(){if(!currentUser||!navigator.onLine||!sb)return;const q=pending();if(!q.length)return;const rest=[];for(const op of q){try{let error;if(op.type==='delete')({error}=await sb.from('events').delete().eq('id',op.id));else({error}=await sb.from('events').upsert(toRow(op.event),{onConflict:'id'}));if(error)rest.push(op)}catch{rest.push(op)}}setPending(rest)}
-async function syncFromCloud(manual=false){if(!currentUser||!navigator.onLine||!sb||syncBusy)return;syncBusy=true;updateCloudUI();try{await flushPending();const{data,error}=await sb.from('events').select('*').order('date',{ascending:true});if(error)throw error;const syncedBefore=localStorage.getItem(SYNCED_USER_KEY)===currentUser.id;if((data||[]).length===0&&!syncedBefore&&events.length){const rows=events.map(toRow);const{error:upErr}=await sb.from('events').upsert(rows,{onConflict:'id'});if(upErr)throw upErr;localStorage.setItem(SYNCED_USER_KEY,currentUser.id);setSyncMessage('Agenda enviada para a nuvem ✓')}else{events=(data||[]).map(fromRow);save();localStorage.setItem(SYNCED_USER_KEY,currentUser.id);setSyncMessage(manual?'Sincronização concluída ✓':'Nuvem atualizada ✓')}}catch(err){setSyncMessage('Não foi possível sincronizar agora. Seus dados locais continuam salvos.')}finally{syncBusy=false;render()}}
+async function persistDelete(id){save();if(!currentUser){render();return}if(!navigator.onLine||!sb){queueOp({type:'delete',id});render();return}let error;try{({error}=await sb.from('events').delete().eq('id',id).eq('user_id',currentUser.id))}catch(cause){error=cause}if(error)queueOp({type:'delete',id});else setSyncMessage('Exclusão sincronizada ✓');render()}
+async function flushPending(account=currentUser?.id){if(!account||!navigator.onLine||!sb)return;const q=pending(account);for(const op of q){try{let error;if(op.type==='delete')({error}=await sb.from('events').delete().eq('id',op.id).eq('user_id',account));else({error}=await sb.from('events').upsert(toRow(op.event,account),{onConflict:'id'}));if(!error){const latest=pending(account);setPending(latest.filter(item=>item.id!==op.id||JSON.stringify(item)!==JSON.stringify(op)),account)}}catch{}}}
+async function syncFromCloud(){setSyncMessage('Preparando a sincronização da sua conta…')}
 function setSyncMessage(msg){document.querySelector('#syncState').textContent=msg;const a=document.querySelector('#authMessageIn');if(a)a.textContent=msg}
 function updateCloudUI(){const status=document.querySelector('#status'),dot=document.querySelector('#syncDot'),state=document.querySelector('#syncState'),text=document.querySelector('#syncText');status.classList.remove('cloud','off');dot.classList.remove('ok','warn');if(!navigator.onLine){status.textContent='OFFLINE';status.classList.add('off');dot.classList.add('warn');state.textContent=pending().length?`${pending().length} alteração(ões) aguardando internet`:'Offline — dados locais disponíveis';text.textContent='A agenda continua funcionando neste aparelho e sincroniza quando a internet voltar.'}else if(currentUser){status.textContent='NUVEM ✓';status.classList.add('cloud');dot.classList.add('ok');if(!syncBusy&&!pending().length)state.textContent='Sincronizado';text.textContent=`Conectado como ${currentUser.email}. Alterações são salvas online.`}else{status.textContent='Entrar na nuvem';state.textContent='Modo local';text.textContent='Seus dados estão salvos neste aparelho. Entre na nuvem para sincronizar com outros dispositivos.'}document.querySelector('#authLoggedOut').style.display=currentUser?'none':'block';document.querySelector('#authLoggedIn').style.display=currentUser?'block':'none';if(currentUser)document.querySelector('#userEmail').textContent=currentUser.email||'Conta conectada'}
 
-async function initAuth(){if(!sb){updateCloudUI();return}const{data}=await sb.auth.getSession();currentUser=data.session?.user||null;updateCloudUI();if(currentUser)syncFromCloud();sb.auth.onAuthStateChange((event,session)=>{currentUser=session?.user||null;updateCloudUI();if(currentUser&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'))setTimeout(()=>syncFromCloud(),50)})}
+function activateAccount(user){
+ if((currentUser?.id||'local')===(user?.id||'local')){currentUser=user;return}
+ currentUser=user;events=load();if(document.querySelector('#modal')?.open)closeForm();render();
+}
+async function initAuth(){if(!sb){updateCloudUI();return}await PM.ready;const{data}=await sb.auth.getSession();activateAccount(data.session?.user||null);updateCloudUI();if(currentUser)syncFromCloud();sb.auth.onAuthStateChange((event,session)=>{activateAccount(session?.user||null);updateCloudUI();if(currentUser&&(event==='SIGNED_IN'||event==='INITIAL_SESSION'))setTimeout(()=>syncFromCloud(),50)})}
 function authErrorMessage(error){
   const code=error?.code,status=Number(error?.status||0);
   if(code==='invalid_credentials')return 'E-mail ou senha incorretos. Confira os dados e o preenchimento automático. Use Mostrar para conferir a senha.';
@@ -67,7 +71,7 @@ async function login(){
   try{
     const{error}=await sb.auth.signInWithPassword({email,password});
     msg.textContent=error?authErrorMessage(error):'Login realizado ✓';
-    if(!error)document.querySelector('#authPassword').value='';
+    if(!error){document.querySelector('#authPassword').value='';if(new URLSearchParams(location.search).get('next')==='account')location.assign('./conta.html')}
   }catch(error){
     msg.textContent=authErrorMessage(error);
   }finally{
@@ -77,7 +81,7 @@ async function login(){
 async function signup(){const email=document.querySelector('#authEmail').value.trim(),password=document.querySelector('#authPassword').value,msg=document.querySelector('#authMessage');if(!email||password.length<6){msg.textContent='Informe um e-mail e uma senha com pelo menos 6 caracteres.';return}msg.textContent='Criando conta...';if(!sb){msg.textContent='Conexão com a nuvem indisponível.';return}const{data,error}=await sb.auth.signUp({email,password});if(error){msg.textContent=error.message;return}msg.textContent=data.session?'Conta criada e conectada ✓':'Conta criada. Confirme o e-mail recebido e depois toque em Entrar.'}
 
 async function toggleComplete(id){const e=events.find(x=>x.id===id);if(!e)return;e.completed=!e.completed;e.completedAt=e.completed?new Date().toISOString():null;await persistEvent(e)}
-async function deleteEvent(id){const e=events.find(x=>x.id===id);if(e&&confirm(`Excluir “${e.title}”?`)){const deleted=new Set(PM.read('pec-agenda-deleted-v1',[]));deleted.add(id);PM.write('pec-agenda-deleted-v1',[...deleted]);events=events.filter(x=>x.id!==id);await persistDelete(id)}}
+async function deleteEvent(id){const e=events.find(x=>x.id===id);if(e&&confirm(`Excluir “${e.title}”?`)){const deleted=new Set(PM.agendaRead('deleted',currentUser?.id||'local'));deleted.add(id);PM.agendaWrite('deleted',[...deleted],currentUser?.id||'local');events=events.filter(x=>x.id!==id);await persistDelete(id)}}
 
 let accountTrigger=null;
 function openAccount(){
@@ -109,7 +113,7 @@ document.querySelector('#accountModal').addEventListener('keydown',event=>{
   if(event.shiftKey&&(document.activeElement===first||!controls.includes(document.activeElement))){event.preventDefault();last.focus()}
   else if(!event.shiftKey&&(document.activeElement===last||!controls.includes(document.activeElement))){event.preventDefault();first.focus()}
 });
-document.querySelector('#accountBtn').onclick=openAccount;document.querySelector('#status').onclick=openAccount;document.querySelector('#accountClose').onclick=closeAccount;document.querySelector('#accountModal').onclick=e=>{if(e.target.id==='accountModal')closeAccount()};document.querySelector('#authLoggedOut').onsubmit=event=>{event.preventDefault();login()};document.querySelector('#signupBtn').onclick=signup;document.querySelector('#syncNowBtn').onclick=()=>syncFromCloud(true);document.querySelector('#logoutBtn').onclick=async()=>{if(sb)await sb.auth.signOut();currentUser=null;updateCloudUI()};
+document.querySelector('#accountBtn').onclick=openAccount;document.querySelector('#status').onclick=openAccount;document.querySelector('#accountClose').onclick=closeAccount;document.querySelector('#accountModal').onclick=e=>{if(e.target.id==='accountModal')closeAccount()};document.querySelector('#authLoggedOut').onsubmit=event=>{event.preventDefault();login()};document.querySelector('#signupBtn').onclick=signup;document.querySelector('#syncNowBtn').onclick=()=>syncFromCloud(true);document.querySelector('#logoutBtn').onclick=async()=>{if(sb)await sb.auth.signOut();activateAccount(null);updateCloudUI()};
 
 addEventListener('online',handleNetwork);addEventListener('offline',handleNetwork);render();
 }

@@ -2,6 +2,12 @@
 
 Agenda, orçamentos e contratos em HTML, com a mesma conta Supabase. Publicação: https://agenda.djpec.com/.
 
+## Versão comercial em preparação
+
+O plano definido é **R$ 29,90 por mês**. A branch `feat/subscriptions-29-90` inclui cadastro do negócio, identidade nos novos documentos, cache da agenda por conta, tela `conta.html`, migração com RLS e funções de cobrança. A integração inicial foi preparada para Mercado Pago; o provedor precisa ser confirmado pelo proprietário. A assinatura ainda precisa de credenciais, configuração do banco e homologação do checkout/webhooks antes de abrir vendas.
+
+O roteiro de ativação e as limitações estão em [docs/ASSINATURAS.md](docs/ASSINATURAS.md). A migração mantém a exigência de pagamento desativada durante a instalação e oferece uma liberação separada para a conta do proprietário.
+
 ## Módulos definitivos
 
 `orcamentos.html` contém o arquivo **ORÇAMENTOS DEFINITIVO.html** e `contratos.html` contém **CONTRATOS.html**. O único acréscimo nos dois arquivos é o bloco demarcado `pec Manager integration`, antes de `</body>`. Os estilos, formulários, cálculos, importação/exportação XML e impressão dos originais permanecem intactos. `tests/originals.json` registra os hashes SHA-256 dos arquivos fornecidos.

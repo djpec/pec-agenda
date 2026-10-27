@@ -1,5 +1,5 @@
 import {$,icon,esc,dateKey,parseDate,formatDate,monthKey,timeLabel,moment,calendar,monthControls,eventRow,empty,fold} from './core.js';
-import {toast,installDialogFocus} from './shell.js?v=26';
+import {toast,installDialogFocus} from './shell.js?v=27';
 const store=window.AgendaStore,main=$('#workspace'),params=new URLSearchParams(location.search);
 let selected=/^\d{4}-\d{2}-\d{2}$/.test(params.get('date')||'')?params.get('date'):dateKey(new Date()),month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1),view=localStorage.getItem('pec-workspace-view')||'calendar',query='',filter='active';
 const requested=store.events.find(e=>e.id===params.get('event'));if(requested){selected=requested.date;month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1)}
@@ -38,4 +38,4 @@ addEventListener('agenda:change',()=>{if(params.has('event')){const e=store.even
 addEventListener('agenda:saved',e=>{selected=e.detail.date;month=new Date(parseDate(selected).getFullYear(),parseDate(selected).getMonth(),1);filter='active';$('#agendaStatus').value=filter;query='';$('#agendaSearch').value='';render();toast('Evento salvo. Os detalhes estão na sua agenda.')});
 for(const dialog of [$('#modal'),$('#accountModal')]){installDialogFocus(dialog);dialog.addEventListener('close',()=>{dialog.classList.remove('open');dialog.setAttribute('aria-hidden','true')})}
 main.addEventListener('keydown',e=>{if(!e.target.matches('[data-day]'))return;const offsets={ArrowLeft:-1,ArrowRight:1,ArrowUp:-7,ArrowDown:7};if(!(e.key in offsets))return;e.preventDefault();const date=parseDate(e.target.dataset.day);date.setDate(date.getDate()+offsets[e.key]);selected=dateKey(date);month=new Date(date.getFullYear(),date.getMonth(),1);render();main.querySelector('[data-day="'+selected+'"]')?.focus({preventScroll:true})});
-render();if(params.get('new')==='1')openNew();if(params.get('account')==='1')window.openAccount();document.documentElement.dataset.workspaceReady='true';
+render();if(params.get('new')==='1')openNew();if(params.get('account')==='1')window.openAccount();PM.ready.then(()=>{document.documentElement.dataset.workspaceReady='true'});

@@ -8,7 +8,7 @@
     d.addEventListener('close',()=>d.remove());document.body.append(d);d.showModal();return d;
   };
   P.initDocument=async adapter=>{
-    await P.ready;
+    await P.ready;await P.businessReady;
     const type=adapter.type,table=type==='quote'?'quotes':'contracts',label=type==='quote'?'orçamento':'contrato';
     let scope=P.scope,meta={},rows=[],busy=false,restoring=false,unsaved=false,version=0,draftTimer,ready=false;
     const cacheKey=()=>`${scope}:${table}:history`,draftKey=()=>`${scope}:${table}:draft`;
@@ -60,24 +60,24 @@
     }
     async function push(row){
       const outgoing={...row};delete outgoing._pending;delete outgoing._baseVersion;delete outgoing._error;
-      outgoing.user_id=P.user.id;
+      if(row.user_id!==P.user?.id)throw new Error('A conta mudou. Abra o documento novamente.');outgoing.user_id=row.user_id;
       let result;
-      if(row._baseVersion)result=await P.client.from(table).update(outgoing).eq('id',row.id).eq('user_id',P.user.id).eq('updated_at',row._baseVersion).select('id,updated_at').maybeSingle();
+      if(row._baseVersion)result=await P.client.from(table).update(outgoing).eq('id',row.id).eq('user_id',row.user_id).eq('updated_at',row._baseVersion).select('id,updated_at').maybeSingle();
       else result=await P.client.from(table).insert(outgoing).select('id,updated_at').single();
       if(result.error)throw result.error;
       if(!result.data)throw new Error('Este registro mudou em outro dispositivo. Abra-o novamente ou salve uma cópia.');
       return {...row,_pending:false,_error:null,_baseVersion:result.data.updated_at,updated_at:result.data.updated_at};
     }
     async function save(copy=false){
-      if(busy)return false;busy=true;$('pmSave').disabled=true;const capturedVersion=version;
+      if(busy)return false;if(P.user&&!P.business?.canWrite){state('Seu plano precisa de um pagamento confirmado. Consulte Meu negócio e assinatura.',true);return false}busy=true;const capturedScope=scope;$('pmSave').disabled=true;const capturedVersion=version;
       try{
         if(copy){meta={status:meta.status||'draft'};}
         meta.id||=P.uid(type==='quote'?'q':'c');meta.status=$('pmDocumentStatus').value;
         const payload=snapshot(),info=adapter.info(payload),old=rows.find(r=>r.id===meta.id),now=new Date().toISOString();
         let row={id:meta.id,user_id:P.user?.id||null,...info,status:meta.status,payload,created_at:old?.created_at||now,updated_at:now,_pending:!!P.user,_baseVersion:old?._pending?old._baseVersion:(meta.remoteUpdated||null)};
-        rows=[row,...rows.filter(r=>r.id!==row.id)];await writeRows();await stash();
+        rows=[row,...rows.filter(r=>r.id!==row.id)];await writeRows();if(scope!==capturedScope)throw new Error('Account changed');await stash();
         if(P.user&&navigator.onLine){
-          try{row=await push(row);meta.remoteUpdated=row.updated_at;row.payload._manager={...row.payload._manager,remoteUpdated:row.updated_at};rows=rows.map(r=>r.id===row.id?row:r);await writeRows();state('Salvo na nuvem ✓');}
+          try{row=await push(row);if(scope!==capturedScope)throw new Error('Account changed');meta.remoteUpdated=row.updated_at;row.payload._manager={...row.payload._manager,remoteUpdated:row.updated_at};rows=rows.map(r=>r.id===row.id?row:r);await writeRows();state('Salvo na nuvem ✓');}
           catch(error){state(error.message?.includes('outro dispositivo')?error.message:'Salvo neste aparelho; envio pendente. Tente novamente com conexão.',true);return false;}
         }else state(P.user?'Salvo neste aparelho · envio pendente.':'Salvo no histórico deste aparelho. Entre na conta para salvar online.');
         if(capturedVersion===version)unsaved=false;await stash();P.notify('pm:saved',{table,id:meta.id});return true;
@@ -108,7 +108,8 @@
     if($('pmConvert'))$('pmConvert').onclick=()=>adapter.convert(api);
     editor.addEventListener('input',e=>{if(!panel.contains(e.target))changed()});editor.addEventListener('change',e=>{if(!panel.contains(e.target))changed()});
     async function restore(){
-      rows=await P.db('get',cacheKey())||[];const draft=await P.db('get',draftKey());
+      const account=scope;const history=await P.db('get',cacheKey())||[];const draft=await P.db('get',draftKey());if(account!==scope)return;rows=history;
+      if(!draft&&P.business?.configured)apply(adapter.defaults());
       if(draft){apply(draft.payload);unsaved=!!draft.unsaved;}renderHistory();
     }
     await restore();ready=true;
@@ -117,7 +118,7 @@
     state(P.user?'Conta conectada · histórico disponível.':'Modo local · entre pela Minha conta para sincronizar.');
     await adapter.start?.(api);history();flush();
     addEventListener('pm:refresh',()=>api.refresh());
-    addEventListener('pm:account',async()=>{if(scope===P.scope)return;scope=P.scope;apply(adapter.defaults());meta={status:'draft'};await restore();await api.refresh()});
+    addEventListener('pm:account',async()=>{if(scope===P.scope)return;clearTimeout(draftTimer);scope=P.scope;apply(adapter.defaults());meta={status:'draft'};await restore();await api.refresh()});
     addEventListener('beforeunload',()=>{clearTimeout(draftTimer);stash().catch(()=>{})});
     document.documentElement.dataset.pmReady='true';
     return api;

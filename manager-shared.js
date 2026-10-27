@@ -14,7 +14,7 @@
   const currency=value=>Number(value||0).toLocaleString('pt-BR',{style:'currency',currency:'BRL'});
   const dbPromise=new Promise((resolve,reject)=>{const r=indexedDB.open('pec-manager-v12',1);r.onupgradeneeded=()=>r.result.createObjectStore('items');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error)});
   const db=async(action,key,value)=>{const connection=await dbPromise;return new Promise((resolve,reject)=>{const tx=connection.transaction('items',action==='get'?'readonly':'readwrite'),s=tx.objectStore('items');const r=action==='get'?s.get(key):action==='put'?s.put(value,key):s.delete(key);tx.oncomplete=()=>resolve(r.result);tx.onerror=()=>reject(tx.error);tx.onabort=()=>reject(tx.error)})};
-  let user=null;
+  let user=null,accountKnown=false;
   const defaults={theme:'light',background_image:null,background_darkness:88,background_blur:0};
   let prefs={...defaults,...read('pec-manager-preferences-v1',{})};
   const oldTheme=localStorage.getItem('pec-manager-ui-theme')||localStorage.getItem('pec-manager-theme');
@@ -27,6 +27,18 @@
     notify:(name,detail)=>dispatchEvent(new CustomEvent(name,{detail})),
     async session(){const r=await client?.auth.getSession();return r?.data?.session||null}
   };
+  const legacyAgenda={events:'pec-agenda-v1',pending:'pec-agenda-pending-v1',deleted:'pec-agenda-deleted-v1'};
+  const agendaKey=(kind,scope)=>`pec-account-agenda:${scope}:${kind}`;
+  function migrateAgenda(){
+    const owner=localStorage.getItem('pec-agenda-cache-owner')||localStorage.getItem('pec-agenda-synced-user')||'local';
+    for(const[kind,key]of Object.entries(legacyAgenda))if(localStorage.getItem(agendaKey(kind,owner))===null&&localStorage.getItem(key)!==null)write(agendaKey(kind,owner),read(key,[]));
+  }
+  PM.agendaRead=(kind,scope=PM.scope)=>{migrateAgenda();return clone(read(agendaKey(kind,scope),[]))};
+  PM.agendaWrite=(kind,value,scope=PM.scope)=>{
+    migrateAgenda();write(agendaKey(kind,scope),value);
+    // Keep legacy exports compatible while all app reads use the account namespace.
+    for(const[name,key]of Object.entries(legacyAgenda))write(key,read(agendaKey(name,scope),[]));localStorage.setItem('pec-agenda-cache-owner',scope);
+  };
   const prefKey=()=>`pec-manager-prefs:${PM.scope}`,pendingKey=()=>`pec-manager-prefs-pending:${PM.scope}`;
   function status(message){const el=document.querySelector('#pmAppearanceState');if(el)el.textContent=message}
   function applyPreferences(){
@@ -36,8 +48,8 @@
     document.documentElement.style.setProperty('--pm-background',prefs.background_image?`url(${JSON.stringify(prefs.background_image)})`:'none');
     document.documentElement.style.setProperty('--pm-shade',String(Math.min(100,Math.max(0,prefs.background_darkness))/100));
     document.documentElement.style.setProperty('--pm-blur',`${Math.min(30,Math.max(0,prefs.background_blur))}px`);
-    write(prefKey(),prefs);write('pec-manager-preferences-v1',prefs);write('pec-manager-pref-migrated',true);
-    for(const key of ['pec-manager-background-v1','pec-agenda-bg-v1']){try{if(prefs.background_image)localStorage.setItem(key,prefs.background_image);else localStorage.removeItem(key)}catch{}}
+    if(accountKnown){write(prefKey(),prefs);write('pec-manager-preferences-v1',prefs);write('pec-manager-pref-migrated',true);localStorage.setItem('pec-manager-preferences-owner',PM.scope);}
+    if(accountKnown)for(const key of ['pec-manager-background-v1','pec-agenda-bg-v1']){try{if(prefs.background_image)localStorage.setItem(key,prefs.background_image);else localStorage.removeItem(key)}catch{}}
     const theme=document.querySelector('#pmTheme');if(theme)theme.value=mode;
     for(const[id,key]of[['pmDarkness','background_darkness'],['pmBlur','background_blur']]){const input=document.querySelector('#'+id);if(input)input.value=prefs[key]}
   }
@@ -75,7 +87,7 @@
     link.setAttribute('aria-label','Conta e nuvem · '+text);link.title='Conta e nuvem · '+text;
   }
   function shell(){
-    document.body.dataset.pmPage=document.querySelector('.editor')?'quote':document.querySelector('.sidebar')?'contract':location.pathname.endsWith('agenda.html')?'agenda':'home';
+    document.body.dataset.pmPage=document.querySelector('.editor')?'quote':document.querySelector('.sidebar')?'contract':location.pathname.endsWith('agenda.html')?'agenda':location.pathname.endsWith('conta.html')?'account':'home';
     const backdrop=document.createElement('div');backdrop.id='pmBackdrop';backdrop.setAttribute('aria-hidden','true');document.body.prepend(backdrop);
     const icons={
       home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',
@@ -107,8 +119,20 @@
   }
   let resolveReady;PM.ready=new Promise(resolve=>resolveReady=resolve);
   async function accountChanged(session){
-    const previous=user?.id||null,next=session?.user?.id||null;user=session?.user||null;
-    if(previous!==next){const stored=read(prefKey());if(stored)prefs={...defaults,...stored};else if(previous)prefs={...defaults};dirty=read(pendingKey(),{});applyPreferences();PM.notify('pm:account',{user})}
+    const first=!accountKnown,previous=user?.id||null,next=session?.user?.id||null;user=session?.user||null;accountKnown=true;
+    if(first||previous!==next){
+      const legacyOwner=localStorage.getItem('pec-manager-preferences-owner')||localStorage.getItem('pec-agenda-cache-owner')||localStorage.getItem('pec-agenda-synced-user');
+      if(!read('pec-preference-isolation-v1')){
+        if(legacyOwner&&legacyOwner!=='local'){
+          const legacyLocal=read('pec-manager-prefs:local');if(legacyLocal)write('pec-legacy-unassigned-preferences',legacyLocal);
+          write('pec-manager-prefs:local',{...defaults});write('pec-manager-prefs-pending:local',{});
+        }
+        write('pec-preference-isolation-v1',true);
+      }
+      const stored=read(prefKey());
+      if(stored)prefs={...defaults,...stored};else if(!first||legacyOwner&&legacyOwner!==(next||'local'))prefs={...defaults};
+      dirty=read(pendingKey(),{});applyPreferences();PM.notify('pm:account',{user});
+    }
     resolveReady();await syncPreferences();
   }
   shell();(async()=>{try{await accountChanged(await PM.session())}catch{resolveReady()}})();

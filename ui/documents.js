@@ -1,5 +1,5 @@
 import {$,icon,esc,empty} from './core.js';
-import {installDialogFocus,toast} from './shell.js?v=26';
+import {installDialogFocus,toast} from './shell.js?v=27';
 const P=window.PM,type=document.body.dataset.pmPage,name=type==='quote'?'proposta':'contrato',isQuote=type==='quote',requested=!!location.search;
 async function setup(){
  await P.ready;
@@ -44,6 +44,13 @@ async function setup(){
  addEventListener('pm:document-open',()=>{showStep(0);open()});
  const marker=document.createComment('document-position');preview.before(marker);
  addEventListener('beforeprint',()=>{document.body.append(preview);preview.classList.add('ws-print-target')});addEventListener('afterprint',()=>{marker.after(preview);preview.classList.remove('ws-print-target')});
+ function applyBrand(){
+  const brand=P.document?.snapshot()._business;if(!brand)return;
+  const make=(className,width,height)=>{const el=document.createElement(brand.logo?'img':'span');el.className=className;if(brand.logo){el.src=brand.logo;el.alt=brand.name;el.width=width;el.height=height}else{el.textContent=brand.name;el.classList.add('ws-business-wordmark')}return el};
+  for(const mark of document.querySelectorAll('.ws-brand-document-mark'))mark.replaceChildren(make('',100,34));
+  for(const mark of document.querySelectorAll('.doc .ws-quote-wordmark'))mark.replaceWith(make('ws-quote-wordmark',92,32));
+ }
+ addEventListener('pm:document-brand',()=>queueMicrotask(applyBrand));applyBrand();
  showStep(0);if(requested||P.document.openRequested)open();document.documentElement.dataset.workspaceReady='true';
 }
 setup().catch(error=>{console.error('Workspace document initialization failed',error)});

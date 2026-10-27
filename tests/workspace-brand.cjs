@@ -1,10 +1,11 @@
+const{authorize}=require('./access-fixture.cjs');
 // Fresh visits must open directly, with readable white brand assets and native app icons.
 const{chromium}=require('playwright');const assert=require('node:assert/strict');const fs=require('node:fs');
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.PEC_BROWSER,args:['--no-sandbox','--disable-dev-shm-usage']});try{
  for(const theme of ['light','dark']){
   const c=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:'block'});await c.addInitScript(theme=>{if(location.protocol==='http:')localStorage.setItem('pec-manager-preferences-v1',JSON.stringify({theme}))},theme);
-  await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const p=await c.newPage(),errors=[],media=[];p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{if(/pec-intro|\.mp4/.test(r.url()))media.push(r.url())});
+  await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(c);const p=await c.newPage(),errors=[],media=[];p.on('pageerror',e=>errors.push(e.message));p.on('request',r=>{if(/pec-intro|\.mp4/.test(r.url()))media.push(r.url())});
   for(const file of ['index.html','agenda.html','orcamentos.html','contratos.html']){
    await p.goto(BASE+file);await p.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');assert.equal(await p.locator('video,#wsBrandIntro,dialog[open]').count(),0,'Fresh visit must open directly');
    assert(await p.locator('.ws-wordmark img').evaluate(async image=>{await image.decode();return image.naturalWidth>0&&image.src.endsWith('pec-logo-white.svg')}));

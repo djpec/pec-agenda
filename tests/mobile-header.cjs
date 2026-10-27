@@ -1,3 +1,4 @@
+const{authorize}=require('./access-fixture.cjs');
 // Simulate a native status-bar hit area; viewport emulation alone has zero safe insets.
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
@@ -8,7 +9,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
    document.documentElement.style.setProperty('--ws-safe-top',inset+'px');document.documentElement.style.setProperty('--ws-safe-bottom',inset?'34px':'0px');
    const native=document.createElement('div');native.id='testNativeStatusBar';native.style.cssText=`position:fixed;top:0;left:0;right:0;height:${inset}px;z-index:2147483647;pointer-events:auto;background:#444;`;document.body.append(native);
   }),inset);
-  await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(context);const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   for(const file of ['index.html','agenda.html','orcamentos.html','contratos.html']){
    await page.goto(BASE+file);await page.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');
    assert(await page.locator('.ws-nav a').first().evaluate(el=>{const r=el.getBoundingClientRect();return el.contains(document.elementFromPoint(r.x+r.width/2,r.y+r.height/2))}),'Bottom navigation must remain above page content');

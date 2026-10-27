@@ -1,3 +1,4 @@
+const{authorize,user:verifiedUser}=require('./access-fixture.cjs');
 // Real Supabase JS SDK; intercepted network, isolated browser accounts, no live writes.
 const {chromium}=require('playwright');
 const assert=require('node:assert/strict');
@@ -35,6 +36,7 @@ async function setup(browser){
   const single=req.headers().accept?.includes('application/vnd.pgrst.object+json');
   await route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(single?(results[0]||null):results)});
  });
+ await authorize(ctx);
  ctx.on('page',p=>{p.on('pageerror',e=>errors.push(e.message));p.on('dialog',d=>d.accept())});
  return ctx;
 }
@@ -46,7 +48,18 @@ const completed=[];
 async function localContext(browser,width=1440,theme='light'){
  const c=await browser.newContext({viewport:{width,height:1000},serviceWorkers:'block'});
  await c.addInitScript(theme=>{if(!localStorage.getItem('workspace-test-initialized')){localStorage.setItem('workspace-test-initialized','1');localStorage.setItem('pec-agenda-v1','[]');localStorage.setItem('pec-manager-preferences-v1',JSON.stringify({theme}));localStorage.setItem('pec-manager-pref-migrated','true')}},theme);
- await c.route('https://qmhyeotvbktdilrudwys.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));
+ const records=[];
+ await c.route('https://qmhyeotvbktdilrudwys.supabase.co/**',r=>{
+  const req=r.request(),u=new URL(req.url());let data=[];
+  if(u.pathname.startsWith('/auth/'))data=verifiedUser;
+  else if(u.pathname.endsWith('/events')){
+   if(req.method()==='POST'){const body=req.postDataJSON();for(const row of Array.isArray(body)?body:[body]){const i=records.findIndex(v=>v.id===row.id);if(i<0)records.push(row);else records[i]=row}}
+   if(req.method()==='DELETE'){const id=u.searchParams.get('id')?.slice(3),i=records.findIndex(row=>row.id===id);if(i>=0)records.splice(i,1)}
+   data=records;
+  }
+  return r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(data)})
+ });
+ await authorize(c);
  return c;
 }
 async function createEvent(page,title,time='23:00',date=night){
@@ -66,14 +79,14 @@ async function createEvent(page,title,time='23:00',date=night){
   await ready(p,'agenda.html?date='+night);const titles=await p.locator('.ws-day-event h3').allTextContents();assert.deepEqual(titles,['Evento <teste>','Madrugada']);
   await p.locator(`[data-day="${night}"]`).focus();await p.keyboard.press('ArrowRight');assert.equal(await p.locator('[data-day]:focus').getAttribute('aria-pressed'),'true');
   await p.locator(`[data-day="${night}"]`).click();await p.locator('[data-complete]').first().click();await p.locator('#agendaStatus').selectOption('completed');assert.equal(await p.locator('.ws-day-event h3').textContent(),'Evento <teste>');
-  await p.locator('[data-complete]').click();await p.locator('#agendaStatus').selectOption('active');await p.locator('[data-duplicate]').first().click();assert.equal(await p.locator('#eventId').inputValue(),'');await p.locator('#eventForm [type=submit]').click();assert.equal(await p.locator('.ws-day-event').count(),3);
-  await p.locator('[data-edit]').filter({hasText:'Editar'}).last().click();await p.locator('#deleteBtn').click();assert.equal(await p.locator('.ws-day-event').count(),2);
+  await p.locator('[data-complete]').click();await p.locator('#agendaStatus').selectOption('active');await p.locator('[data-duplicate]').first().click();assert.equal(await p.locator('#eventId').inputValue(),'');await p.locator('#eventForm [type=submit]').click();await p.waitForFunction(()=>document.querySelectorAll('.ws-day-event').length===3);
+  await p.locator('[data-edit]').filter({hasText:'Editar'}).last().click();await p.locator('#deleteBtn').click();await p.waitForFunction(()=>document.querySelectorAll('.ws-day-event').length===2);
   await p.reload();await p.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('pec-agenda-v1')).length),3);
   const download=p.waitForEvent('download');await p.locator('#exportBtn').click();const downloaded=await download;const exported=JSON.parse(fs.readFileSync(await downloaded.path(),'utf8'));assert.equal(exported.events.length,3);
   await p.locator('#importFile').setInputFiles({name:'invalid.json',mimeType:'application/json',buffer:Buffer.from('{"events":[{"title":"invalid"}]}')});assert.equal(await p.evaluate(()=>JSON.parse(localStorage.getItem('pec-agenda-v1')).length),3);
   await ready(p);await p.locator('#homeSearch').fill('does not exist');await p.locator('#homeEvents').getByText('Nenhum evento encontrado',{exact:true}).waitFor();await p.locator('#homeSearch').fill('');
   await p.locator('#homeCalendar [data-day]').first().click();await p.locator('#homeSelectedDay a').click();assert(new URL(p.url()).searchParams.has('date'));
-  completed.push('Local CRUD, overnight order, accent-insensitive global search, completion/reopen, duplication, keyboard, reload, export and invalid import');await local.close();
+  completed.push('Authorized CRUD, overnight order, accent-insensitive global search, completion/reopen, duplication, keyboard, reload, export and invalid import');await local.close();
   // Actual SDK + intercepted cloud routes: no requests are written to a real account.
   const ctx=await setup(browser),page=await ctx.newPage();await ready(page,'agenda.html');await createEvent(page,'Evento online');await page.waitForFunction(()=>document.querySelector('#syncState').textContent.includes('Sincronizado'));assert.equal(cloud.events.length,1);
   await ctx.setOffline(true);await createEvent(page,'Evento offline');assert.equal(await page.evaluate(()=>JSON.parse(localStorage.getItem('pec-agenda-pending-v1')).length),1);await ctx.setOffline(false);await page.evaluate(()=>window.pecPullCloud());await page.waitForFunction(()=>JSON.parse(localStorage.getItem('pec-agenda-pending-v1')).length===0);assert.equal(cloud.events.length,2);
@@ -94,17 +107,7 @@ async function createEvent(page,title,time='23:00',date=night){
   completed.push('Document library filters/search, complete quote payload, images and per-item totals, conversion after midnight, extras, linked event deduplication and PDF generation');
   await ready(page,'orcamentos.html');await page.locator('[data-record]').first().click();await page.locator('#wsDocumentSteps button').nth(1).click();
   cloud.quotes[0].updated_at='2099-01-01T00:00:00.000Z';await page.locator('[data-fixed=client]').fill('Tentativa concorrente');await page.locator('#wsSaveDocument').click();await page.waitForFunction(()=>document.querySelector('#pmDocumentState').textContent.includes('outro dispositivo'));assert.equal(cloud.quotes[0].client_name,'Cliente integração');completed.push('Concurrent update protection');await ctx.close();
-  // Mobile keyboard login exercises the actual SDK without real credentials.
-  const loginContext=await localContext(browser,390);
-  let submittedPassword=null;
-  await loginContext.route('https://qmhyeotvbktdilrudwys.supabase.co/**',async route=>{
-   const url=new URL(route.request().url());
-   if(url.pathname.includes('/token')){submittedPassword=route.request().postDataJSON().password;return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(session)})}
-   return route.fulfill({status:200,contentType:'application/json',body:JSON.stringify(url.pathname.includes('/auth/')?session.user:[])});
-  });
-  const loginPage=await loginContext.newPage();loginPage.on('pageerror',e=>errors.push(e.message));await ready(loginPage,'agenda.html');await loginPage.locator('#accountBtn').click();
-  await loginPage.locator('#authEmail').fill('qa@example.invalid');await loginPage.locator('#authPassword').fill(' Fixture-password-7! ');await loginPage.locator('#authPassword').press('Enter');await loginPage.locator('#authLoggedIn').waitFor({state:'visible'});
-  assert.equal(submittedPassword,' Fixture-password-7! ');assert.equal(await loginPage.locator('#authPassword').inputValue(),'');assert.equal(await loginPage.locator('#authPassword').getAttribute('type'),'password');await loginPage.waitForFunction(()=>document.querySelector('#pmAccountLink').dataset.connection==='connected');completed.push('Mobile keyboard login, password masking and connected-account status');await loginContext.close();
+  // Dedicated restricted-login/password/recovery cases live in access-control.cjs.
   // Responsive layout and both themes across all four screens.
   for(const width of [1440,390,320])for(const theme of ['light','dark']){
    const c=await localContext(browser,width,theme),p=await c.newPage();p.on('pageerror',e=>errors.push(e.message));

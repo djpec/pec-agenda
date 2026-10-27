@@ -1,10 +1,11 @@
+const{authorize}=require('./access-fixture.cjs');
 // Real touch scroll gestures must move form content, never the window or the page behind it.
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
 (async()=>{const browser=await chromium.launch({headless:true,executablePath:process.env.PEC_BROWSER,args:['--no-sandbox','--disable-dev-shm-usage']});try{
  const c=await browser.newContext({viewport:{width:390,height:844},isMobile:true,hasTouch:true,serviceWorkers:'block'});
  await c.addInitScript(()=>document.addEventListener('DOMContentLoaded',()=>{document.documentElement.style.setProperty('--ws-safe-top','59px');document.documentElement.style.setProperty('--ws-safe-bottom','34px')}));
- await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(BASE+'agenda.html');await p.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');
+ await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(c);const p=await c.newPage(),errors=[];p.on('pageerror',e=>errors.push(e.message));await p.goto(BASE+'agenda.html');await p.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');
  const before=await p.evaluate(()=>{window.scrollTo(0,300);const before={scrollY:window.scrollY,mainTop:document.querySelector('#workspace').getBoundingClientRect().top};document.querySelector('#addBtn').focus({preventScroll:true});AgendaStore.open();return before});
  await p.locator('#modal').evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished)));
  const initial=await p.locator('#modal').boundingBox(),heading=await p.locator('#modal .ws-drawer-heading').boundingBox(),footer=await p.locator('#modal .ws-form-footer').boundingBox();
@@ -31,7 +32,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
  assert.deepEqual(errors,[]);await c.close();
  // Hold the new module back: original document controls must never paint while booting.
  for(const [file,selector]of [['orcamentos.html','.editor'],['contratos.html','.sidebar']]){
-  const context=await browser.newContext({serviceWorkers:'block'});await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));let release;const gate=new Promise(resolve=>release=resolve);
+  const context=await browser.newContext({serviceWorkers:'block'});await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(context);let release;const gate=new Promise(resolve=>release=resolve);
   await context.route('**/ui/documents.js*',async route=>{await gate;await route.continue()});const page=await context.newPage();await page.goto(BASE+file,{waitUntil:'commit'});await page.locator(selector).waitFor({state:'attached'});
   assert.equal(await page.getAttribute('html','data-ws-boot'),'pending');assert.equal(await page.locator(selector).evaluate(el=>getComputedStyle(el).visibility),'hidden',`${file}: legacy editor flashed before workspace setup`);
   release();await page.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true'&&document.documentElement.dataset.wsBoot==='ready');assert(!await page.locator(selector).isVisible());await page.locator('.ws-heading').waitFor({state:'visible'});await context.close();

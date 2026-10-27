@@ -2,6 +2,12 @@
 
 Agenda, orçamentos e contratos em HTML, com a mesma conta Supabase. Publicação: https://agenda.djpec.com/.
 
+## Entrada reservada ao proprietário
+
+O link da divulgação leva a `login.html`. Painel, agenda, propostas e contratos só carregam depois de validação da sessão pelo Supabase Auth e da autorização de `app_has_access()`. Não há cadastro público na interface. A migração e os passos necessários para liberar a conta existente `contato@djpec.com` estão em [docs/ACESSO-RESTRITO.md](docs/ACESSO-RESTRITO.md). A migração ainda precisa ser aplicada no Supabase remoto: até isso acontecer, o acesso permanece fechado inclusive para o proprietário.
+
+O login é verificado online em cada nova abertura. Uma aba já autorizada conserva a edição local quando perde a conexão; o armazenamento de rascunhos não é apagado ao sair. Os testes usam sessões e APIs isoladas, sem alterar credenciais ou registros reais.
+
 ## Módulos definitivos
 
 `orcamentos.html` contém o arquivo **ORÇAMENTOS DEFINITIVO.html** e `contratos.html` contém **CONTRATOS.html**. O único acréscimo nos dois arquivos é o bloco demarcado `pec Manager integration`, antes de `</body>`. Os estilos, formulários, cálculos, importação/exportação XML e impressão dos originais permanecem intactos. `tests/originals.json` registra os hashes SHA-256 dos arquivos fornecidos.
@@ -10,7 +16,7 @@ Os scripts externos adicionam navegação, histórico, status, conversão para c
 
 ## Uso
 
-- Entre em **Minha conta**, usando o login já utilizado na Agenda.
+- Abra **Entrar no sistema** e use sua conta já cadastrada, após a liberação no Supabase.
 - **Salvar no histórico** grava o documento completo, incluindo as imagens do orçamento. Sem conexão, as gravações da conta ficam pendentes até a internet retornar.
 - O rascunho aberto é guardado neste navegador. Para acessá-lo em outro dispositivo, salve no histórico e abra o registro lá.
 - **Gerar contrato** permite revisar datas reais, horários, valor principal e extras contratados. Os opcionais não são incluídos automaticamente. CPF, endereço do cliente e demais informações ausentes continuam disponíveis para preenchimento.
@@ -21,9 +27,9 @@ Os scripts externos adicionam navegação, histórico, status, conversão para c
 
 ## Estrutura e dados
 
-Não há etapa de build. Sirva a pasta por HTTP ou publique no GitHub Pages. O Supabase JS 2.116.0 está fixado em `vendor/`, para evitar mudanças inesperadas e permitir abertura offline dos editores.
+Não há etapa de build. Sirva a pasta por HTTP ou publique no GitHub Pages. O Supabase JS 2.116.0 está fixado em `vendor/`, para evitar mudanças inesperadas e manter os recursos estáticos disponíveis sem depender de uma CDN.
 
-As tabelas existentes são `events`, `quotes`, `contracts` e `user_preferences`. Esta versão não exige migração nem altera os eventos existentes. As políticas de acesso por `user_id` continuam em vigor; apenas a chave pública está no cliente. O service worker armazena os arquivos estáticos da aplicação e não armazena respostas de autenticação ou do banco.
+As tabelas existentes são `events`, `quotes`, `contracts` e `user_preferences`. O acesso restrito exige a migração descrita acima, que não apaga os eventos existentes e reforça as políticas de propriedade por `user_id`; apenas a chave pública está no cliente. O service worker armazena os arquivos estáticos da aplicação e não armazena respostas de autenticação ou do banco.
 
 Os documentos completos e rascunhos usam IndexedDB, separados por conta. Os registros no Supabase usam o JSON `payload` existente; `_manager` contém status, versão remota e vínculos entre documentos. Os formatos antigos de histórico são adaptados ao abrir.
 
@@ -56,6 +62,7 @@ A suíte atual usa Node.js, `playwright@1.62.1`, Chromium e `pdftotext` (Poppler
 ```sh
 npm install --prefix /tmp/pec-tools --cache /tmp/pec-npm-cache --no-package-lock playwright@1.62.1
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace.cjs
+NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/access-control.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/workspace-offline.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/document-contrast.cjs
 NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8765/ node tests/mobile-header.cjs
@@ -94,3 +101,5 @@ NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL
 Os arquivos ficam em `marketing/`. As capturas mostram a interface real com eventos e locais fictícios; as capturas do painel e da agenda no celular também são reais, com dados fictícios e ampliação ao tocar. A página inclui navegação móvel, comparação entre agenda e painel, ampliação das imagens, FAQ, preferência por movimento reduzido e imagem para compartilhamento.
 
 Verificação: `NODE_PATH=/tmp/pec-tools/node_modules PEC_BROWSER=/usr/bin/chromium PEC_TEST_URL=http://127.0.0.1:8769/ node tests/marketing.cjs`.
+
+O teste de autorização no PostgreSQL usa `npm install --prefix /tmp/pec-tools --cache /tmp/pec-npm-cache @electric-sql/pglite`, seguido de `NODE_PATH=/tmp/pec-tools/node_modules node tests/access-rls.cjs`.

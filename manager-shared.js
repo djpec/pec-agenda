@@ -2,7 +2,7 @@
 (() => {
   'use strict';
   if (window.PM) return;
-  const client = window.supabase?.createClient('https://qmhyeotvbktdilrudwys.supabase.co','sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT');
+  const client = window.ArtistAuth?.client||window.supabase?.createClient('https://qmhyeotvbktdilrudwys.supabase.co','sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT');
   const read=(key,fallback=null)=>{try{return JSON.parse(localStorage.getItem(key))??fallback}catch{return fallback}};
   const write=(key,value)=>{try{localStorage.setItem(key,JSON.stringify(value));return true}catch{return false}};
   const clone=value=>structuredClone(value);
@@ -118,5 +118,5 @@
   addEventListener('storage',event=>{if(event.key===prefKey()){prefs={...defaults,...read(prefKey(),{})};dirty=read(pendingKey(),{});applyPreferences()}});
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change',applyPreferences);
   setInterval(()=>{if(!document.hidden){syncPreferences();PM.notify('pm:refresh')}},20000);
-  if('serviceWorker'in navigator)addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));
+  if('serviceWorker'in navigator){const register=()=>navigator.serviceWorker.register('./sw.js').catch(()=>console.warn('Não foi possível atualizar o acesso offline agora.'));if(document.readyState==='complete')register();else addEventListener('load',register,{once:true})}
 })();

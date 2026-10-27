@@ -1,0 +1,5 @@
+// Test-only verified owner session. No credentials or production authorization bypass.
+const uid='11111111-1111-4111-8111-111111111111';const b64=x=>Buffer.from(JSON.stringify(x)).toString('base64url');const token=b64({alg:'HS256',typ:'JWT'})+'.'+b64({sub:uid,exp:Math.floor(Date.now()/1000)+7200})+'.fixture';
+const user={id:uid,email:'qa@example.invalid',aud:'authenticated',role:'authenticated',email_confirmed_at:'2026-01-01',app_metadata:{},user_metadata:{}};const session={access_token:token,refresh_token:'fixture',token_type:'bearer',expires_in:7200,expires_at:Math.floor(Date.now()/1000)+7200,user};
+async function authorize(context){await context.addInitScript(s=>{if(location.protocol==='http:')localStorage.setItem('sb-qmhyeotvbktdilrudwys-auth-token',JSON.stringify(s))},session);await context.route('https://**.supabase.co/auth/v1/user',r=>r.fulfill({status:200,contentType:'application/json',body:JSON.stringify(user)}));await context.route('https://**.supabase.co/rest/v1/rpc/app_has_access',r=>r.fulfill({status:200,contentType:'application/json',body:'true'}))}
+module.exports={authorize,session,user,uid};

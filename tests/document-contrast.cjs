@@ -1,3 +1,4 @@
+const{authorize}=require('./access-fixture.cjs');
 // Printed document colors must remain readable independently of the app theme.
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
@@ -6,7 +7,7 @@ const luminance=color=>color.match(/[\d.]+/g).slice(0,3).map(Number).map(v=>{con
  for(const width of [1440,390])for(const theme of ['light','dark']){
   const c=await browser.newContext({viewport:{width,height:1000},serviceWorkers:'block'});
   await c.addInitScript(theme=>{localStorage.setItem('pec-manager-preferences-v1',JSON.stringify({theme}));localStorage.setItem('pec-manager-pref-migrated','true')},theme);
-  await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const p=await c.newPage();
+  await c.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(c);const p=await c.newPage();
   for(const file of ['contratos.html','orcamentos.html']){
    await p.emulateMedia({media:'screen'});await p.goto(BASE+file);await p.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');await p.locator('#wsResumeDocument').click();if(width<1000)await p.locator('#wsTogglePreview').click();
    const root=file==='contratos.html'?'.paper':'.doc';

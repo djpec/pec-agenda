@@ -74,7 +74,7 @@ async function login(){
     button.disabled=false;signupButton.disabled=false;button.textContent='Entrar';
   }
 }
-async function signup(){const email=document.querySelector('#authEmail').value.trim(),password=document.querySelector('#authPassword').value,msg=document.querySelector('#authMessage');if(!email||password.length<6){msg.textContent='Informe um e-mail e uma senha com pelo menos 6 caracteres.';return}msg.textContent='Criando conta...';if(!sb){msg.textContent='Conexão com a nuvem indisponível.';return}const{data,error}=await sb.auth.signUp({email,password});if(error){msg.textContent=error.message;return}msg.textContent=data.session?'Conta criada e conectada ✓':'Conta criada. Confirme o e-mail recebido e depois toque em Entrar.'}
+async function signup(){document.querySelector('#authMessage').textContent='O cadastro público está fechado.'}
 
 async function toggleComplete(id){const e=events.find(x=>x.id===id);if(!e)return;e.completed=!e.completed;e.completedAt=e.completed?new Date().toISOString():null;await persistEvent(e)}
 async function deleteEvent(id){const e=events.find(x=>x.id===id);if(e&&confirm(`Excluir “${e.title}”?`)){const deleted=new Set(PM.read('pec-agenda-deleted-v1',[]));deleted.add(id);PM.write('pec-agenda-deleted-v1',[...deleted]);events=events.filter(x=>x.id!==id);await persistDelete(id)}}

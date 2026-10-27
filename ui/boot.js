@@ -1,6 +1,6 @@
 /* Runs in <head>: restore local appearance before paint and never expose legacy editors. */
 (()=>{
- const root=document.documentElement;root.dataset.wsBoot='pending';
+ const root=document.documentElement;root.dataset.wsBoot='pending';root.dataset.wsAccess='pending';
  try{const prefs=JSON.parse(localStorage.getItem('pec-manager-preferences-v1')||'{}');const mode=prefs.theme||'light';root.dataset.pmTheme=mode==='auto'?(matchMedia('(prefers-color-scheme:dark)').matches?'dark':'light'):mode;
  const accent=JSON.parse(localStorage.getItem('pec-workspace-accent')||'"#4358db"');if(/^#[0-9a-f]{6}$/i.test(accent))root.style.setProperty('--ws-accent',accent);
  }catch{root.dataset.pmTheme='light'}

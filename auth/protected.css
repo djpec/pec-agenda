@@ -1,0 +1,3 @@
+/* This guard also applies before JavaScript runs and during printing. */
+html:not([data-ws-access=granted]) body,html:not([data-ws-access=granted]) body *{visibility:hidden!important}
+@media print{html:not([data-ws-access=granted]) body{display:none!important}}

@@ -1,3 +1,4 @@
+const{authorize}=require('./access-fixture.cjs');
 // Modal geometry, background blocking, focus, persisted motion preference and OS opt-out.
 const {chromium}=require('playwright');const assert=require('node:assert/strict');
 const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
@@ -5,7 +6,7 @@ const BASE=process.env.PEC_TEST_URL||'http://127.0.0.1:8765/';
  for(const width of [1440,390])for(const reducedMotion of ['no-preference','reduce']){
   const context=await browser.newContext({viewport:{width,height:1000},hasTouch:width<600,serviceWorkers:'block',reducedMotion});
   await context.addInitScript(width=>document.addEventListener('DOMContentLoaded',()=>{document.documentElement.style.setProperty('--ws-safe-top',width<600?'59px':'0px');document.documentElement.style.setProperty('--ws-safe-bottom',width<600?'34px':'0px')}),width);
-  await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
+  await context.route('https://**.supabase.co/**',r=>r.fulfill({status:200,contentType:'application/json',body:'[]'}));await authorize(context);const page=await context.newPage(),errors=[];page.on('pageerror',e=>errors.push(e.message));
   await page.goto(BASE+'agenda.html');await page.waitForFunction(()=>document.documentElement.dataset.workspaceReady==='true');assert.equal(await page.getAttribute('html','data-ws-motion'),reducedMotion==='reduce'?'off':'on');
   await page.locator('#addBtn').click();await page.locator('#modal[open]').waitFor();await page.locator('#modal').evaluate(el=>Promise.all(el.getAnimations().map(a=>a.finished)));
   const rect=await page.locator('#modal').boundingBox();assert(Math.abs(rect.x+rect.width/2-width/2)<2,'Launch window must be centered horizontally');assert(rect.width<width,'Launch window must float inside viewport');assert(rect.y>=(width<600?59:0),'Window must respect status bar');assert(rect.y+rect.height<=1000-(width<600?34:0),'Window must respect bottom safe area');

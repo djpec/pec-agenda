@@ -17,3 +17,24 @@ html[data-pm-theme=dark] .is-income{color:#8dcba8}
 html[data-pm-theme=dark] #financeError{color:#f1a28e}
 
 .fin-backup-actions{display:flex;gap:18px;flex-wrap:wrap}.fin-backup-dialog{max-width:calc(100vw - 24px)}.fin-backup-dialog strong{color:var(--ws-ink)}#financeRestoreError{color:#b94d35}html[data-pm-theme=dark] #financeRestoreError{color:#f1a28e}
+/* Quick entry: one compact card, with a shared account/card picker. */
+#financeDialog.is-quick-entry{width:min(620px,calc(100vw - 32px));height:auto;max-height:calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px)!important}
+#financeDialog.is-quick-entry>.sheet{height:auto;max-height:inherit}
+#financeDialog.is-quick-entry #financeFields{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px 14px;padding:16px 24px;flex:0 1 auto}
+#financeDialog.is-quick-entry .ws-drawer-heading{padding:16px 24px}
+#financeDialog.is-quick-entry .ws-drawer-heading small{display:none}
+#financeDialog.is-quick-entry .ws-drawer-heading h2{font-size:23px}
+#financeDialog.is-quick-entry .ws-field{gap:5px;font-size:11px}
+#financeDialog.is-quick-entry .ws-field :is(input,select){min-height:40px;height:40px;padding:7px 10px;font-size:15px}
+.fin-quick-description,.fin-quick-types,.fin-quick-status,.fin-quick-repeat,.fin-quick-summary,.is-quick-entry .is-wide{grid-column:1/-1}
+.fin-quick-types,.fin-repeat-options{display:flex;gap:4px;padding:3px;background:var(--ws-soft);border:1px solid var(--ws-line);border-radius:10px}
+.fin-quick-types button,.fin-repeat-options button{flex:1;min-height:30px;padding:5px 8px;border:0;border-radius:7px;font:600 11px var(--ws-font);color:var(--ws-muted);background:transparent;cursor:pointer;white-space:nowrap}
+.fin-quick-types button[aria-pressed=true],.fin-repeat-options button[aria-pressed=true]{color:var(--ws-ink);background:var(--ws-panel);box-shadow:0 2px 5px #0000000a}
+.fin-quick-status{display:flex;gap:16px;align-items:center;justify-content:space-between}.fin-quick-status>.ws-field{width:48%}.fin-quick-status>.ws-field>label{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%)}
+.fin-paid-switch{display:flex;align-items:center;gap:7px;position:relative;cursor:pointer;font-size:11px;white-space:nowrap}.fin-paid-switch input{position:absolute;opacity:0;width:34px;height:24px;left:0;margin:0}.fin-switch{width:32px;height:20px;background:var(--ws-line);border-radius:20px;position:relative;flex-shrink:0}.fin-switch:after{content:'';position:absolute;left:3px;top:3px;width:14px;height:14px;border-radius:50%;background:var(--ws-panel);transition:transform .15s}.fin-paid-switch input:checked+.fin-switch{background:#297b66}.fin-paid-switch input:checked+.fin-switch:after{transform:translateX(12px)}.fin-paid-switch input:focus-visible+.fin-switch{outline:3px solid var(--ws-accent);outline-offset:3px}.fin-paid-switch:has(input:disabled){opacity:.65;cursor:default}
+.fin-small-label{display:block;font-size:10px;color:var(--ws-muted);margin-bottom:5px}.fin-quick-summary{margin:0;font-size:11px;color:var(--ws-muted);line-height:1.5;min-height:17px}
+#financeDialog.is-quick-entry .ws-form-footer{padding:12px 24px}#financeDialog.is-quick-entry .ws-form-footer .ws-button{min-height:40px}
+@media(max-width:600px){#financeDialog.is-quick-entry{width:auto}#financeDialog.is-quick-entry #financeFields{padding:12px 16px;gap:9px 10px}#financeDialog.is-quick-entry .ws-drawer-heading{padding:12px 16px!important}#financeDialog.is-quick-entry .ws-field :is(input,select){font-size:16px}#financeDialog.is-quick-entry .ws-form-footer{padding:10px 16px}.fin-repeat-options button{font-size:10px}}
+@media(max-height:760px){#financeDialog.is-quick-entry #financeFields{padding-block:10px;gap:7px 10px}#financeDialog.is-quick-entry .ws-field :is(input,select){min-height:36px;height:36px}#financeDialog.is-quick-entry .ws-drawer-heading{padding-block:8px!important}#financeDialog.is-quick-entry .ws-drawer-heading h2{font-size:21px}.fin-quick-types button,.fin-repeat-options button{min-height:28px}.fin-quick-summary{font-size:10px}}
+@media(prefers-reduced-motion:reduce){.fin-switch:after{transition:none}}
+.fin-paid-switch input{z-index:1;inset:0;width:100%;height:100%;cursor:pointer}.fin-paid-switch:has(input:disabled) input{cursor:default}

@@ -39,3 +39,9 @@ Receitas e despesas em conta podem ser editadas (descrição, valor, categoria, 
 Exporte backups regularmente; limpar os dados do site, desinstalar o navegador ou usar navegação anônima pode apagar o armazenamento. Os arquivos JSON contêm dados financeiros e devem ser guardados em local privado. Não há sincronização automática entre aparelhos neste modo.
 
 A restauração aceita o formato atual e os backups JSON antigos exportados pelo módulo. Primeiro valida o arquivo (até 10 MB), contas, cartões, lançamentos, referências e valores em centavos. Depois mostra a quantidade de registros e solicita confirmação para substituir **apenas o financeiro do destino**. Há um botão para baixar os dados atuais antes da substituição. Cancelar ou importar um arquivo inválido não altera o financeiro. A restauração não mescla estados de dois aparelhos.
+
+## Lançamento rápido
+
+A criação usa uma janela compacta com Despesa/Receita/Transferir, descrição, valor, data, conta ou cartão, categoria, uso e baixa. Controles adicionais aparecem apenas quando necessários. O modo Parcelado divide o **valor total** entre até 120 parcelas, inclusive em conta; Fixo mensal repete o **valor informado** a cada mês, por até 60 meses. Nas contas, apenas o primeiro lançamento pode nascer baixado; os próximos ficam pendentes. Nos cartões, as compras entram nas faturas e nunca nas baixas diretas. Confira a primeira fatura: as datas dos bancos podem variar.
+
+A janela cabe nas telas usuais sem rolagem. Em uma área de visualização reduzida, como com teclado aberto, o conteúdo continua acessível por rolagem interna. Nenhum campo ou botão é cortado para forçar a altura.

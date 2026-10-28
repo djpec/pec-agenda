@@ -5,8 +5,9 @@
  menu.onclick=()=>{const expanded=menu.getAttribute('aria-expanded')!=='true';menu.setAttribute('aria-expanded',String(expanded));nav.classList.toggle('is-open',expanded)};
  nav.addEventListener('click',e=>{if(e.target.closest('a'))close()});document.addEventListener('keydown',e=>{if(e.key==='Escape'&&menu.getAttribute('aria-expanded')==='true'){close();menu.focus()}});document.addEventListener('click',e=>{if(!e.target.closest('.header'))close()});
  // Contact uses the business number already published in the app; clicking only opens a draft.
- const contact=new URL('https://wa.me/5545991087615');contact.searchParams.set('text','Olá! Quero conhecer a Agenda do Artista e acompanhar o lançamento do plano de R$ 29,90 por mês.');for(const link of document.querySelectorAll('[data-contact]')){link.href=contact.href;link.target='_blank';link.rel='noopener noreferrer'}
+ const contact=new URL('https://wa.me/5545991087615');contact.searchParams.set('text','Olá! Quero conhecer a Agenda do Artista e acompanhar o lançamento do plano de R$ 19,90 por mês.');for(const link of document.querySelectorAll('[data-contact]')){link.href=contact.href;link.target='_blank';link.rel='noopener noreferrer'}
  const screens={agenda:{src:'./marketing/agenda.webp',alt:'Calendário do sistema com eventos ilustrativos',caption:'Agenda · interface real com dados de demonstração.'},painel:{src:'./marketing/painel.webp',alt:'Painel do sistema com resumo e próximos eventos ilustrativos',caption:'Painel · interface real com dados de demonstração.'}};
+ for(const [name,label] of [['orcamentos','Propostas'],['contratos','Contratos'],['financeiro','Financeiro']])screens[name]={src:'./marketing/'+name+'.webp',alt:label+' · interface real com dados fictícios',caption:label+' · interface real com dados de demonstração.'};
  const image=document.querySelector('#previewImage'),caption=document.querySelector('#previewCaption'),dialog=document.querySelector('#previewDialog'),expand=document.querySelector('#expandPreview');let selected='agenda';
  for(const button of document.querySelectorAll('[data-preview]'))button.onclick=()=>{const screen=screens[button.dataset.preview];if(!screen)return;selected=button.dataset.preview;image.src=screen.src;image.alt=screen.alt;caption.textContent=screen.caption;for(const b of document.querySelectorAll('[data-preview]'))b.setAttribute('aria-pressed',String(b===button))};
  let previewTrigger=expand;
@@ -16,6 +17,7 @@
  if(typeof dialog.showModal==='function'){
   expand.hidden=false;expand.onclick=()=>openPreview(screens[selected],expand);
   for(const button of document.querySelectorAll('[data-mobile-preview]'))button.onclick=event=>{event.preventDefault();const name=button.dataset.mobilePreview;openPreview({src:'./marketing/celular-'+name+'.webp',alt:button.querySelector('img').alt,label:name==='agenda'?'Agenda':'Painel'},button,true)};
+  for(const link of document.querySelectorAll('[data-product-preview]'))link.onclick=event=>{event.preventDefault();openPreview(screens[link.dataset.productPreview],link)};
   document.querySelector('#closePreview').onclick=()=>dialog.close();dialog.addEventListener('close',()=>previewTrigger.focus({preventScroll:true}));dialog.addEventListener('click',e=>{if(e.target!==dialog)return;const r=dialog.getBoundingClientRect();if(e.clientX<r.left||e.clientX>r.right||e.clientY<r.top||e.clientY>r.bottom)dialog.close()});
  }
  if('IntersectionObserver'in window){const observer=new IntersectionObserver(items=>{for(const item of items)if(item.isIntersecting){item.target.classList.add('is-inview');observer.unobserve(item.target)}},{threshold:.12});for(const el of document.querySelectorAll('.reveal'))observer.observe(el)}

@@ -1,3 +1,5 @@
+> **Acesso temporariamente sem login, a pedido do proprietário.** O aplicativo abre diretamente para permitir criar contratos e propostas locais, inclusive PDF. A chave `ArtistAuth.accessRequired` em `auth/client.js` está `false`; a lógica de autorização continua disponível para reativar depois. A página `login.html` redireciona ao sistema. Não foram modificadas as permissões do Supabase nem apagados dados locais ou remotos. O financeiro em nuvem continua dependendo de uma sessão e das migrações.
+
 # Login reservado ao proprietário
 
 A conta autorizada nesta fase é a conta existente e confirmada `contato@djpec.com`. A aplicação usa Supabase Auth; não cria senhas locais ou libera acesso por comparação do e-mail no JavaScript.

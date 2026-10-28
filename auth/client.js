@@ -14,5 +14,6 @@
   return{allowed:permission.data===true,reason:'restricted',user:verified.data.user};
  }
  function loginURL(reason='login'){const url=new URL('login.html',base);url.searchParams.set('next',destination(location.href));if(reason!=='login')url.searchParams.set('estado',reason);return url.href}
- window.ArtistAuth={client,verify,destination,loginURL,timeout};
+ // Temporary local access while the owner prepares documents. Restore true to require login.
+ window.ArtistAuth={accessRequired:false,client,verify,destination,loginURL,timeout};
 })();

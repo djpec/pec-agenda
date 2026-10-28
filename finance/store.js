@@ -1,6 +1,6 @@
 import {blank,validate} from './model.mjs';
 export async function openStore(){
- await PM.ready;if(!PM.user)throw Error('Entre novamente para abrir o financeiro.');
+ await PM.ready;if(!PM.user)return {get state(){return blank()},ready:false,busy:false,note:'O financeiro em nuvem está pausado neste acesso sem login. Os contratos e propostas podem ser criados normalmente neste aparelho.',refresh:async()=>{},change:async()=>{throw Error('O financeiro em nuvem está pausado neste acesso sem login.')}};
  const userId=PM.user.id,key='artist-finance-v1:'+userId;let state=blank(),revision=0,ready=false,busy=false,note='';
  const emit=()=>dispatchEvent(new CustomEvent('finance:change'));
  const cache=()=>{try{localStorage.setItem(key,JSON.stringify({revision,state}))}catch{/* Cloud remains the source of truth. */}};

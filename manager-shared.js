@@ -75,7 +75,7 @@
     link.setAttribute('aria-label','Conta e nuvem · '+text);link.title='Conta e nuvem · '+text;
   }
   function shell(){
-    document.body.dataset.pmPage=document.querySelector('.editor')?'quote':document.querySelector('.sidebar')?'contract':location.pathname.endsWith('agenda.html')?'agenda':'home';
+    document.body.dataset.pmPage=document.querySelector('.editor')?'quote':document.querySelector('.sidebar')?'contract':location.pathname.endsWith('agenda.html')?'agenda':location.pathname.endsWith('financeiro.html')?'finance':'home';
     const backdrop=document.createElement('div');backdrop.id='pmBackdrop';backdrop.setAttribute('aria-hidden','true');document.body.prepend(backdrop);
     const icons={
       home:'<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1Z"/>',

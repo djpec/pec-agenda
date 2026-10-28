@@ -2,7 +2,7 @@
 (()=>{
  'use strict';if(window.ArtistAuth)return;
  const client=window.supabase.createClient('https://qmhyeotvbktdilrudwys.supabase.co','sb_publishable_Yin9aHOMDRYJ0PsuMloVlQ_q8M7iReT');
- const allowed=new Set(['index.html','agenda.html','orcamentos.html','contratos.html']);
+ const allowed=new Set(['index.html','agenda.html','orcamentos.html','contratos.html','financeiro.html']);
  const base=new URL('.',location.href);
  function destination(raw){try{const url=new URL(raw||'index.html',base);const name=url.pathname.slice(base.pathname.length);if(url.origin!==base.origin||!url.pathname.startsWith(base.pathname)||!allowed.has(name)||url.username||url.password)return new URL('index.html',base).href;url.hash='';return url.href}catch{return new URL('index.html',base).href}}
  async function timeout(promise){let timer;try{return await Promise.race([promise,new Promise((_,reject)=>timer=setTimeout(()=>reject(new Error('verification_unavailable')),9000))])}finally{clearTimeout(timer)}}

@@ -1,6 +1,6 @@
 import {$,icon,esc} from './core.js';
 const page=document.body.dataset.pmPage;
-const routes=[['home','./','dashboard','Painel'],['agenda','./agenda.html','calendar','Agenda'],['quote','./orcamentos.html','quote','Propostas'],['contract','./contratos.html','contract','Contratos']];
+const routes=[['home','./','dashboard','Painel'],['agenda','./agenda.html','calendar','Agenda'],['quote','./orcamentos.html','quote','Propostas'],['contract','./contratos.html','contract','Contratos'],['finance','./financeiro.html','wallet','Financeiro']];
 const old=$('#pmHeader'),appearance=$('#pmAppearance'),account=$('#pmAccountLink');
 const rail=document.createElement('aside');rail.id='pmHeader';rail.className='ws-rail';
 rail.innerHTML=`<a class="ws-monogram" href="./" aria-label="pec Manager · Início"><img src="./assets/brand/pec-logo-white.svg" alt="pec" width="72" height="28"></a><nav class="ws-nav pm-nav" aria-label="Navegação principal">${routes.map(([key,href,name,label])=>`<a href="${href}" title="${label}" ${key===page?'aria-current="page"':''}>${icon(name)}<span>${label}</span></a>`).join('')}</nav><div class="ws-rail-bottom"><span class="ws-rail-line"></span></div>`;

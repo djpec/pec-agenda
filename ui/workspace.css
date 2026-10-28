@@ -242,3 +242,6 @@ html:not([data-pm-theme=dark]) .ws-wordmark img{background:#121716;border-radius
 
 /* Contracts use black ink on transparent logo art, on screen and in the PDF. */
 .paper .ws-brand-document-mark img{filter:brightness(0)!important}
+
+/* Proposals use the same transparent black document branding as contracts. */
+.doc .ws-quote-wordmark,.doc .ws-brand-document-mark img{filter:brightness(0)!important}

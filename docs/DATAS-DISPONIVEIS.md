@@ -2,13 +2,14 @@
 
 Na Agenda, o botão **Datas disponíveis** abre seleção de até 12 meses, filtros por dia da semana e uma prévia editável. O link do WhatsApp contém apenas a mensagem: o usuário escolhe o destinatário e confirma o envio. Não há envio automático nem acesso à lista de contatos.
 
-- Dia sem evento: disponível. Dia com evento: depende do horário. Eventos concluídos não bloqueiam. Um show às 23h não torna o dia inteiro indisponível.
+- Dia sem evento: disponível. Evento de noite toda: data indisponível, sem liberação manual para envio. Outros eventos: depende do horário, fora da mensagem até o proprietário revisar e liberar o encaixe. Eventos concluídos não bloqueiam. Um show às 23h não torna o dia inteiro indisponível.
 - A agenda representa a noite do evento: um horário entre 00h e 11h59 é a madrugada seguinte à data cadastrada. Esses eventos e os eventos de noite toda deixam também o dia seguinte como “depende do horário”. Não são inferidos duração, deslocamento ou intervalos livres exatos.
 - Só entram hoje e datas futuras. A lista usa todos os eventos disponíveis neste aparelho, independentemente da busca e dos filtros visuais da agenda.
+- Na revisão, os compromissos mostram nome, local e horário apenas ao proprietário. O campo **Posso encaixar — incluir esta data na mensagem** libera cada data individualmente como dependente do horário. Uma data com evento nunca é convertida automaticamente em totalmente livre.
 - É possível escolher dias da semana individualmente ou usar Todos, Sex a dom, Qua a dom e Qua a sáb. Feriados e vésperas podem ser incluídos mesmo fora desses dias.
-- Datas podem ser marcadas manualmente como disponíveis, dependentes do horário ou indisponíveis, só para essa mensagem. Isso não modifica os eventos.
+- Ao clicar numa data, o painel mostra os compromissos e permite ajustar o tratamento para essa mensagem. Datas sem evento podem ser alteradas livremente. Datas com eventos têm as opções depende do horário ou indisponível; datas de noite toda permanecem indisponíveis. Isso não modifica os eventos.
 - O texto não inclui nomes de clientes, locais de eventos, observações nem horários reservados. Os horários são mostrados apenas na revisão do proprietário. A mensagem pede horário e local ao novo contratante para confirmar o encaixe.
-- Se os eventos mudarem enquanto a janela estiver aberta, o compartilhamento é bloqueado até gerar e revisar novamente. Ajustes manuais de disponibilidade são descartados nessa atualização para não esconder novos compromissos.
+- Se os eventos mudarem enquanto a janela estiver aberta, o compartilhamento é bloqueado até gerar e revisar novamente. Ajustes manuais e liberações de encaixe são descartados nessa atualização para não esconder novos compromissos. Mudanças de nome ou local do evento também exigem nova revisão.
 
 ## Cidade, feriados e limites
 

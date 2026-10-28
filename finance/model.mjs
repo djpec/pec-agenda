@@ -19,7 +19,7 @@ export function validate(s){
  for(const e of s.entries){
   if(!text(e.description)||!money(e.amount,true)||!validDate(e.date)||!['income','expense','card','transfer','payment'].includes(e.kind)||!['personal','work'].includes(e.scope)||!text(e.category)||e.paidOn!==null&&!validDate(e.paidOn))throw Error('Lançamento inválido.');
   if(e.kind==='card'){if(!card(e.cardId)||e.paidOn!==null)throw Error('Compra sem cartão válido.')}else if(!account(e.accountId))throw Error('Selecione uma conta válida.');
-  if(e.kind==='transfer'&&(!account(e.targetId)||e.targetId===e.accountId)||e.kind==='payment'&&(!card(e.cardId)||!/^\d{4}-\d{2}$/.test(e.invoice||''))||['transfer','payment'].includes(e.kind)&&!e.paidOn)throw Error('Movimentação inválida.');
+  if(e.kind==='transfer'&&(!account(e.targetId)||e.targetId===e.accountId)||e.kind==='payment'&&(!card(e.cardId)||!validDate((e.invoice||'')+'-01'))||['transfer','payment'].includes(e.kind)&&!e.paidOn)throw Error('Movimentação inválida.');
  }
  for(const inv of invoices(s))if(inv.paid>inv.total)throw Error('A alteração deixaria uma fatura com pagamento maior que as compras.');
  return s;

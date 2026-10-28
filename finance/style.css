@@ -15,3 +15,5 @@ body[data-pm-page=finance] button.ws-text-link{border:0;background:transparent;p
 @media(max-width:600px){#financeDialog.fin-dialog{inset:calc(var(--ws-safe-top) + 12px) calc(var(--ws-safe-right) + 12px) auto calc(var(--ws-safe-left) + 12px);margin:0;width:auto;height:min(calc(100svh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px),calc(100dvh - var(--ws-safe-top) - var(--ws-safe-bottom) - 24px));max-height:none!important;border-radius:18px;transform:none!important}}
 html[data-pm-theme=dark] .is-income{color:#8dcba8}
 html[data-pm-theme=dark] #financeError{color:#f1a28e}
+
+.fin-backup-actions{display:flex;gap:18px;flex-wrap:wrap}.fin-backup-dialog{max-width:calc(100vw - 24px)}.fin-backup-dialog strong{color:var(--ws-ink)}#financeRestoreError{color:#b94d35}html[data-pm-theme=dark] #financeRestoreError{color:#f1a28e}

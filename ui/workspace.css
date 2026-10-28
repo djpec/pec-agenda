@@ -239,3 +239,6 @@ html[data-pm-theme=dark] .ws-wordmark img{filter:none}
 @media print{.ws-quote-wordmark{filter:none!important}}
 
 html:not([data-pm-theme=dark]) .ws-wordmark img{background:#121716;border-radius:6px;padding:3px;box-sizing:border-box}
+
+/* Contracts use black ink on transparent logo art, on screen and in the PDF. */
+.paper .ws-brand-document-mark img{filter:brightness(0)!important}

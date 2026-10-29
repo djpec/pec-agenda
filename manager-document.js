@@ -7,7 +7,21 @@
     d.innerHTML=`<form method="dialog"><div class="pm-dialog-head"><h2>${P.esc(title)}</h2><button aria-label="Fechar">×</button></div></form><div class="pm-dialog-body">${body}</div>`;
     d.addEventListener('close',()=>d.remove());document.body.append(d);d.showModal();return d;
   };
+  // Native Save as PDF uses the page title as its suggested filename.
+  P.documentFilename=(type,client,date)=>{
+    const clean=value=>String(value||'').normalize('NFC').replace(/[<>:"/\\|?*\x00-\x1f\x7f]/g,' ').replace(/\s+/g,' ').trim().replace(/[. ]+$/g,'');
+    const name=clean(client).slice(0,120).trim()||'Cliente a definir';
+    const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(date||''));
+    return `${type==='quote'?'Proposta':'Contrato'} - ${name} - ${match?match[3]+'-'+match[2]+'-'+match[1]:'Data a definir'}`;
+  };
   P.initDocument=async adapter=>{
+    let titleBeforePrint=null;
+    addEventListener('beforeprint',()=>{
+      if(titleBeforePrint===null)titleBeforePrint=document.title;
+      const info=adapter.info(adapter.get());
+      document.title=P.documentFilename(adapter.type,info.client_name,info.event_date);
+    });
+    addEventListener('afterprint',()=>{if(titleBeforePrint!==null){document.title=titleBeforePrint;titleBeforePrint=null}});
     await P.ready;
     const type=adapter.type,table=type==='quote'?'quotes':'contracts',label=type==='quote'?'orçamento':'contrato';
     let scope=P.scope,meta={},rows=[],busy=false,restoring=false,unsaved=false,version=0,draftTimer,ready=false;

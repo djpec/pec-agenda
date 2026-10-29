@@ -2566,7 +2566,7 @@ ${fixed}
   const url = URL.createObjectURL(blob);
   const a = document.createElement("a");
   a.href = url;
-  a.download = `proposta-${String(data.client || "cliente").toLowerCase().replace(/\s+/g,"-")}.xml`;
+  a.download = PM.documentFilename("quote",data.client,data.eventDate)+".xml";
   document.body.appendChild(a);
   a.click();
   a.remove();
@@ -2728,7 +2728,7 @@ renderAll();
 <!-- /pec Manager integration -->
 
 <script src="./auth/client.js?v=3"></script>
-<script id="workspaceScripts" type="application/json">[{"src":"./manager-shared.js?v=29"},{"src":"./manager-document.js?v=20"},{"src":"./quote-cloud.js?v=17"},{"src":"./ui/documents.js?v=31","type":"module"}]</script>
+<script id="workspaceScripts" type="application/json">[{"src":"./manager-shared.js?v=29"},{"src":"./manager-document.js?v=21"},{"src":"./quote-cloud.js?v=17"},{"src":"./ui/documents.js?v=31","type":"module"}]</script>
 <script src="./auth/access.js?v=2"></script>
 </body>
 </html>

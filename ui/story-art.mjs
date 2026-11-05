@@ -22,10 +22,10 @@ export function storyColors(palette='graphite',background,highlight){const prese
 function lines(ctx,text,width,max=3){const words=String(text||'').split(/\s+/),out=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>width&&line){out.push(line);line=word}else line=next}if(line)out.push(line);const result=out.slice(0,max);if(out.length>max)result[max-1]+='…';return result}
 export const STORY_STYLES=['Editorial','Órbita','Pôster','Colagem','Traço'];
 function text(ctx,value,x,y,width,size,color,max=2,weight=400,font='Manrope, sans-serif'){ctx.font=`${weight} ${size}px ${font}`;ctx.fillStyle=color;const result=lines(ctx,value,width,max);result.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.22,width));return result.length*size*1.22}
-export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',background=null,highlight=null,artist='pec',photo=null,logo=null,page=0,pages=1}){
+export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',background=null,highlight=null,artist='pec',photo=null,photoOpacity=35,logo=null,page=0,pages=1}){
  canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d');const {bg,accent,ink,dark}=storyColors(palette,background,highlight);
  c.fillStyle=bg;c.fillRect(0,0,1080,1920);
- if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,bg+'e6');veil.addColorStop(.5,bg+'d9');veil.addColorStop(1,bg+'f2');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
+ if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.globalAlpha=Math.max(0,Math.min(100,Number.isFinite(Number(photoOpacity))?Number(photoOpacity):35))/100;c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);c.globalAlpha=1;const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,bg+'26');veil.addColorStop(.5,bg+'0d');veil.addColorStop(1,bg+'4d');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
  const left=96,right=984,width=888;
  const serif='Georgia, "Times New Roman", serif',mono='"Courier New", monospace';
  const headingFont=style===0?serif:style===4?mono:'Manrope, sans-serif';

@@ -17,3 +17,5 @@ Validação visual dos cinco modelos: `NODE_PATH=/tmp/pec-tools/node_modules nod
 ## Escolha independente de cores
 
 Modelo pode ser escolhido diretamente ou pelo botão Outra arte. As cores são independentes: Grafite (padrão escuro), Azul noturno, Verde profundo, Vinho, Preto e dourado, Areia clara e Gelo. Os controles Cor do fundo e Cor de destaque ativam Personalizada. A configuração é persistida localmente em `pec-story-colors-v1`, validada ao carregar e mantida ao trocar de modelo. Texto e logo ajustam para fundo claro ou escuro. Destaques com contraste insuficiente usam a cor do texto. Com foto, o degradê segue a cor do fundo escolhida. Nada disso altera os registros da agenda.
+
+Ao escolher uma foto, aparece Opacidade da foto (0–100%). O valor inicial é 35%; a preferência é salva neste navegador em `pec-story-photo-opacity-v1`. 0% deixa a cor de fundo e 100% mostra a foto com um degradê leve para leitura. A mesma composição é usada na prévia e no PNG. Remover foto oculta o controle, preservando a preferência para a próxima imagem.

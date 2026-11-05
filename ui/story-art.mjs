@@ -3,19 +3,39 @@ const pad=n=>String(n).padStart(2,'0');
 export const dayKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 export function storyEvents(events,date,mode){const start=new Date(date+'T12:00:00');if(Number.isNaN(+start))return [];if(mode==='week')start.setDate(start.getDate()-(start.getDay()+6)%7);const end=new Date(start);if(mode==='week')end.setDate(end.getDate()+6);return events.filter(e=>!e.completed&&e.date>=dayKey(start)&&e.date<=dayKey(end)).map(e=>({...e})).sort((a,b)=>a.date.localeCompare(b.date)||String(a.time||a.time_value||'99').localeCompare(String(b.time||b.time_value||'99')))}
 export function nextStyle(previous=-1,random=Math.random){const choices=[0,1,2,3,4].filter(i=>i!==previous);return choices[Math.floor(random()*choices.length)]}
-const themes=[['#111c25','#e9fc81','#f5f6ee'],['#30102b','#ff9474','#fff4e9'],['#eee9de','#364dff','#172231'],['#062b2a','#7ef2c5','#f3fff9'],['#19121f','#d6b4ff','#fcf3ff']];
+// Quiet palettes and a single variable type family keep every model consistent.
+const themes=[['#f5f3ed','#646e57','#20251f'],['#171b1a','#c1c9ba','#f4f3ed'],['#edeef0','#606b83','#202633'],['#eaf0ec','#47695b','#1c3028'],['#f1eae5','#8b6754','#32271f']];
 function lines(ctx,text,width,max=3){const words=String(text||'').split(/\s+/),out=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>width&&line){out.push(line);line=word}else line=next}if(line)out.push(line);const result=out.slice(0,max);if(out.length>max)result[max-1]+='…';return result}
-function text(ctx,value,x,y,width,size,color,max=2,font='Manrope, sans-serif'){ctx.font=`${size}px ${font}`;ctx.fillStyle=color;const result=lines(ctx,value,width,max);result.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.22,width));return result.length*size*1.22}
-export function drawStory(canvas,{mode,date,events,style=0,artist='pec',photo=null,logo=null,page=0,pages=1}){canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d'),[bg,accent,ink]=themes[style];c.fillStyle=bg;c.fillRect(0,0,1080,1920);if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);c.fillStyle=style===2?'#eee9deeb':'#081018ce';c.fillRect(0,0,1080,1920)}
- c.strokeStyle=accent;c.lineWidth=2;c.globalAlpha=.25;
- if(style===0){for(let i=0;i<5;i++){c.beginPath();c.arc(1020,480,180+i*95,0,Math.PI*2);c.stroke()}}
- if(style===1){c.fillStyle=accent;c.save();c.translate(710,200);c.rotate(.42);c.fillRect(0,0,280,1600);c.restore()}
- if(style===2){for(let x=75;x<1080;x+=75){c.beginPath();c.moveTo(x,0);c.lineTo(x,1920);c.stroke()}}
- if(style===3){for(let i=0;i<13;i++){c.beginPath();c.ellipse(540,350,180+i*40,80+i*25,-.3,0,Math.PI*2);c.stroke()}}
- if(style===4){for(let i=0;i<8;i++){c.beginPath();c.moveTo(0,150+i*80);c.bezierCurveTo(300,0,700,800,1080,300+i*70);c.stroke()}}
- c.globalAlpha=1;
- const serif=style===1||style===4; text(c,mode==='week'?'NOS ENCONTRAMOS POR AQUI':'O ENCONTRO É HOJE',80,235,920,22,accent,1);
- text(c,mode==='week'?'Agenda da':'Agenda do',75,350,930,98,ink,1,serif?'Georgia, serif':'Manrope, sans-serif');text(c,mode==='week'?'semana.':'dia.',75,470,930,116,accent,1,serif?'Georgia, serif':'Manrope, sans-serif');
- const d=new Date(date+'T12:00:00');let period=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});if(mode==='week'){d.setDate(d.getDate()-(d.getDay()+6)%7);const end=new Date(d);end.setDate(end.getDate()+6);period=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' — '+end.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})}text(c,period.toUpperCase(),80,545,920,25,ink,1);
- const slot=173;events.forEach((e,i)=>{const y=655+i*slot;const dt=new Date(e.date+'T12:00:00');c.fillStyle=accent;c.fillRect(80,y-25,5,slot-25);text(c,dt.toLocaleDateString('pt-BR',{day:'2-digit',month:'2-digit'}),105,y+12,140,43,accent,1);text(c,dt.toLocaleDateString('pt-BR',{weekday:'short'}).toUpperCase(),105,y+50,140,19,ink,1);let titleY=y+4;if(mode==='day'){const type=e.timeType||e.time_type;const hour=type==='allnight'?'NOITE TODA':type==='time'?String(e.time||e.time_value||'').slice(0,5)||'A CONFIRMAR':'A CONFIRMAR';text(c,hour,280,y,700,23,accent,1);titleY+=39}const h=text(c,e.title||'Show',280,titleY,700,mode==='day'?31:35,ink,2);if(e.place)text(c,e.place,280,titleY+h+8,700,23,ink,mode==='day'?1:2)});
- c.fillStyle=accent;c.fillRect(80,1740,920,2);if(logo&&artist.toLowerCase()==='pec'){c.save();if(style===2)c.filter='brightness(0)';c.drawImage(logo,80,1780,180,70);c.restore()}else text(c,artist||'Minha agenda',80,1825,720,48,ink,1);text(c,pages>1?`${page+1} / ${pages}`:'TE VEJO LÁ',810,1825,200,19,accent,1);return canvas}
+function text(ctx,value,x,y,width,size,color,max=2,weight=400){ctx.font=`${weight} ${size}px Manrope, sans-serif`;ctx.fillStyle=color;const result=lines(ctx,value,width,max);result.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.22,width));return result.length*size*1.22}
+export function drawStory(canvas,{mode,date,events,style=0,artist='pec',photo=null,logo=null,page=0,pages=1}){
+ canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d');let [bg,accent,ink]=themes[style];
+ if(photo){bg='#171b1a';accent='#cfd7c8';ink='#ffffff'}
+ c.fillStyle=bg;c.fillRect(0,0,1080,1920);
+ if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,'#101714d9');veil.addColorStop(.5,'#101714bf');veil.addColorStop(1,'#101714ed');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
+ const left=96,right=984,width=888;
+ text(c,mode==='week'?'AO VIVO / ESTA SEMANA':'AO VIVO / HOJE',left,225,width,23,accent,1,600);
+ // Small graphic signatures replace the previous all-over patterns.
+ c.fillStyle=accent;
+ if(style===0)c.fillRect(left,274,48,4);
+ if(style===1){c.beginPath();c.arc(969,218,8,0,Math.PI*2);c.fill()}
+ if(style===2)c.fillRect(970,200,14,54);
+ if(style===3){c.fillRect(920,218,64,2);c.fillRect(950,194,2,50)}
+ if(style===4){c.beginPath();c.arc(970,220,12,0,Math.PI*2);c.lineWidth=2;c.strokeStyle=accent;c.stroke()}
+ text(c,'Agenda',left,390,width,112,ink,1,300);
+ text(c,mode==='week'?'semanal.':'do dia.',left,510,width,112,ink,1,600);
+ const d=new Date(date+'T12:00:00');let period=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'long',year:'numeric'});
+ if(mode==='week'){d.setDate(d.getDate()-(d.getDay()+6)%7);const end=new Date(d);end.setDate(end.getDate()+6);period=d.toLocaleDateString('pt-BR',{day:'2-digit',month:'short'})+' — '+end.toLocaleDateString('pt-BR',{day:'2-digit',month:'short',year:'numeric'})}
+ text(c,period,left,585,width,29,accent,1,400);
+ const slot=Math.min(270,1000/Math.max(events.length,1)),size=events.length>4?34:42;
+ events.forEach((e,i)=>{const y=710+i*slot,dt=new Date(e.date+'T12:00:00');c.fillStyle=ink;c.globalAlpha=.14;c.fillRect(left,y-40,width,1);c.globalAlpha=1;
+ text(c,dt.toLocaleDateString('pt-BR',{day:'2-digit'}),left,y+20,150,64,ink,1,300);
+ const label=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')+' / '+dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');text(c,label.toUpperCase(),left,y+58,156,18,accent,1,500);
+ let titleY=y+4;
+ if(mode==='day'){const type=e.timeType||e.time_type;const hour=type==='allnight'?'NOITE TODA':type==='time'?String(e.time||e.time_value||'').slice(0,5)||'A CONFIRMAR':'A CONFIRMAR';text(c,hour,300,y,684,23,accent,1,600);titleY+=38}
+ const h=text(c,e.title||'Show',300,titleY,684,size,ink,2,600);
+ if(e.place)text(c,e.place,300,titleY+h+8,684,26,accent,mode==='day'?1:2,400);
+ });
+ c.fillStyle=ink;c.globalAlpha=.18;c.fillRect(left,1740,width,1);c.globalAlpha=1;
+ if(logo&&artist.toLowerCase()==='pec'){c.save();if(!photo&&style!==1)c.filter='brightness(0)';c.drawImage(logo,left,1784,156,61);c.restore()}else text(c,artist||'Minha agenda',left,1827,700,38,ink,1,600);
+ text(c,pages>1?`${page+1} / ${pages}`:'TE VEJO LÁ',805,1820,179,19,accent,1,500);return canvas
+}

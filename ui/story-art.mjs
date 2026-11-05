@@ -5,15 +5,27 @@ const storyTime=e=>{const type=e.timeType||e.time_type;if(type!=='time')return t
 export function storyEvents(events,date,mode){const start=new Date(date+'T12:00:00');if(Number.isNaN(+start))return [];if(mode==='week')start.setDate(start.getDate()-(start.getDay()+6)%7);const end=new Date(start);if(mode==='week')end.setDate(end.getDate()+6);return events.filter(e=>!e.completed&&e.date>=dayKey(start)&&e.date<=dayKey(end)).map(e=>({...e})).sort((a,b)=>a.date.localeCompare(b.date)||storyTime(a)-storyTime(b))}
 export function nextStyle(previous=-1,random=Math.random){const choices=[0,1,2,3,4].filter(i=>i!==previous);return choices[Math.floor(random()*choices.length)]}
 // Each model has its own type, composition and geometric signature.
-const themes=[['#f5f3ed','#646e57','#20251f'],['#171b1a','#c1c9ba','#f4f3ed'],['#edeef0','#606b83','#202633'],['#eaf0ec','#47695b','#1c3028'],['#f1eae5','#8b6754','#32271f']];
+export const STORY_PALETTES={
+ graphite:{name:'Grafite',background:'#171b1a',accent:'#c1c9ba'},
+ midnight:{name:'Azul noturno',background:'#101b2e',accent:'#adc8ee'},
+ forest:{name:'Verde profundo',background:'#102b24',accent:'#abcfbb'},
+ wine:{name:'Vinho',background:'#2b1725',accent:'#e0b6c5'},
+ charcoal:{name:'Preto e dourado',background:'#161616',accent:'#d5bb81'},
+ sand:{name:'Areia clara',background:'#f5f3ed',accent:'#646e57'},
+ ice:{name:'Gelo',background:'#edeef0',accent:'#606b83'}
+};
+const validColor=v=>/^#[0-9a-f]{6}$/i.test(v||'');
+const luminance=hex=>{const rgb=hex.slice(1).match(/../g).map(v=>parseInt(v,16)/255).map(v=>v<=.04045?v/12.92:((v+.055)/1.055)**2.4);return rgb[0]*.2126+rgb[1]*.7152+rgb[2]*.0722};
+const contrast=(a,b)=>(Math.max(luminance(a),luminance(b))+.05)/(Math.min(luminance(a),luminance(b))+.05);
+export function storyColors(palette='graphite',background,highlight){const preset=STORY_PALETTES[palette]||STORY_PALETTES.graphite,bg=validColor(background)?background:preset.background,ink=luminance(bg)>.3?'#20251f':'#f7f7f2';let accent=validColor(highlight)?highlight:preset.accent;if(contrast(bg,accent)<3)accent=ink;return{bg,accent,ink,dark:luminance(bg)<=.3}}
+
 function lines(ctx,text,width,max=3){const words=String(text||'').split(/\s+/),out=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>width&&line){out.push(line);line=word}else line=next}if(line)out.push(line);const result=out.slice(0,max);if(out.length>max)result[max-1]+='…';return result}
 export const STORY_STYLES=['Editorial','Órbita','Pôster','Colagem','Traço'];
 function text(ctx,value,x,y,width,size,color,max=2,weight=400,font='Manrope, sans-serif'){ctx.font=`${weight} ${size}px ${font}`;ctx.fillStyle=color;const result=lines(ctx,value,width,max);result.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.22,width));return result.length*size*1.22}
-export function drawStory(canvas,{mode,date,events,style=0,artist='pec',photo=null,logo=null,page=0,pages=1}){
- canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d');let [bg,accent,ink]=themes[style];
- if(photo){bg='#171b1a';accent='#cfd7c8';ink='#ffffff'}
+export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',background=null,highlight=null,artist='pec',photo=null,logo=null,page=0,pages=1}){
+ canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d');const {bg,accent,ink,dark}=storyColors(palette,background,highlight);
  c.fillStyle=bg;c.fillRect(0,0,1080,1920);
- if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,'#101714d9');veil.addColorStop(.5,'#101714bf');veil.addColorStop(1,'#101714ed');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
+ if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,bg+'e6');veil.addColorStop(.5,bg+'d9');veil.addColorStop(1,bg+'f2');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
  const left=96,right=984,width=888;
  const serif='Georgia, "Times New Roman", serif',mono='"Courier New", monospace';
  const headingFont=style===0?serif:style===4?mono:'Manrope, sans-serif';
@@ -40,7 +52,7 @@ export function drawStory(canvas,{mode,date,events,style=0,artist='pec',photo=nu
  c.globalAlpha=1;
  const size=events.length>4?34:42;let cursor=660;
  events.forEach((e,index)=>{const y=cursor,dt=new Date(e.date+'T12:00:00');c.fillStyle=ink;c.globalAlpha=.14;if(style===3)c.fillRect(left,y-22,3,94);else c.fillRect(left,y-40,width,1);c.globalAlpha=1;
- const rightDate=style===2||style===4&&index%2===1,dateX=rightDate?840:left,titleX=rightDate?left:300,textWidth=rightDate?688:684;
+ const rightDate=style===2,dateX=rightDate?840:left,titleX=rightDate?left:300,textWidth=rightDate?688:684;
  if(style===1){c.strokeStyle=accent;c.globalAlpha=.32;c.beginPath();c.arc(dateX+45,y+5,50,0,Math.PI*2);c.stroke();c.globalAlpha=1}
  text(c,dt.toLocaleDateString('pt-BR',{day:'2-digit'}),dateX,y+20,150,style===1?52:64,ink,1,style===2?700:300,style===4?mono:'Manrope, sans-serif');
  const label=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')+' / '+dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');text(c,label.toUpperCase(),dateX,y+68,156,18,accent,1,500);
@@ -52,6 +64,6 @@ export function drawStory(canvas,{mode,date,events,style=0,artist='pec',photo=nu
  });
  c.fillStyle=ink;c.globalAlpha=.18;c.fillRect(left,1740,width,1);c.globalAlpha=1;
  const brandX=style===1?462:style===2?828:left;
- if(logo&&artist.toLowerCase()==='pec'){c.save();if(!photo&&style!==1)c.filter='brightness(0)';c.drawImage(logo,brandX,1784,156,61);c.restore()}else{c.textAlign=style===1?'center':style===2?'right':'left';text(c,artist||'Minha agenda',style===1?540:style===2?right:left,1827,700,38,ink,1,600);c.textAlign='left'}
+ if(logo&&artist.toLowerCase()==='pec'){c.save();if(!dark)c.filter='brightness(0)';c.drawImage(logo,brandX,1784,156,61);c.restore()}else{c.textAlign=style===1?'center':style===2?'right':'left';text(c,artist||'Minha agenda',style===1?540:style===2?right:left,1827,700,38,ink,1,600);c.textAlign='left'}
  if(pages>1)text(c,`${page+1} / ${pages}`,style===2?left:805,1820,179,19,accent,1,500);else{c.strokeStyle=accent;c.lineWidth=2;const x=style===2?left:940;if(style===0||style===1){c.beginPath();c.arc(x,1814,17,0,Math.PI*2);c.stroke()}else if(style===3)c.strokeRect(x-17,1797,34,34);else{c.beginPath();c.moveTo(x-18,1827);c.lineTo(x+9,1800);c.stroke()}}return canvas
 }

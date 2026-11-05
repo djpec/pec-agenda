@@ -53,9 +53,19 @@ export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',ba
  const size=events.length>4?34:42;let cursor=660;
  events.forEach((e,index)=>{const y=cursor,dt=new Date(e.date+'T12:00:00');c.fillStyle=ink;c.globalAlpha=.14;if(style===3)c.fillRect(left,y-22,3,94);else c.fillRect(left,y-40,width,1);c.globalAlpha=1;
  const rightDate=style===2,dateX=rightDate?840:left,titleX=rightDate?left:300,textWidth=rightDate?688:684;
- if(style===1){c.strokeStyle=accent;c.globalAlpha=.32;c.beginPath();c.arc(dateX+45,y+5,50,0,Math.PI*2);c.stroke();c.globalAlpha=1}
- text(c,dt.toLocaleDateString('pt-BR',{day:'2-digit'}),dateX,y+20,150,style===1?52:64,ink,1,style===2?700:300,style===4?mono:'Manrope, sans-serif');
- const label=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')+' / '+dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');text(c,label.toUpperCase(),dateX,y+68,156,18,accent,1,500);
+ const day=dt.toLocaleDateString('pt-BR',{day:'2-digit'});
+ const label=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')+' / '+dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');
+ if(style===1){
+  const centerX=dateX+60,centerY=y+5;
+  c.strokeStyle=accent;c.globalAlpha=.32;c.beginPath();c.arc(centerX,centerY,50,0,Math.PI*2);c.stroke();c.globalAlpha=1;
+  c.save();c.textAlign='center';c.font='300 52px Manrope, sans-serif';c.fillStyle=ink;
+  const metrics=c.measureText(day),baseline=centerY+(metrics.actualBoundingBoxAscent-metrics.actualBoundingBoxDescent)/2;
+  c.fillText(day,centerX,baseline,84);
+  text(c,label.toUpperCase(),centerX,y+78,120,18,accent,1,500);c.restore();
+ }else{
+  text(c,day,dateX,y+20,150,64,ink,1,style===2?700:300,style===4?mono:'Manrope, sans-serif');
+  text(c,label.toUpperCase(),dateX,y+68,156,18,accent,1,500);
+ }
  let titleY=y+4;
  if(mode==='day'){const type=e.timeType||e.time_type;const hour=type==='allnight'?'NOITE TODA':type==='time'?String(e.time||e.time_value||'').slice(0,5)||'A CONFIRMAR':'A CONFIRMAR';text(c,hour,titleX,y,textWidth,23,accent,1,600);titleY+=38}
  const h=text(c,e.title||'Show',titleX,titleY,textWidth,size,ink,2,style===0?400:600,eventFont);

@@ -24,21 +24,22 @@ const assert=require('node:assert/strict');
   await p.locator('#storyMode').selectOption('month');await ready();
   assert.equal(await p.locator('[data-story-index]').count(),13);
   assert.equal(await p.locator('#storyArtTitle').getAttribute('placeholder'),'Agenda mensal.');
-  assert.match(await p.locator('#storyPage').innerText(),/1 de 3/);
+  assert.match(await p.locator('#storyPage').innerText(),/1 de 1/);
   for(let style=0;style<5;style++){
    await p.evaluate(()=>storyText=[]);
    await p.locator('#storyStyle').selectOption(String(style));await ready();
    const text=await p.evaluate(()=>storyText);
    assert(text.includes(style===2?'MENSAL':'mensal.'));
    assert(!text.includes('23:00'));
+   for(let i=0;i<13;i++)assert(text.includes('Show mensal '+i),'Missing event '+i);
   }
   await p.locator('#storyPalette').selectOption('wine');
   await p.locator('#storyArtTitle').fill('Agenda de novembro');await ready();
   await p.locator('[data-story-index="1"]').uncheck();await ready();
-  assert.match(await p.locator('#storyPage').innerText(),/1 de 2/);
-  await p.locator('#storyNext').click();await ready();
+  assert.match(await p.locator('#storyPage').innerText(),/1 de 1/);
+  assert(await p.locator('.story-pagination').isHidden());
   const download=p.waitForEvent('download');await p.locator('#storyDownload').click();
-  const file=await download;assert.equal(file.suggestedFilename(),'Agenda-mensal-2026-11-15-2.png');
+  const file=await download;assert.equal(file.suggestedFilename(),'Agenda-mensal-2026-11-15-1.png');
   const output='/tmp/story-month-'+width+'.png';await file.saveAs(output);
   assert.equal(require('fs').readFileSync(output).toString('base64'),await p.locator('#storyCanvas').evaluate(c=>c.toDataURL().split(',')[1]));
   await p.locator('#storyDate').fill('2026-12-15');await p.locator('#storyDate').dispatchEvent('change');await ready();
@@ -51,6 +52,6 @@ const assert=require('node:assert/strict');
   assert.equal(await p.evaluate(()=>localStorage.getItem('pec-agenda-v1')),original);
   assert(await p.evaluate(()=>document.documentElement.scrollWidth<=innerWidth));
   assert.deepEqual(errors,[]);await context.close();
-  console.log('PASS monthly '+width+': month boundaries, five models, pagination, title, PNG, empty month, unchanged data');
+  console.log('PASS monthly '+width+': month boundaries, five models, single image, title, PNG, empty month, unchanged data');
  }}finally{await browser.close()}
 })().catch(e=>{console.error(e);process.exitCode=1});

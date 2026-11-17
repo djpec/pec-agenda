@@ -61,8 +61,35 @@ export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',ba
  if(style===3){c.save();c.translate(left,558);c.rotate(-.025);c.globalAlpha=.22;c.fillRect(0,0,320,22);c.restore()}
  if(style===4){for(let i=0;i<4;i++)c.fillRect(left+i*34,565,20,3)}
  c.globalAlpha=1;
- const size=events.length>4?34:42;let cursor=660;
- events.forEach((e,index)=>{const y=cursor,dt=new Date(e.date+'T12:00:00');c.fillStyle=ink;c.globalAlpha=.14;if(style===3)c.fillRect(left,y-22,3,94);else c.fillRect(left,y-40,width,1);c.globalAlpha=1;
+ // Fit every selected event into the list area. Additional columns preserve
+ // readable proportions for busy months; the canvas and source events stay unchanged.
+ const size=events.length>4?34:42;
+ function rowHeight(e){
+  c.font=`${style===0?400:600} ${size}px ${eventFont}`;
+  const h=lines(c,e.title||'Show',style===2?688:684,2).length*size*1.22;
+  c.font='400 26px Manrope, sans-serif';
+  const placeHeight=e.place?lines(c,e.place,style===2?688:684,mode==='day'||events.length>4?1:2).length*26*1.22:0;
+  return Math.max(100,(mode==='day'?42:4)+h+(placeHeight?8+placeHeight:0))+(events.length>4?20:32);
+ }
+ const heights=events.map(rowHeight);
+ let layout={columns:1,scale:1,perColumn:events.length||1};
+ if(events.length){
+  layout.scale=Math.min(1,1080/(40+heights.reduce((a,b)=>a+b,0)));
+  for(let columns=2;columns<=Math.ceil(Math.sqrt(events.length));columns++){
+   const perColumn=Math.ceil(events.length/columns);
+   let tallest=0;
+   for(let i=0;i<events.length;i+=perColumn)tallest=Math.max(tallest,40+heights.slice(i,i+perColumn).reduce((a,b)=>a+b,0));
+   const scale=Math.min((width-(columns-1)*28)/columns/width,1080/tallest);
+   if(scale>layout.scale)layout={columns,scale,perColumn};
+  }
+ }
+ for(let column=0;column<layout.columns;column++){
+  c.save();
+  const columnWidth=(width-(layout.columns-1)*28)/layout.columns;
+  c.translate(left+column*(columnWidth+28)+(columnWidth-width*layout.scale)/2,620);
+  c.scale(layout.scale,layout.scale);c.translate(-left,-620);
+  let cursor=660;
+  events.slice(column*layout.perColumn,(column+1)*layout.perColumn).forEach((e,index)=>{const y=cursor,dt=new Date(e.date+'T12:00:00');c.fillStyle=ink;c.globalAlpha=.14;if(style===3)c.fillRect(left,y-22,3,94);else c.fillRect(left,y-40,width,1);c.globalAlpha=1;
  const rightDate=style===2,dateX=rightDate?840:left,titleX=rightDate?left:300,textWidth=rightDate?688:684;
  const day=dt.toLocaleDateString('pt-BR',{day:'2-digit'});
  const label=dt.toLocaleDateString('pt-BR',{month:'short'}).replace('.','')+' / '+dt.toLocaleDateString('pt-BR',{weekday:'short'}).replace('.','');
@@ -83,6 +110,8 @@ export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',ba
  const placeHeight=e.place?text(c,e.place,titleX,titleY+h+8,textWidth,26,accent,mode==='day'||events.length>4?1:2,400):0;
  cursor+=Math.max(100,(titleY-y)+h+(placeHeight?8+placeHeight:0))+(events.length>4?20:32);
  });
+ c.restore();
+ }
  c.fillStyle=ink;c.globalAlpha=.18;c.fillRect(left,1740,width,1);c.globalAlpha=1;
  const brandX=style===1?462:style===2?828:left;
  if(logo&&artist.toLowerCase()==='pec'){c.save();if(!dark)c.filter='brightness(0)';c.drawImage(logo,brandX,1784,156,61);c.restore()}else{c.textAlign=style===1?'center':style===2?'right':'left';text(c,artist||'Minha agenda',style===1?540:style===2?right:left,1827,700,38,ink,1,600);c.textAlign='left'}

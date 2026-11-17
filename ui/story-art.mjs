@@ -22,7 +22,7 @@ export function storyColors(palette='graphite',background,highlight){const prese
 function lines(ctx,text,width,max=3){const words=String(text||'').split(/\s+/),out=[];let line='';for(const word of words){const next=line?line+' '+word:word;if(ctx.measureText(next).width>width&&line){out.push(line);line=word}else line=next}if(line)out.push(line);const result=out.slice(0,max);if(out.length>max)result[max-1]+='…';return result}
 export const STORY_STYLES=['Editorial','Órbita','Pôster','Colagem','Traço'];
 function text(ctx,value,x,y,width,size,color,max=2,weight=400,font='Manrope, sans-serif'){ctx.font=`${weight} ${size}px ${font}`;ctx.fillStyle=color;const result=lines(ctx,value,width,max);result.forEach((line,i)=>ctx.fillText(line,x,y+i*size*1.22,width));return result.length*size*1.22}
-export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',background=null,highlight=null,artist='pec',photo=null,photoOpacity=35,logo=null,page=0,pages=1}){
+export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',background=null,highlight=null,artist='pec',title='',photo=null,photoOpacity=35,logo=null,page=0,pages=1}){
  canvas.width=STORY_WIDTH;canvas.height=STORY_HEIGHT;const c=canvas.getContext('2d');const {bg,accent,ink,dark}=storyColors(palette,background,highlight);
  c.fillStyle=bg;c.fillRect(0,0,1080,1920);
  if(photo){const scale=Math.max(1080/photo.width,1920/photo.height);c.globalAlpha=Math.max(0,Math.min(100,Number.isFinite(Number(photoOpacity))?Number(photoOpacity):35))/100;c.drawImage(photo,(1080-photo.width*scale)/2,(1920-photo.height*scale)/2,photo.width*scale,photo.height*scale);c.globalAlpha=1;const veil=c.createLinearGradient(0,0,0,1920);veil.addColorStop(0,bg+'26');veil.addColorStop(.5,bg+'0d');veil.addColorStop(1,bg+'4d');c.fillStyle=veil;c.fillRect(0,0,1080,1920)}
@@ -41,8 +41,19 @@ export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',ba
  const headerX=style===1?540:style===2?right:left;
  c.textAlign=style===1?'center':style===2?'right':'left';
  const first=style===2?'AGENDA':'Agenda',second=mode==='week'?(style===2?'SEMANAL':'semanal.'):(style===2?'DO DIA':'do dia.');
- text(c,first,headerX,style===3?365:390,width,style===4?96:112,ink,1,style===2?800:300,headingFont);
- text(c,second,headerX,style===3?495:510,width,style===4?96:112,ink,1,style===2?800:style===0?400:600,headingFont);
+ const customTitle=String(title||'').trim();
+ if(customTitle){
+  // Fit the editable heading inside the existing header, keeping every model's layout.
+  let headingSize=style===4?96:112;
+  c.font=`${style===2?800:style===0?400:600} ${headingSize}px ${headingFont}`;
+  while(headingSize>32&&lines(c,customTitle,width,90).length>2){
+   headingSize-=2;c.font=`${style===2?800:style===0?400:600} ${headingSize}px ${headingFont}`;
+  }
+  text(c,customTitle,headerX,style===3?365:390,width,headingSize,ink,2,style===2?800:style===0?400:600,headingFont);
+ }else{
+  text(c,first,headerX,style===3?365:390,width,style===4?96:112,ink,1,style===2?800:300,headingFont);
+  text(c,second,headerX,style===3?495:510,width,style===4?96:112,ink,1,style===2?800:style===0?400:600,headingFont);
+ }
  c.textAlign='left';c.fillStyle=accent;
  if(style===0){c.fillRect(left,566,150,2);c.beginPath();c.arc(left+166,567,4,0,Math.PI*2);c.fill()}
  if(style===1){c.beginPath();c.moveTo(516,560);c.lineTo(540,574);c.lineTo(564,560);c.stroke()}

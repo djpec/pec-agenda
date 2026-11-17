@@ -2,7 +2,7 @@ export const STORY_WIDTH=1080,STORY_HEIGHT=1920;
 const pad=n=>String(n).padStart(2,'0');
 export const dayKey=d=>`${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;
 const storyTime=e=>{const type=e.timeType||e.time_type;if(type!=='time')return type==='allnight'?20*60:Infinity;const match=/^(\d{2}):(\d{2})/.exec(String(e.time||e.time_value||''));if(!match)return Infinity;const h=+match[1];return (h<12?h+24:h)*60+Number(match[2])};
-export function storyEvents(events,date,mode){const start=new Date(date+'T12:00:00');if(Number.isNaN(+start))return [];if(mode==='week')start.setDate(start.getDate()-(start.getDay()+6)%7);const end=new Date(start);if(mode==='week')end.setDate(end.getDate()+6);return events.filter(e=>!e.completed&&e.date>=dayKey(start)&&e.date<=dayKey(end)).map(e=>({...e})).sort((a,b)=>a.date.localeCompare(b.date)||storyTime(a)-storyTime(b))}
+export function storyEvents(events,date,mode){const start=new Date(date+'T12:00:00');if(Number.isNaN(+start))return [];if(mode==='week')start.setDate(start.getDate()-(start.getDay()+6)%7);if(mode==='month')start.setDate(1);const end=new Date(start);if(mode==='week')end.setDate(end.getDate()+6);if(mode==='month')end.setMonth(end.getMonth()+1,0);return events.filter(e=>!e.completed&&e.date>=dayKey(start)&&e.date<=dayKey(end)).map(e=>({...e})).sort((a,b)=>a.date.localeCompare(b.date)||storyTime(a)-storyTime(b))}
 export function nextStyle(previous=-1,random=Math.random){const choices=[0,1,2,3,4].filter(i=>i!==previous);return choices[Math.floor(random()*choices.length)]}
 // Each model has its own type, composition and geometric signature.
 export const STORY_PALETTES={
@@ -40,7 +40,7 @@ export function drawStory(canvas,{mode,date,events,style=0,palette='graphite',ba
  c.globalAlpha=1;
  const headerX=style===1?540:style===2?right:left;
  c.textAlign=style===1?'center':style===2?'right':'left';
- const first=style===2?'AGENDA':'Agenda',second=mode==='week'?(style===2?'SEMANAL':'semanal.'):(style===2?'DO DIA':'do dia.');
+ const first=style===2?'AGENDA':'Agenda',second=mode==='week'?(style===2?'SEMANAL':'semanal.'):mode==='month'?(style===2?'MENSAL':'mensal.'):(style===2?'DO DIA':'do dia.');
  const customTitle=String(title||'').trim();
  if(customTitle){
   // Fit the editable heading inside the existing header, keeping every model's layout.

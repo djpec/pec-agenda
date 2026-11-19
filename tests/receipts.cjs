@@ -78,9 +78,16 @@ const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
     await page.evaluate(() => dispatchEvent(new Event('afterprint')));
     assert.equal(await page.locator('#receiptPrintSheet').innerHTML(), '');
     assert.equal(await page.title(), originalTitle);
+    await source.selectOption('');
+    await page.getByLabel('Data de emissão', {exact: true}).fill('2099-11-19');
+    await page.getByLabel('Data prevista do pagamento', {exact: true}).fill('2099-11-24');
     await page.locator('[name=payer]').fill('Produções / Eventos: Paraná');
     await page.locator('#receiptExport').click();
     assert.equal(await page.evaluate(() => window.receiptPrintTitle), 'Recibo - Produções Eventos Paraná');
+    const futurePdf = execFileSync('pdftotext', ['-layout', '-', '-'], {input: await page.pdf({preferCSSPageSize: true}), encoding: 'utf8'});
+    assert.match(futurePdf, /Data de emissão:\s+19\/11\/2099/);
+    assert.match(futurePdf, /Data prevista do pagamento/);
+    assert.match(futurePdf, /24\/11\/2099/);
     console.log('PASS receipt navigation, intake, signature, mobile layout, and single-page PDF');
   } finally {
     await browser.close();

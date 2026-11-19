@@ -3,7 +3,7 @@ import './shell.js?v=29';
 import {cents, today, uid, validDate} from '../finance/model.mjs';
 import {openStore} from '../finance/store.js';
 
-const issuedOn = today();
+const currentDate = today();
 const money = new Intl.NumberFormat('pt-BR', {style: 'currency', currency: 'BRL'});
 const displayDate = value => validDate(value) ? formatDate(value, {day: '2-digit', month: '2-digit', year: 'numeric'}) : '—';
 const methods = ['Pix', 'Transferência bancária', 'Dinheiro', 'Cartão', 'Boleto', 'Outro'];
@@ -21,7 +21,8 @@ main.innerHTML = `
         <label class="receipt-wide">Cliente ou razão social <input name="payer" required maxlength="150"></label>
         <label>CPF ou CNPJ do cliente <input name="payerDocument" maxlength="18"></label>
         <label>Valor recebido (R$) <input name="amount" required inputmode="decimal" maxlength="14" placeholder="0,00"></label>
-        <label>Data do pagamento <input name="paidOn" type="date" required min="2000-01-01" max="${issuedOn}" value="${issuedOn}"></label>
+        <label>Data de emissão <input name="issuedOn" type="date" required min="2000-01-01" max="2199-12-31" value="${currentDate}"></label>
+        <label>Data prevista do pagamento <input name="paidOn" type="date" required min="2000-01-01" max="2199-12-31" value="${currentDate}"></label>
         <label>Forma de pagamento <select name="method" required><option value="">Selecione</option>${methods.map(method => `<option>${method}</option>`).join('')}</select></label>
         <label class="receipt-wide">Referente a <textarea name="reference" required maxlength="240" rows="2"></textarea></label>
         <label>Nome ou razão social do emitente <input name="issuer" required maxlength="150"></label>
@@ -78,11 +79,11 @@ function documentMarkup(data) {
     </header>
     <div class="receipt-paper-body">
       <h2>Recibo de pagamento</h2>
-      <p class="receipt-issued">Emitido em ${displayDate(issuedOn)}</p>
+      <p class="receipt-issued">Data de emissão: ${displayDate(data.issuedOn)}</p>
       <div class="receipt-amount"><small>Valor recebido</small><strong>${value}</strong></div>
       <p class="receipt-statement">Confirmo o recebimento do valor acima, pago por <b>${payer}</b>${data.payerDocument.trim() ? ` (CPF/CNPJ ${esc(data.payerDocument.trim())})` : ''}, pelo serviço ou referência abaixo.</p>
       <dl class="receipt-details">
-        <div><dt>Data do pagamento</dt><dd>${displayDate(data.paidOn)}</dd></div>
+        <div><dt>Data prevista do pagamento</dt><dd>${displayDate(data.paidOn)}</dd></div>
         <div><dt>Forma de pagamento</dt><dd>${esc(data.method || '—')}</dd></div>
         <div class="receipt-wide"><dt>Referente a</dt><dd>${esc(data.reference || 'Descrição do serviço ou pedido')}</dd></div>
       </dl>
@@ -152,8 +153,8 @@ let titleBeforePrint = null;
 form.addEventListener('submit', event => {
   event.preventDefault();
   const data = receiptData();
-  if (!data.payer || !data.issuer || !data.reference || !data.amount || !validDate(data.paidOn) || data.paidOn > issuedOn) {
-    error.textContent = 'Confira os nomes, a referência, a data e o valor recebido. Digite o valor no formato 1200,50.';
+  if (!data.payer || !data.issuer || !data.reference || !data.amount || !validDate(data.issuedOn) || !validDate(data.paidOn)) {
+    error.textContent = 'Confira os nomes, a referência, as datas e o valor recebido. Digite o valor no formato 1200,50.';
     return;
   }
   printSheet.innerHTML = documentMarkup(data);
@@ -181,7 +182,7 @@ async function loadSources() {
     const store = await openStore();
     if (!store.ready) throw Error();
     entries = store.state.entries
-      .filter(entry => entry.kind === 'income' && entry.scope === 'work' && entry.paidOn && entry.paidOn <= issuedOn)
+      .filter(entry => entry.kind === 'income' && entry.scope === 'work' && entry.paidOn && entry.paidOn <= currentDate)
       .sort((first, second) => second.paidOn.localeCompare(first.paidOn));
     for (const entry of entries) {
       fields.source.add(new Option(

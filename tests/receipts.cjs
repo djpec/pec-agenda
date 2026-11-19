@@ -63,8 +63,10 @@ const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
     await page.locator('#receiptPreview img[alt="Assinatura do emitente"]').waitFor();
     await page.setViewportSize({width: 320, height: 800});
     assert(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    await page.evaluate(() => { window.print = () => {}; });
+    const originalTitle = await page.title();
+    await page.evaluate(() => { window.print = () => { window.receiptPrintTitle = document.title; }; });
     await page.locator('#receiptExport').click();
+    assert.equal(await page.evaluate(() => window.receiptPrintTitle), 'Recibo - Empresa & Eventos Ltda');
     assert(await page.locator('body').evaluate(body => body.classList.contains('printing-receipt')));
     const pdf = await page.pdf({preferCSSPageSize: true});
     const printable = execFileSync('pdftotext', ['-layout', '-', '-'], {input: pdf, encoding: 'utf8'});
@@ -75,6 +77,10 @@ const png = Buffer.from('iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAQAAAC1HAwCAAAAC0lEQVR
     assert(!printable.includes('Novo recibo'));
     await page.evaluate(() => dispatchEvent(new Event('afterprint')));
     assert.equal(await page.locator('#receiptPrintSheet').innerHTML(), '');
+    assert.equal(await page.title(), originalTitle);
+    await page.locator('[name=payer]').fill('Produções / Eventos: Paraná');
+    await page.locator('#receiptExport').click();
+    assert.equal(await page.evaluate(() => window.receiptPrintTitle), 'Recibo - Produções Eventos Paraná');
     console.log('PASS receipt navigation, intake, signature, mobile layout, and single-page PDF');
   } finally {
     await browser.close();

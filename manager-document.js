@@ -11,6 +11,7 @@
   P.documentFilename=(type,client,date)=>{
     const clean=value=>String(value||'').normalize('NFC').replace(/[<>:"/\\|?*\x00-\x1f\x7f]/g,' ').replace(/\s+/g,' ').trim().replace(/[. ]+$/g,'');
     const name=clean(client).slice(0,120).trim()||'Cliente a definir';
+    if(type==='receipt')return `Recibo - ${name}`;
     const match=/^(\d{4})-(\d{2})-(\d{2})$/.exec(String(date||''));
     return `${type==='quote'?'Proposta':'Contrato'} - ${name} - ${match?match[3]+'-'+match[2]+'-'+match[1]:'Data a definir'}`;
   };

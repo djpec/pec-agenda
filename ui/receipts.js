@@ -148,6 +148,7 @@ fields.signature.addEventListener('change', async () => {
   }
 });
 
+let titleBeforePrint = null;
 form.addEventListener('submit', event => {
   event.preventDefault();
   const data = receiptData();
@@ -157,12 +158,18 @@ form.addEventListener('submit', event => {
   }
   printSheet.innerHTML = documentMarkup(data);
   document.body.classList.add('printing-receipt');
+  titleBeforePrint ??= document.title;
+  document.title = PM.documentFilename('receipt', data.payer);
   window.print();
 });
 
 addEventListener('afterprint', () => {
   document.body.classList.remove('printing-receipt');
   printSheet.replaceChildren();
+  if (titleBeforePrint !== null) {
+    document.title = titleBeforePrint;
+    titleBeforePrint = null;
+  }
 });
 
 renderPreview();

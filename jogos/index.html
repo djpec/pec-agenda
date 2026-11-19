@@ -4,14 +4,17 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
   <meta name="theme-color" content="#171525">
-  <meta name="description" content="Jogue Intruso com seus amigos. Um celular, uma palavra secreta e alguém fingindo que sabe.">
-  <title>Intruso · pec jogos</title>
-  <link rel="stylesheet" href="./intruso.css">
-  <script src="./intruso.js" type="module"></script>
+  <meta name="description" content="Jogos de roda para jogar com amigos usando um celular.">
+  <title>pec jogos · Jogos de roda</title>
+  <link rel="stylesheet" href="./intruso.css?v=2">
+  <script src="./jogos.js?v=2" type="module"></script>
 </head>
 <body>
   <header class="top"><a class="brand" href="./" aria-label="pec jogos">pec<span>jogos</span></a><span class="top-note">Um celular por roda</span></header>
-  <main id="game"></main>
+  <main>
+    <a class="back" href="#" hidden>← Todos os jogos</a>
+    <div id="game"></div>
+  </main>
   <template id="setup">
     <section class="intro">
       <div class="intro-copy">
@@ -25,9 +28,18 @@
       <div class="settings">
         <label>Jogadores<select name="players"></select></label>
         <label>Intrusos<select name="intruders"></select></label>
+        <label class="wide">Tema da rodada<select name="category"></select></label>
       </div>
       <button class="primary" type="submit">Sortear e começar <span aria-hidden="true">→</span></button>
     </form>
+    <details class="rules">
+      <summary>Como jogar</summary>
+      <ol>
+        <li>Escolham quantas pessoas vão jogar, quantos intrusos haverá e o tema da rodada.</li>
+        <li>Passem o celular pela roda. Cada pessoa revela sua carta em segredo. Quem for intruso recebe uma dica. Os demais recebem a mesma palavra.</li>
+        <li>Cada pessoa dá uma pista sem dizer a palavra. Votem em voz alta e revelem o resultado.</li>
+      </ol>
+    </details>
   </template>
 </body>
 </html>

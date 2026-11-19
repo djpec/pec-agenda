@@ -43,12 +43,13 @@ const themes = [
 
 const game = document.querySelector('#game');
 const setup = document.querySelector('#setup');
-let settings = {players: 5, intruders: 1};
+const categories = [...new Set(themes.map(([category]) => category))];
+let settings = {players: 5, intruders: 1, category: ''};
 let round;
-let deck = [];
+const decks = new Map();
 let previousTheme;
 
-function shuffle(items) {
+export function shuffle(items) {
   const shuffled = [...items];
   for (let i = shuffled.length - 1; i > 0; i--) {
     const j = Math.floor(Math.random() * (i + 1));
@@ -58,9 +59,14 @@ function shuffle(items) {
 }
 
 function drawTheme() {
-  if (!deck.length) {
-    deck = shuffle(themes);
-    if (deck.at(-1) === previousTheme) [deck[0], deck[deck.length - 1]] = [deck.at(-1), deck[0]];
+  const category = settings.category;
+  let deck = decks.get(category);
+  if (!deck?.length) {
+    deck = shuffle(category ? themes.filter(([name]) => name === category) : themes);
+    decks.set(category, deck);
+  }
+  if (deck.length > 1 && deck.at(-1) === previousTheme) {
+    [deck[0], deck[deck.length - 1]] = [deck.at(-1), deck[0]];
   }
   previousTheme = deck.pop();
   return previousTheme;
@@ -71,17 +77,19 @@ function options(select, min, max, value) {
   select.value = Math.min(value, max);
 }
 
-function showSetup(focus = false) {
+export function showSetup(focus = false) {
   round = undefined;
   game.replaceChildren(setup.content.cloneNode(true));
   const form = game.querySelector('form');
-  const {players, intruders} = form.elements;
+  const {players, intruders, category} = form.elements;
+  category.replaceChildren(new Option('Sortear um tema', ''), ...categories.map(name => new Option(name)));
+  category.value = settings.category;
   options(players, 3, 24, settings.players);
   options(intruders, 1, settings.players - 1, settings.intruders);
   players.onchange = () => options(intruders, 1, Number(players.value) - 1, Number(intruders.value));
   form.onsubmit = event => {
     event.preventDefault();
-    settings = {players: Number(players.value), intruders: Number(intruders.value)};
+    settings = {players: Number(players.value), intruders: Number(intruders.value), category: category.value};
     startRound();
   };
   if (focus) form.querySelector('h2').focus();
@@ -110,6 +118,7 @@ function handoff() {
   stage(`
     <p class="count">Jogador ${round.player + 1} de ${settings.players}</p>
     <h1 tabindex="-1">Passe o celular</h1>
+    <p>Tema · ${round.theme[0]}</p>
     <p>Quando for sua vez, olhe a tela sozinho e revele sua carta.</p>
   `, [['Revelar minha carta', reveal]]);
 }
@@ -152,6 +161,5 @@ function result() {
 }
 
 document.addEventListener('visibilitychange', () => {
-  if (document.hidden && round && round.player < settings.players && game.querySelector('.role')) handoff();
+  if (document.hidden && location.hash === '#intruso' && round && round.player < settings.players && game.querySelector('.role')) handoff();
 });
-showSetup();

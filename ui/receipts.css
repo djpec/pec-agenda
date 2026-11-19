@@ -46,10 +46,10 @@
 .receipt-paper {
   --receipt-inset: clamp(18px, 3vw, 36px);
   overflow: hidden;
-  border: 1px solid #c8d1ba;
+  border: 1px solid #d5ceba;
   border-radius: 18px;
   background: #f5f3e8;
-  color: #172c25;
+  color: #292820;
   font: 400 14px/1.55 var(--ws-font, Manrope, system-ui, sans-serif);
   overflow-wrap: anywhere;
   color-scheme: light;
@@ -57,21 +57,13 @@
 }
 
 .receipt-paper-header {
-  padding: calc(var(--receipt-inset) * .8) var(--receipt-inset) var(--receipt-inset);
-  border-bottom: 5px solid #d8ea8f;
-  background: linear-gradient(120deg, #102820, #234738);
-  background-color: #102820;
-  color: #fff;
-}
-
-.receipt-masthead {
   display: flex;
   justify-content: space-between;
   align-items: center;
   gap: 12px;
-  padding-bottom: 14px;
-  margin-bottom: 18px;
-  border-bottom: 1px solid #ffffff47;
+  padding: calc(var(--receipt-inset) * .8) var(--receipt-inset);
+  background: #102820 linear-gradient(120deg, #102820, #234738);
+  color: #fff;
 }
 
 .receipt-brand { flex: 0 0 76px; object-fit: contain; }
@@ -81,24 +73,25 @@
   font-size: 11px;
 }
 
-.receipt-paper-body small, .receipt-paper dt { color: #435a4f; }
-.receipt-number small, .receipt-issued { color: #d1e4d3; }
+.receipt-paper-body small, .receipt-paper dt, .receipt-issued { color: #5a5345; }
+.receipt-number small { color: #d1e4d3; }
 .receipt-number strong { font-size: 12px; letter-spacing: .025em; }
-.receipt-paper-header h2 {
+.receipt-paper-body h2 {
+  margin: 0;
   font-size: clamp(24px, 3.4vw, 42px);
   line-height: 1.1;
   letter-spacing: -.045em;
 }
 
-.receipt-issued { margin-top: 8px; }
+.receipt-issued { margin: 8px 0 24px; }
 .receipt-paper-body { padding: var(--receipt-inset); }
 
 .receipt-amount {
   margin-bottom: 17px;
   padding: 13px 16px 15px;
-  border: 1px solid #b9cd80;
+  border: 1px solid #d6cbb0;
   border-radius: 12px;
-  background: #e2edae;
+  background: #e8e1cd;
 }
 
 .receipt-amount small {
@@ -118,7 +111,7 @@
 .receipt-details { margin: 20px 0 0; gap: 8px; }
 .receipt-details > div {
   padding: 10px 12px;
-  border: 1px solid #d4dcc8;
+  border: 1px solid #ddd6c3;
   border-radius: 8px;
   background: #fafaf2;
 }
@@ -132,7 +125,7 @@
 }
 
 .receipt-signed strong { display: block; margin-top: 6px; }
-.receipt-signature { height: 65px; border-bottom: 1px solid #7c9284; }
+.receipt-signature { height: 65px; border-bottom: 1px solid #9a907b; }
 .receipt-signature img { height: 100%; max-width: 100%; object-fit: contain; }
 #receiptPrintSheet { display: none; }
 
@@ -161,7 +154,7 @@
   }
 
   #receiptPrintSheet .receipt-paper { --receipt-inset: 8mm; break-inside: avoid; font-size: 13px; }
-  #receiptPrintSheet .receipt-paper-header h2 { font-size: 32px; }
+  #receiptPrintSheet .receipt-paper-body h2 { font-size: 32px; }
   #receiptPrintSheet .receipt-amount strong { font-size: 39px; }
   #receiptPrintSheet .receipt-signed { width: min(100%, 340px); }
 }

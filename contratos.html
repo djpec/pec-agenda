@@ -1551,7 +1551,7 @@
 <div class="field">
 <label for="equipmentInventory">Identificação dos equipamentos de terceiros (opcional)</label>
 <textarea id="equipmentInventory" placeholder="Ex.: 2 caixas ativas — marca/modelo, proprietário, número de série e estado de conservação. Informe valores de referência apenas se acordados."></textarea>
-<div class="field-help">Esta relação aparece no contrato. Descreva também os equipamentos na lista de extras ou nos equipamentos incluídos. Registre a condição de entrega e retirada com fotos e conferência conjunta.</div>
+<div class="field-help">Esta relação aparece quando a cláusula Segurança e responsabilidade pelos equipamentos estiver ativada. Descreva também os equipamentos na lista de extras ou nos equipamentos incluídos. Registre a condição de entrega e retirada com fotos e conferência conjunta.</div>
 </div>
 </div>
 </details>
@@ -1596,6 +1596,10 @@
 <details class="section">
 <summary>Cláusulas opcionais</summary>
 <div class="section-body">
+<div class="switch-row">
+<span id="equipmentSecurityLabel">Segurança e responsabilidade pelos equipamentos</span>
+<label class="switch"><input id="clauseEquipmentSecurity" type="checkbox" aria-labelledby="equipmentSecurityLabel"/><span class="slider"></span></label>
+</div>
 <div class="switch-row">
 <span>Alimentação e hidratação fornecidas</span>
 <label class="switch"><input checked="" id="mealIncluded" type="checkbox"/><span class="slider"></span></label>
@@ -1718,7 +1722,7 @@
 </section><section class="clause">
 <h3 id="reservationClauseTitle">Cláusula 7ª — Reserva, cancelamento e remarcação</h3>
 <p id="outCancellationClause">A data será considerada reservada após a assinatura deste instrumento e o pagamento do sinal acordado. Em caso de cancelamento ou remarcação, as partes buscarão solução proporcional à antecedência, aos custos já assumidos e à possibilidade de aproveitamento da data, sem prejuízo das normas legais aplicáveis.</p>
-</section><footer class="footer"><span class="footer-site">djpec.com</span><span class="footer-email">contato@djpec.com</span><span>pec • Contrato de prestação de serviços</span></footer></section><section class="contract-page page-security">
+</section><footer class="footer"><span class="footer-site">djpec.com</span><span class="footer-email">contato@djpec.com</span><span>pec • Contrato de prestação de serviços</span></footer></section><section class="contract-page page-security hidden">
 <header class="contract-header compact-header"><div class="contract-logo"><strong>pec</strong><span>DJ • Eventos • Experiências</span></div><div class="contract-meta"><strong class="contract-number-copy">Contrato nº —</strong><span class="issue-date-copy"></span></div></header>
 <section class="clause equipment-security-clause">
 <h3>Cláusula 8ª — Segurança, guarda e responsabilidade pelos equipamentos</h3>
@@ -2065,7 +2069,7 @@
 
     function renumberClauses(){
       const visibleClauses = Array.from(document.querySelectorAll('.paper .clause'))
-        .filter(element => !element.classList.contains('hidden'));
+        .filter(element => !element.closest('.hidden'));
 
       visibleClauses.forEach((clause,index)=>{
         const heading = clause.querySelector('h3');
@@ -2174,10 +2178,16 @@
         ? `Briefing informado pelo CONTRATANTE: ${brief}`
         : '';
 
+      const equipmentSecurity = $('clauseEquipmentSecurity').checked;
+      const securityPage = $('paper').querySelector('.page-security');
+      securityPage.classList.toggle('hidden', !equipmentSecurity);
+
       $('outEquipmentClause').textContent =
         `O CONTRATADO fornecerá: ${textOr($('includedEquipment').value, textOr($('providerEquipment').value,'equipamentos a definir'))}. ` +
-        `O CONTRATANTE deverá disponibilizar: ${textOr($('clientStructure').value,'estrutura a definir').replace(/[.\s]+$/, '')}. ` +
-        `A proteção dos equipamentos próprios e de terceiros observará a cláusula específica de segurança e responsabilidade deste contrato.`;
+        `O CONTRATANTE deverá disponibilizar: ${textOr($('clientStructure').value,'estrutura a definir').replace(/[.\s]+$/, '')}.` +
+        (equipmentSecurity
+          ? ' A proteção dos equipamentos próprios e de terceiros observará a cláusula específica de segurança e responsabilidade deste contrato.'
+          : '');
 
       const extrasBody = $('outExtrasBody');
       extrasBody.innerHTML = '';
@@ -2341,6 +2351,8 @@
     }
 
     function applyData(data){
+      // Documents saved before the switch was added always included this clause.
+      data = {clauseEquipmentSecurity:true, ...data};
       inputs.forEach(element=>{
         if(!element.id || !(element.id in data)) return;
         if(element.type === 'checkbox') element.checked = Boolean(data[element.id]);
@@ -2450,7 +2462,7 @@
 <!-- /pec Manager integration -->
 
 <script src="./auth/client.js?v=3"></script>
-<script id="workspaceScripts" type="application/json">[{"src":"./manager-shared.js?v=29"},{"src":"./manager-document.js?v=21"},{"src":"./contract-cloud.js?v=17"},{"src":"./ui/documents.js?v=30","type":"module"}]</script>
+<script id="workspaceScripts" type="application/json">[{"src":"./manager-shared.js?v=29"},{"src":"./manager-document.js?v=21"},{"src":"./contract-cloud.js?v=18"},{"src":"./ui/documents.js?v=30","type":"module"}]</script>
 <script src="./auth/access.js?v=2"></script>
 </body>
 </html>

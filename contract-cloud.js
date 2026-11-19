@@ -10,7 +10,10 @@
     d.issueDate=P.today();return d;
   };
   const adapter={type:'contract',container:'.sidebar',get:()=>collectData(),defaults:fresh,
-    apply:p=>{applyData({...P.clone(originalDefaults),...p});saveData(false)},
+    apply:p=>{
+      applyData({...P.clone(originalDefaults),clauseEquipmentSecurity:true,...p});
+      saveData(false);
+    },
     normalize:p=>({...p,contractNumber:p.contractNumber||p.number||'',issueDate:p.issueDate||p.issue||P.today(),baseValue:p.baseValue??p.base??'',signalValue:p.signalValue??p.signal??'',customClause:p.customClause||p.custom||'',travelValue:p.travelValue??p.fuelValue??''}),
     info:p=>({client_name:p.clientName||'',contract_number:p.contractNumber||null,event_date:p.startDate||null,total_value:Number(p.baseValue||0)+(p.extras||[]).reduce((s,x)=>s+Number(x.qty||0)*Number(x.unit||0),0)+['travelValue','tollValue','parkingValue','lodgingValue','otherTravelValue'].reduce((s,k)=>s+Number(p[k]||0),0)}),
     event:p=>({title:p.eventName||`${p.eventType||'Evento'}${p.clientName?' — '+p.clientName:''}`,date:p.startTime&&Number(p.startTime.slice(0,2))<12?P.shiftDate(p.startDate,-1):p.startDate,time:p.startTime||'',timeType:p.startTime?'time':'tbd',place:[p.venueName,p.venueAddress].filter(Boolean).join(', '),notes:[`Cliente: ${p.clientName||'—'}`,`Contrato: ${p.contractNumber||'—'}`,p.musicBrief].filter(Boolean).join('\n')}),

@@ -73,12 +73,14 @@ function documentMarkup(data) {
   const documentLine = value => value.trim() ? `<small>CPF/CNPJ · ${esc(value.trim())}</small>` : '';
   return `<article class="receipt-paper">
     <header class="receipt-paper-header">
-      <div class="receipt-brand"><img src="./assets/brand/pec-logo-white.svg" alt="pec" width="76" height="30"></div>
-      <div class="receipt-number"><small>Número do recibo</small><strong>${data.number}</strong></div>
-    </header>
-    <div class="receipt-paper-body">
+      <div class="receipt-masthead">
+        <img class="receipt-brand" src="./assets/brand/pec-logo-white.svg" alt="pec" width="76" height="30">
+        <div class="receipt-number"><small>Número do recibo</small><strong>${data.number}</strong></div>
+      </div>
       <h2>Recibo de pagamento</h2>
       <p class="receipt-issued">Emitido em ${displayDate(issuedOn)}</p>
+    </header>
+    <div class="receipt-paper-body">
       <div class="receipt-amount"><small>Valor recebido</small><strong>${value}</strong></div>
       <p class="receipt-statement">Confirmo o recebimento do valor acima, pago por <b>${payer}</b>${data.payerDocument.trim() ? ` (CPF/CNPJ ${esc(data.payerDocument.trim())})` : ''}, pelo serviço ou referência abaixo.</p>
       <dl class="receipt-details">

@@ -101,7 +101,30 @@ const games = [
       'Quem é mais provável de encontrar o caminho sem abrir o mapa?',
       'Quem é mais provável de chegar com comida suficiente pra dobrar a roda?',
       'Quem é mais provável de marcar uma festa para comemorar que marcou outra festa?'
-    ]}]
+    ]}, {
+      key: '18', label: 'Sortear pergunta +18', cards: [
+        'Quem é mais provável de fazer sexo oral no primeiro encontro?',
+        'Quem é mais provável de propor um ménage e ainda organizar o encontro?',
+        'Quem é mais provável de levar um vibrador na mala de viagem?',
+        'Quem é mais provável de mandar um áudio gemendo de propósito?',
+        'Quem é mais provável de passar a madrugada inteira transando?',
+        'Quem é mais provável de topar sexo anal e falar abertamente do que gosta?',
+        'Quem é mais provável de fazer um striptease sem perder a pose?',
+        'Quem é mais provável de se masturbar numa chamada de vídeo com alguém?',
+        'Quem é mais provável de sugerir uma transa de frente pro espelho?',
+        'Quem é mais provável de pedir pra ser algemado na cama?',
+        'Quem é mais provável de levar uma lista de posições pra testar?',
+        'Quem é mais provável de sugerir uma gravação caseira se todo mundo topar?',
+        'Quem é mais provável de soltar um palavrão no orgasmo?',
+        'Quem é mais provável de propor uma encenação na hora do sexo?',
+        'Quem é mais provável de comprar um brinquedo sexual no impulso e usar no mesmo dia?',
+        'Quem é mais provável de pedir tapas na bunda durante a transa?',
+        'Quem é mais provável de pagar um motel só pra realizar uma fantasia?',
+        'Quem é mais provável de pedir pra apagar a luz e depois querer transar com ela acesa?',
+        'Quem é mais provável de assistir pornô a dois pra pegar ideias?',
+        'Quem é mais provável de pedir outra rodada antes de sair da cama?'
+      ]
+    }]
   }
 ];
 
@@ -126,14 +149,14 @@ function showMenu() {
 
 const seenByDeck = new Map();
 
-function persistentDeck({key, cards, label}, button, showCard) {
-  const storageKey = 'pec-jogos:eu-nunca:' + key;
+function persistentDeck(gameId, {key, cards, label}, button, showCard) {
+  const storageKey = `pec-jogos:${gameId}:${key}`;
   const read = () => {
     try {
       const saved = JSON.parse(localStorage.getItem(storageKey));
       if (Array.isArray(saved)) return saved.filter(card => cards.includes(card));
     } catch {}
-    return seenByDeck.get(key) ?? [];
+    return seenByDeck.get(storageKey) ?? [];
   };
   const resetLabel = key === '18' ? 'Reembaralhar +18' : 'Reembaralhar clássico';
   const refresh = seen => {
@@ -156,14 +179,14 @@ function persistentDeck({key, cards, label}, button, showCard) {
     const next = available[Math.floor(Math.random() * available.length)];
     seen.push(next);
     drawn.add(next);
-    seenByDeck.set(key, seen);
+    seenByDeck.set(storageKey, seen);
     try { localStorage.setItem(storageKey, JSON.stringify(seen)); } catch {}
     showCard(next);
     refresh(drawn);
   };
 }
 
-function showCards({title, description, rules, decks}) {
+function showCards({id, title, description, rules, decks}) {
   game.innerHTML = `
     <section class="intro menu-intro"><div><h1>${title.replace(/\?$/, '')}<span>${title.endsWith('?') ? '?' : '.'}</span></h1><p>${description}</p></div></section>
     <details class="rules" open>
@@ -188,7 +211,7 @@ function showCards({title, description, rules, decks}) {
     button.className = actions.childElementCount ? 'secondary' : 'primary';
     actions.append(button);
     if (key) {
-      persistentDeck(deck, button, showCard);
+      persistentDeck(id, deck, button, showCard);
       continue;
     }
     button.textContent = label;

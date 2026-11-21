@@ -10,6 +10,7 @@ const games = [
       'Se a roda combinar, quem já fez pode escolher dar um gole da bebida que estiver tomando.'
     ],
     decks: [{
+      key: 'classico',
       label: 'Sortear frase',
       cards: [
         'Eu nunca mandei áudio pra pessoa errada.',
@@ -26,6 +27,7 @@ const games = [
         'Eu nunca fiz amizade numa fila.'
       ]
     }, {
+      key: '18',
       label: 'Sortear frase +18',
       cards: [
         'Eu nunca fiz sexo oral no primeiro encontro.',
@@ -122,6 +124,45 @@ function showMenu() {
     </nav>`;
 }
 
+const seenByDeck = new Map();
+
+function persistentDeck({key, cards, label}, button, showCard) {
+  const storageKey = 'pec-jogos:eu-nunca:' + key;
+  const read = () => {
+    try {
+      const saved = JSON.parse(localStorage.getItem(storageKey));
+      if (Array.isArray(saved)) return saved.filter(card => cards.includes(card));
+    } catch {}
+    return seenByDeck.get(key) ?? [];
+  };
+  const resetLabel = key === '18' ? 'Reembaralhar +18' : 'Reembaralhar clássico';
+  const refresh = seen => {
+    button.textContent = seen.size === cards.length ? resetLabel : label;
+  };
+  refresh(new Set(read()));
+  button.onclick = () => {
+    let seen = read();
+    const drawn = new Set(seen);
+    let available = cards.filter(card => !drawn.has(card));
+    if (available.length === 0) {
+      if (button.textContent !== resetLabel) {
+        refresh(drawn);
+        return;
+      }
+      available = cards.filter(card => card !== seen.at(-1));
+      seen = [];
+      drawn.clear();
+    }
+    const next = available[Math.floor(Math.random() * available.length)];
+    seen.push(next);
+    drawn.add(next);
+    seenByDeck.set(key, seen);
+    try { localStorage.setItem(storageKey, JSON.stringify(seen)); } catch {}
+    showCard(next);
+    refresh(drawn);
+  };
+}
+
 function showCards({title, description, rules, decks}) {
   game.innerHTML = `
     <section class="intro menu-intro"><div><h1>${title.replace(/\?$/, '')}<span>${title.endsWith('?') ? '?' : '.'}</span></h1><p>${description}</p></div></section>
@@ -135,11 +176,21 @@ function showCards({title, description, rules, decks}) {
     </section>`;
   const card = game.querySelector('.party-card');
   const actions = game.querySelector('.actions');
-  for (const {label, cards} of decks) {
+  const showCard = text => {
+    card.hidden = false;
+    card.textContent = text;
+  };
+  for (const deck of decks) {
+    const {key, label, cards} = deck;
     let remaining = [];
     let previous;
     const button = document.createElement('button');
     button.className = actions.childElementCount ? 'secondary' : 'primary';
+    actions.append(button);
+    if (key) {
+      persistentDeck(deck, button, showCard);
+      continue;
+    }
     button.textContent = label;
     button.onclick = () => {
       if (!remaining.length) {
@@ -149,10 +200,8 @@ function showCards({title, description, rules, decks}) {
         }
       }
       previous = remaining.pop();
-      card.hidden = false;
-      card.textContent = previous;
+      showCard(previous);
     };
-    actions.append(button);
   }
 }
 

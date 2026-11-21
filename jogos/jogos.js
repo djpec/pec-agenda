@@ -25,6 +25,30 @@ const games = [
         'Eu nunca pedi o mesmo prato três vezes seguidas.',
         'Eu nunca fiz amizade numa fila.'
       ]
+    }, {
+      label: 'Sortear frase +18',
+      cards: [
+        'Eu nunca tive um beijo que me fez esquecer onde eu estava.',
+        'Eu nunca fiquei com alguém no mesmo dia em que conheci.',
+        'Eu nunca mandei uma mensagem ousada e desliguei a tela de vergonha.',
+        'Eu nunca beijei alguém em um lugar onde podia ser flagrado.',
+        'Eu nunca tive uma amizade com benefícios.',
+        'Eu nunca passei a noite na casa de alguém sem planejar.',
+        'Eu nunca improvisei uma desculpa pra sair de uma festa acompanhado.',
+        'Eu nunca flertei por mensagem com alguém que estava na mesma festa.',
+        'Eu nunca marquei um encontro sem intenção nenhuma de ir embora cedo.',
+        'Eu nunca deixei uma peça de roupa na casa de um contatinho de propósito.',
+        'Eu nunca tive um encontro que só terminou no café da manhã.',
+        'Eu nunca mandei uma foto provocante pra alguém de confiança.',
+        'Eu nunca vivi um romance secreto que só meus amigos mais próximos sabiam.',
+        'Eu nunca achei que era só um beijo e acabei querendo repetir a noite inteira.',
+        'Eu nunca inventei uma playlist pra criar clima a dois.',
+        'Eu nunca sussurrei algo no ouvido de alguém só pra provocar.',
+        'Eu nunca tive vontade de beijar alguém desta roda.',
+        'Eu nunca tive uma queda por alguém só pelo jeito de dançar.',
+        'Eu nunca me arrumei achando que ia encontrar um contatinho e dei de cara com outro.',
+        'Eu nunca tive um date tão bom que já marquei o próximo antes de ir embora.'
+      ]
     }]
   },
   {
